@@ -1,0 +1,24 @@
+<th:block th:replace="usr/common/head"/>
+<title>반려견 추가</title>
+<link rel="stylesheet" href="/resource/dogAdd.css"/>
+<script src="/resource/dogAdd.js"></script>
+</head>
+<body>
+<h1>반려견 정보 추가</h1>
+<form action="/upload" method="post" enctype="multipart/form-data">
+    <label for="dog_name">반려견 이름:</label>
+    <input type="text" class="dog_name" id="dog_name" name="dog_name" required><br><br>
+
+    <label>사진 업로드:</label>
+    <div class="drop_area">
+        <p>여기에 사진 파일을 드래그 앤 드롭하세요!</p>
+        <input type="file" class="dog_photo" name="dog_photo" accept="image/*" required style="display: none;">
+    </div>
+    <br>
+
+    <img id="preview" src="#" alt="업로드된 이미지 미리보기" style="display: none; width: 200px; height: auto;"/>
+
+    <input type="submit" value="제출">
+</form>
+</body>
+</html>

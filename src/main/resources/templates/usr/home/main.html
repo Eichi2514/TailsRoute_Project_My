@@ -1,16 +1,9 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="">
-<head>
-    <title>Main</title>
-    <link rel="stylesheet" href="/resource/main.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.1.4/tailwind.min.css">
-
+<th:block th:replace="usr/common/head"/>
+<title>반려견 추가</title>
+<link rel="stylesheet" href="/resource/main.css"/>
+<script src="/resource/main.js"></script>
 </head>
 <body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="/resource/main.js"></script>
-
 <div class="message cursor-pointer">${message}</div>
 <div class="message2 cursor-pointer" th:text="${message}"></div>
 </body>

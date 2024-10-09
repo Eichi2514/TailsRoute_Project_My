@@ -1,0 +1,20 @@
+body{
+    margin: auto;
+    width: 1000px;
+    background-color: #FFFEF0;
+    border: 1px solid;
+    color : #4D3E3E;
+}
+/* 드롭 영역 스타일 */
+.drop_area {
+    height: 100px;
+    border: 2px dashed #ccc; /* 점선 테두리 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    padding: 20px; /* 내부 여백 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    margin-top: 20px; /* 상단 여백 */
+}
+/* 드롭 영역 강조 스타일 */
+.drop_area.highlight {
+    border-color: #333; /* 강조할 때 테두리 색 변경 */
+}

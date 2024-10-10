@@ -27,7 +27,7 @@ CREATE TABLE `dog`(
                       `name` CHAR(20) DEFAULT '이름 없음' COMMENT '이름',
                       weight INT(10) DEFAULT -1 COMMENT '체중 (-1=모름)',
                       photo TEXT DEFAULT '기본 사진 url' COMMENT '사진',
-                      dogType CHAR(20) NOT NULL COMMENT '소형, 중형, 대형'
+                      `type` CHAR(20) NOT NULL COMMENT '소형, 중형, 대형'
 
 );
 
@@ -122,3 +122,12 @@ CREATE TABLE doghealth(
                           checkupDate DATETIME NOT NULL COMMENT '건강 검진 날짜',
                           activityLevel FLOAT NOT NULL COMMENT '활동량(평균걸음수)'
 );
+
+SELECT *
+FROM dog
+ORDER BY id DESC
+    LIMIT 0, 1;
+
+SHOW GRANTS FOR 'root'@'localhost';
+
+SELECT USER, HOST FROM mysql.user WHERE USER = 'root';

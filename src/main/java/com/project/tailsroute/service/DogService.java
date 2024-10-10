@@ -13,8 +13,8 @@ public class DogService {
     @Autowired
     private DogRepository dogRepository;
 
-    public int dogNumber() {
-        Integer number = dogRepository.dogNumber();
+    public int lastNumber() {
+        Integer number = dogRepository.lastNumber();
         return (number != null) ? number : 0; // null일 경우 0을 반환
     }
 

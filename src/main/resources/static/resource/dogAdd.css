@@ -71,6 +71,7 @@ body {
     width: 300px;
     height: 300px;
     border-radius: 5px; /* 모서리 둥글게 */
+    object-fit: fill;
 }
 
 .upload_button_wrapper {
@@ -84,4 +85,11 @@ body {
     border-radius: 10px;
     height: 40px;
     width: 100px;
+}
+
+.trait {
+    width: 1290px;
+    height: 100px;
+    text-align: left; /* 왼쪽 정렬 */
+    overflow-wrap: break-word; /* 줄바꿈 허용 */
 }

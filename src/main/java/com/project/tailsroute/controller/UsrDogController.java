@@ -32,16 +32,16 @@ public class UsrDogController {
         // 파일 처리 로직
         String photoPath = null;
         if (!file.isEmpty()) {
-            int number = dogService.dogNumber(); // 데이터베이스에서 가져온 마지막 ID
+            int number = dogService.lastNumber(); // 데이터베이스에서 가져온 마지막 ID
             number++;
 
-            String filePath = "src/main/resources/static/resource/dogAdd/photo" + number + ".png";
+            String filePath = "src/main/resources/static/resource/dog/photo" + number + ".png";
             try {
                 // 파일 저장 전에 이미지 크기 조절
                 Thumbnails.of(file.getInputStream()).size(80, 80) // 원하는 사이즈로 조정
                         .toFile(new File(filePath));
 
-                photoPath = "/resource/dogAdd/photo" + number + ".png"; // 웹에서 접근할 수 있는 경로
+                photoPath = "/resource/dog/photo" + number + ".png"; // 웹에서 접근할 수 있는 경로
             } catch (IOException e) {
                 return "redirect:/usr/dog/add";
             }

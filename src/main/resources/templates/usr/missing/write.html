@@ -1,0 +1,81 @@
+<th:block th:replace="usr/common/head"/>
+<head>
+    <title>실종신고 글작성</title>
+    <link rel="stylesheet" href="/resource/dogAdd.css"/>
+    <script src="/resource/dogAdd.js"></script>
+</head>
+<body>
+<div class="title">실종신고 글작성</div>
+<div class="profile p-5">
+    <div class="profile_title">사용자 정보</div>
+</div>
+<form action="/usr/missing/write" method="post" enctype="multipart/form-data">
+
+    <div class="drop_area relative">
+        <button type="button" class="image_button">이미지 업로드</button>
+        <p class="upload_text">또는 파일 놓기</p>
+        <input type="file" class="dog_photo" name="dog_photo" accept="image/*" required style="display: none;">
+        <img class="preview absolute" src="#" alt="업로드된 이미지 미리보기" style="display: none;"/><br>
+    </div>
+    <br>
+
+    <div class="dogAdd_title p-5">실종일시 및 장소</div>
+    <div class="dogAdd_body p-5">
+        <div class="mt-5 mb-5">
+            <label for="reportDate">실종날짜</label>
+            <input type="date" class="border_box" id="reportDate" name="reportDate" required><br>
+        </div>
+        <div class="mt-5 mb-5">
+            <label for="reportTime">실종시간</label>
+            <input type="text" class="border_box" id="reportTime" name="reportTime" placeholder="예 : 14 또는 오후 2"
+                   required><br>
+        </div>
+        <div class="mt-5 mb-5">
+            <label for="missingLocation">실종장소</label>
+            <input type="text" class="border_box" id="missingLocation" name="missingLocation" required><br>
+        </div>
+    </div>
+
+    <div class="dogAdd_title p-5">동물 정보</div>
+    <div class="dogAdd_body p-5">
+        <div class="mt-5 mb-5">
+            <label for="name">이름</label>
+            <input type="text" class="border_box" id="name" name="name" required><br>
+        </div>
+        <div class="mt-5 mb-5">
+            <label for="breed">품종</label>
+            <input type="text" class="border_box" id="breed" name="breed" required><br>
+        </div>
+        <div class="mt-5 mb-5">
+            <label for="color">색상</label>
+            <input type="text" class="border_box" id="color" name="color" required><br>
+        </div>
+        <div class="mt-5 mb-5">
+            <label for="gender">성별</label>
+            <select class="border_box" id="gender" name="gender" required>
+                <option value="암컷">암컷</option>
+                <option value="수컷">수컷</option>
+            </select><br>
+        </div>
+        <div class="mt-5 mb-5">
+            <label for="age">나이 (개월)</label>
+            <input type="number" class="border_box" id="age" name="age" min="0"><br>
+        </div>
+        <div class="mt-5 mb-5">
+            <label for="RFID">마이크로칩(RFID)번호</label>
+            <input type="text" class="border_box" id="RFID" name="RFID"><br>
+        </div>
+    </div>
+
+    <div class="dogAdd_title p-5">특징</div>
+    <div class="dogAdd_body p-5">
+        <div class="mt-5 mb-5">
+            <textarea type="text" class="trait border_box p-5" id="trait" name="trait" required></textarea>
+        </div>
+    </div>
+    <div class="upload_button_wrapper">
+        <input type="submit" value="제출" class="upload_button">
+    </div>
+</form>
+</body>
+</html>

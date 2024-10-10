@@ -107,11 +107,17 @@ CREATE TABLE medicationLog (
 ##실종 테이블
 CREATE TABLE missing(
                         id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
-                        memberId INT(10) UNSIGNED NOT NULL COMMENT 'member번호',
-                        dogId INT(10) UNSIGNED NOT NULL COMMENT 'dog번호',
+                        memberId INT(10) UNSIGNED NOT NULL COMMENT '신고자 식별번호',
+                        `name` CHAR(30) NOT NULL COMMENT '강아지 이름',
                         reportDate DATETIME NOT NULL COMMENT '실종 날짜',
                         missingLocation VARCHAR(100) NOT NULL COMMENT '실종 장소',
-                        howToLost TEXT NOT NULL COMMENT '잃어버린 경위'
+                        breed CHAR(30) NOT NULL COMMENT '품종',
+                        color CHAR(30) NOT NULL COMMENT '색상',
+                        gender CHAR(30) NOT NULL COMMENT '성별',
+                        age CHAR(30) NOT NULL COMMENT '나이',
+                        photo TEXT NOT NULL COMMENT '사진',
+                        RFID CHAR(30) NOT NULL COMMENT '마이크로칩 번호',
+                        trait TEXT NOT NULL COMMENT '특징'
 );
 
 ##건강기록 테이블
@@ -127,6 +133,8 @@ SELECT *
 FROM dog
 ORDER BY id DESC
     LIMIT 0, 1;
+
+SELECT * FROM missing;
 
 SHOW GRANTS FOR 'root'@'localhost';
 

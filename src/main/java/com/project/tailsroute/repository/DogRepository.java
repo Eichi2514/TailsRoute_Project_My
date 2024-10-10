@@ -13,18 +13,7 @@ public interface DogRepository {
             ORDER BY id DESC
             LIMIT 0, 1;		
             	""")
-    public Integer dogNumber();
-/*
-    @Insert("""
-            INSERT INTO dog
-            SET regDate = NOW(),
-            updateDate = NOW(),
-            memberId = #{loginedMemberId},
-            `name` = #{dogName},
-            dogType = #{dogType},
-            photo = #{photoPath}
-                    			""")
-    public void upload(int loginedMemberId, String dogName, String dogType, String photoPath);*/
+    Integer lastNumber();
 
     @Insert("""
             INSERT INTO dog
@@ -36,5 +25,5 @@ public interface DogRepository {
             `type` = #{dogType},
             photo = #{photoPath}
                     			""")
-    public void upload(int loginedMemberId, String dogName, Double dogWeight, String dogType, String photoPath);
+    void upload(int loginedMemberId, String dogName, Double dogWeight, String dogType, String photoPath);
 }

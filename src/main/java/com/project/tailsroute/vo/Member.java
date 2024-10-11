@@ -1,5 +1,6 @@
 package com.project.tailsroute.vo;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Member {
+
     private int id;
     private String regDate;
     private String updateDate;
@@ -18,6 +20,14 @@ public class Member {
     private String nickname;
     private int gender;
     private String cellphoneNum;
-    private int delStatus;
+    private boolean delStatus;
     private String delDate;
+
+    private String extra__dogPoto;
+
+
+    public boolean isAdmin() {
+        return this.authLevel == 7;
+    }
+
 }

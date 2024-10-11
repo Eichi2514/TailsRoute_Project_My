@@ -1,6 +1,8 @@
 package com.project.tailsroute.controller;
 
 import com.project.tailsroute.service.DogService;
+import com.project.tailsroute.vo.Member;
+import com.project.tailsroute.vo.Rq;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,11 @@ import java.io.IOException;
 
 @Controller
 public class UsrDogController {
+    private final Rq rq;
+
+    public UsrDogController(Rq rq) {
+        this.rq = rq;
+    }
 
 
     @Autowired
@@ -22,6 +29,15 @@ public class UsrDogController {
 
     @GetMapping("/usr/dog/add")
     public String showAdd(Model model) {
+        boolean isLogined = rq.isLogined();
+
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        }
+
+        model.addAttribute("isLogined", isLogined);
+
         return "/usr/dog/add";
     }
 

@@ -1,6 +1,8 @@
 package com.project.tailsroute.controller;
 
 import com.project.tailsroute.service.MissingService;
+import com.project.tailsroute.vo.Member;
+import com.project.tailsroute.vo.Rq;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,11 @@ import java.io.IOException;
 
 @Controller
 public class UsrMissingController {
+    private final Rq rq;
+
+    public UsrMissingController(Rq rq) {
+        this.rq = rq;
+    }
 
 
     @Autowired
@@ -22,6 +29,15 @@ public class UsrMissingController {
 
     @GetMapping("/usr/missing/write")
     public String showWrite(Model model) {
+        boolean isLogined = rq.isLogined();
+
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        }
+
+        model.addAttribute("isLogined", isLogined);
+
         return "/usr/missing/write";
     }
 
@@ -30,6 +46,8 @@ public class UsrMissingController {
     public String write(@RequestParam("name") String name, @RequestParam("reportDate") String reportDate, @RequestParam("reportTime") String reportTime, @RequestParam("missingLocation") String missingLocation, @RequestParam("breed") String breed,
                         @RequestParam("color") String color, @RequestParam("gender") String gender, @RequestParam(value = "age", required = false) Integer age, @RequestParam(value = "RFID", required = false) String RFID,
                         @RequestParam("dog_photo") MultipartFile file, @RequestParam("trait") String trait) {
+
+        boolean isLogined = rq.isLogined();
 
         String reportDate2 = reportDate + " " + reportTime;
 

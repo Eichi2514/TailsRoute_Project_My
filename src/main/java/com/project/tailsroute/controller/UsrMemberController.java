@@ -40,7 +40,7 @@ public class UsrMemberController {
     @ResponseBody // 로그인 결과를 JSON 형태로 반환
     public String doLogin(HttpServletRequest req, @RequestParam("loginId") String loginId, @RequestParam("loginPw") String loginPw) {
 
-        System.err.println(loginId);
+        // System.err.println(loginId);
 
         if (Ut.isEmptyOrNull(loginId)) {
             return Ut.jsHistoryBack("F-1", "loginId 입력 x");

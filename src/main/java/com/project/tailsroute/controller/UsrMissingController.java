@@ -61,20 +61,20 @@ public class UsrMissingController {
             int number = missingService.lastNumber(); // 데이터베이스에서 가져온 마지막 ID
             number++;
 
-            String filePath = "src/main/resources/static/resource/dog/missing" + number + ".png";
+            String filePath = "src/main/resources/static/resource/photo/missing" + number + ".png";
             try {
                 // 파일 저장 전에 이미지 크기 조절
                 Thumbnails.of(file.getInputStream()).size(80, 80) // 원하는 사이즈로 조정
                         .toFile(new File(filePath));
 
-                photoPath = "/resource/dog/missing" + number + ".png"; // 웹에서 접근할 수 있는 경로
+                photoPath = "/resource/photo/missing" + number + ".png"; // 웹에서 접근할 수 있는 경로
             } catch (IOException e) {
                 return "redirect:/usr/dog/add";
             }
         }
 
         // 데이터베이스에 반려견 정보 저장
-        missingService.write(1, name, reportDate2, missingLocation, breed, color, gender, age2, RFID, photoPath, trait);
+        missingService.write(rq.getLoginedMemberId(), name, reportDate2, missingLocation, breed, color, gender, age2, RFID, photoPath, trait);
 
         return "redirect:/usr/home/main"; // 메인 페이지로 리다이렉트
     }

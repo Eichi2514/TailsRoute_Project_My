@@ -62,11 +62,11 @@
             <div class="tw-hidden head_profile_bar tw-cursor-default tw-mt-[15px] tw-absolute tw-w-[400px] tw-h-[350px] tw-bg-[#FFF3CD] tw-border tw-border-[#4D3E3E] tw-rounded-[30px] tw-flex tw-flex-col tw-items-center tw-justify-center tw-gap-2 tw-right-0">
                 <div class="head_profile_id tw-text-[#4D3E3E]" th:text="${member.getLoginId}">user01</div>
                 <img th:if="${member.extra__dogPoto != null}"
-                     th:src="${member.extra__dogPoto}"
+                     th:src="@{${member.extra__dogPoto}}"
                      alt="Profile Image"
                      class="head_profile_image tw-w-[100px] tw-h-[100px] tw-border tw-border-[#4D3E3E] tw-rounded-full"/>
                 <img th:if="${member.extra__dogPoto == null}"
-                     th:src="@{/resource/poto/default.png}"
+                     th:src="@{/resource/photo/default.png}"
                      alt="Default Profile Image"
                      class="head_profile_image tw-w-[100px] tw-h-[100px] tw-border tw-border-[#4D3E3E] tw-rounded-full"/>
                 <div class="head_profile_text tw-text-[#4D3E3E]" th:text="|안녕하세요, ${member.getNickname}님|">안녕하세요, 콩이의 대장님.</div>

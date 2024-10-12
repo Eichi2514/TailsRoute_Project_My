@@ -13,12 +13,6 @@ public class MemberService {
     @Autowired
     private MemberRepository memberRepository;
 
-    public MemberService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
-
-
-
     public Member getMemberByLoginId(String loginId) {
         return memberRepository.getMemberByLoginId(loginId);
     }

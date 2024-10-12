@@ -51,20 +51,20 @@ public class UsrDogController {
             int number = dogService.lastNumber(); // 데이터베이스에서 가져온 마지막 ID
             number++;
 
-            String filePath = "src/main/resources/static/resource/dog/photo" + number + ".png";
+            String filePath = "src/main/resources/static/resource/photo/dog" + number + ".png";
             try {
                 // 파일 저장 전에 이미지 크기 조절
                 Thumbnails.of(file.getInputStream()).size(80, 80) // 원하는 사이즈로 조정
                         .toFile(new File(filePath));
 
-                photoPath = "/resource/dog/photo" + number + ".png"; // 웹에서 접근할 수 있는 경로
+                photoPath = "/resource/photo/dog" + number + ".png"; // 웹에서 접근할 수 있는 경로
             } catch (IOException e) {
                 return "redirect:/usr/dog/add";
             }
         }
 
         // 데이터베이스에 반려견 정보 저장
-        dogService.upload(1, dogName, dogWeight, dogType, photoPath);
+        dogService.upload(rq.getLoginedMemberId(), dogName, dogWeight, dogType, photoPath);
 
         return "redirect:/usr/home/main"; // 메인 페이지로 리다이렉트
     }

@@ -9,16 +9,23 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface MemberRepository {
 
-    @Select("SELECT * FROM `member` WHERE id = #{id}")
-    public Member getMemberById(int id);
-
     @Select("""			
             SELECT M.*, D.photo extra__dogPoto
             FROM `member` M
             LEFT JOIN dog D
             ON D.memberId = M.id
-            WHERE loginId = #{loginId}
+            WHERE M.id = #{id}
+            LIMIT 1
             """)
+    public Member getMemberById(int id);
+
+    @Select("""
+			SELECT M.*, D.photo extra__dogPoto
+            FROM `member` M
+            LEFT JOIN dog D
+            ON D.memberId = M.id
+            WHERE loginId = #{loginId}
+			""")
     public Member getMemberByLoginId(String loginId);
 
     @Insert("INSERT INTO `member` SET regDate = NOW(), updateDate = NOW(), loginId = #{loginId}, loginPw = #{loginPw}, `name` = #{name}, nickname = #{nickname}, cellphoneNum = #{cellphoneNum}, email = #{email}")

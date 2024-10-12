@@ -29,4 +29,12 @@ public class MissingService {
     public List<Missing> list(int limitFrom, int itemsInAPage, String str) {
         return missingRepository.list(limitFrom, itemsInAPage, str);
     }
+
+    public Missing missingArticle(int missingId) {
+        return missingRepository.missingArticle(missingId);
+    }
+
+    public void missingDelete(int missingId) {
+        missingRepository.missingDelete(missingId);
+    }
 }

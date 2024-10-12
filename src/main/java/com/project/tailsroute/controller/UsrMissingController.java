@@ -1,6 +1,8 @@
 package com.project.tailsroute.controller;
 
 import com.project.tailsroute.service.MissingService;
+import com.project.tailsroute.util.Ut;
+import com.project.tailsroute.vo.Dog;
 import com.project.tailsroute.vo.Member;
 import com.project.tailsroute.vo.Missing;
 import com.project.tailsroute.vo.Rq;
@@ -11,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -44,6 +47,38 @@ public class UsrMissingController {
     }
 
 
+    @GetMapping("/usr/missing/detail")
+    public String showDetail(Model model, @RequestParam("missingId") int missingId) {
+        boolean isLogined = rq.isLogined();
+
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        }
+
+        model.addAttribute("isLogined", isLogined);
+
+        Missing missing = missingService.missingArticle(missingId);
+
+        model.addAttribute("missing", missing);
+
+        return "/usr/missing/detail";
+    }
+
+    @PostMapping("/usr/missing/doDelete")
+    @ResponseBody
+    public String doDelete(Model model, @RequestParam("missingId") int missingId, @RequestParam("memberId") int memberId) {
+
+        if (rq.getLoginedMemberId() != memberId) {
+            return Ut.jsHistoryBack("F-1", Ut.f("삭제 권한이 없습니다"));
+        }
+
+        missingService.missingDelete(missingId);
+
+        return Ut.jsReplace("S-1", Ut.f("%s번 글이 삭제되었습니다", missingId), "/usr/missing/list");
+    }
+
+
     @PostMapping("/usr/missing/write")
     public String write(@RequestParam("name") String name, @RequestParam("reportDate") String reportDate, @RequestParam("reportTime") String reportTime, @RequestParam("missingLocation") String missingLocation, @RequestParam("breed") String breed,
                         @RequestParam("color") String color, @RequestParam("gender") String gender, @RequestParam(value = "age", required = false) Integer age, @RequestParam(value = "RFID", required = false) String RFID,
@@ -53,7 +88,7 @@ public class UsrMissingController {
 
         String reportDate2 = reportDate + " " + reportTime;
 
-        String age2 = "모름";
+        String age2 = "불명";
         if (age != null) age2 = Integer.toString(age);
 
 
@@ -78,7 +113,7 @@ public class UsrMissingController {
         // 데이터베이스에 반려견 정보 저장
         missingService.write(rq.getLoginedMemberId(), name, reportDate2, missingLocation, breed, color, gender, age2, RFID, photoPath, trait);
 
-        return "redirect:/usr/home/main"; // 메인 페이지로 리다이렉트
+        return "redirect:/usr/missing/list"; // 메인 페이지로 리다이렉트
     }
 
     @GetMapping("/usr/missing/list")

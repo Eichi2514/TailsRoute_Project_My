@@ -1,6 +1,6 @@
 <th:block th:replace="usr/common/head"/>
 <head>
-    <title>내 정보</title>
+    <title>Lost Pet Report & Alerts</title>
     <link rel="stylesheet" href="/resource/css/missingList.css"/>
 </head>
 <body>
@@ -35,13 +35,15 @@
     <a class="misssing_write" href="../missing/write">글 작성</a>
 </div>
 <div class="misssing_list">
-    <a class="misssing_item tw-ml-[12px] tw-mb-[12px]" href="" th:each="missing : ${missings}">
+    <a class="misssing_item tw-ml-[12px] tw-mb-[12px]" th:href="@{'../missing/detail?missingId='+${missing.id}}" th:each="missing : ${missings}">
         <img th:src="@{${missing.photo}}" alt="Misssing Image" class="misssing_image"/>
         <label class="tw-pl-[9px]">이름</label>
         <div th:text="${missing.name}" class="tw-pl-[9px] tw-pb-[9px] tw-inline-block tw-font-bold"></div>
         <br/>
         <label class="tw-pl-[9px]">정보</label>
-        <div th:text="|${missing.gender} / ${missing.age}개월 / ${missing.breed}|"
+        <div th:if="${missing.age != '불명'}"  th:text="|${missing.gender} / ${missing.age}개월 / ${missing.breed}|"
+             class="tw-pl-[9px] tw-pb-[9px] tw-inline-block tw-font-bold"></div>
+        <div th:if="${missing.age == '불명'}" th:text="|${missing.gender} / ${missing.age} / ${missing.breed}|"
              class="tw-pl-[9px] tw-pb-[9px] tw-inline-block tw-font-bold"></div>
         <br/>
         <label class="tw-pl-[9px]">실종 날짜</label>

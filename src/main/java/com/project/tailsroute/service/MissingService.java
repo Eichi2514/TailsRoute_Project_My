@@ -22,11 +22,11 @@ public class MissingService {
         missingRepository.write(loginedMemberId, name, reportDate, missingLocation, breed, color, gender, age, rfid, photoPath, trait);
     }
 
-    public int totalCnt() {
-        return missingRepository.totalCnt();
+    public int totalCnt(String str) {
+        return missingRepository.totalCnt(str);
     }
 
-    public List<Missing> list(int limitFrom, int itemsInAPage) {
-        return missingRepository.list(limitFrom, itemsInAPage);
+    public List<Missing> list(int limitFrom, int itemsInAPage, String str) {
+        return missingRepository.list(limitFrom, itemsInAPage, str);
     }
 }

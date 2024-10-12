@@ -35,18 +35,22 @@ public interface MissingRepository {
               			""")
     void write(int loginedMemberId, String name, String reportDate, String missingLocation, String breed, String color, String gender, String age, String rfid, String photoPath, String trait);
 
-    @Select("""			
-			SELECT COUNT(*)
-			FROM missing
-			""")
-    int totalCnt();
-
     @Select("""
-			SELECT S.*, M.name extra__ownerName, M.cellphoneNum extra__ownerCellphoneNum
-			FROM missing S
-			LEFT JOIN `member` M
-			ON m.id = S.memberId
-			LIMIT #{limitFrom}, #{itemsInAPage}
-			""")
-    List<Missing> list(int limitFrom, int itemsInAPage);
+  			SELECT COUNT(*)
+    		FROM missing
+    		WHERE #{str} = '전체' OR missingLocation LIKE CONCAT('%', #{str}, '%')
+				""")
+    int totalCnt(String str);
+
+	@Select("""
+        
+			SELECT S.*, M.name AS extra__ownerName, M.cellphoneNum AS extra__ownerCellphoneNum
+        	FROM missing S
+        	LEFT JOIN `member` M
+        	ON M.id = S.memberId
+        	WHERE S.missingLocation LIKE CONCAT('%', #{str}, '%')
+          	OR #{str} = '전체'
+        	LIMIT #{limitFrom}, #{itemsInAPage}        
+        		""")
+    List<Missing> list(int limitFrom, int itemsInAPage, String str);
 }

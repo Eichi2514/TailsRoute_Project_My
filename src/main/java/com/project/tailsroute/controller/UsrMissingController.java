@@ -82,7 +82,7 @@ public class UsrMissingController {
     }
 
     @GetMapping("/usr/missing/list")
-    public String showList(Model model, @RequestParam(defaultValue = "1") int page) {
+    public String showList(Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "전체") String str) {
         boolean isLogined = rq.isLogined();
 
         if (isLogined) {
@@ -98,7 +98,7 @@ public class UsrMissingController {
         int limitFrom = (page - 1) * itemsInAPage;
 
         // 현재 실종기록의 갯수 변수에 저장
-        int totalCnt = missingService.totalCnt();
+        int totalCnt = missingService.totalCnt(str);
         // 실종 페이지의 갯수 변수에 저장
         int totalPage = (int) Math.ceil(totalCnt / (double) itemsInAPage);
 
@@ -114,7 +114,7 @@ public class UsrMissingController {
         }
 
         // 실종기록들 가져오기
-        List<Missing> missings = missingService.list(limitFrom, itemsInAPage);
+        List<Missing> missings = missingService.list(limitFrom, itemsInAPage, str);
 
         // 실종기록들 넘기기
         model.addAttribute("missings", missings);
@@ -128,6 +128,8 @@ public class UsrMissingController {
         model.addAttribute("rpage", rpage);
         // 현재 페이지 넘기기
         model.addAttribute("page", page);
+        // 현재 지역 넘기기
+        model.addAttribute("str", str);
 
         return "/usr/missing/list";
     }

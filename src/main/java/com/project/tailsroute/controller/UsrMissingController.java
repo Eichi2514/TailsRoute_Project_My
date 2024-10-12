@@ -2,6 +2,7 @@ package com.project.tailsroute.controller;
 
 import com.project.tailsroute.service.MissingService;
 import com.project.tailsroute.vo.Member;
+import com.project.tailsroute.vo.Missing;
 import com.project.tailsroute.vo.Rq;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 public class UsrMissingController {
@@ -77,6 +79,57 @@ public class UsrMissingController {
         missingService.write(rq.getLoginedMemberId(), name, reportDate2, missingLocation, breed, color, gender, age2, RFID, photoPath, trait);
 
         return "redirect:/usr/home/main"; // 메인 페이지로 리다이렉트
+    }
+
+    @GetMapping("/usr/missing/list")
+    public String showList(Model model, @RequestParam(defaultValue = "1") int page) {
+        boolean isLogined = rq.isLogined();
+
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        }
+
+        model.addAttribute("isLogined", isLogined);
+
+        // 한 페이지에 나타낼 갯수 변수에 저장
+        int itemsInAPage = 25;
+        // 페이지 범위 변수에 저장
+        int limitFrom = (page - 1) * itemsInAPage;
+
+        // 현재 실종기록의 갯수 변수에 저장
+        int totalCnt = missingService.totalCnt();
+        // 실종 페이지의 갯수 변수에 저장
+        int totalPage = (int) Math.ceil(totalCnt / (double) itemsInAPage);
+
+        // 현재 페이지의 이전 페이지 변수에 저장
+        int lpage = page - 1;
+        if (page - 1 <= 0) {
+            lpage = 1;
+        }
+        // 현재 페이지의 다음 페이지 변수에 저장
+        int rpage = page + 1;
+        if (page + 1 >= totalPage) {
+            rpage = totalPage;
+        }
+
+        // 실종기록들 가져오기
+        List<Missing> missings = missingService.list(limitFrom, itemsInAPage);
+
+        // 실종기록들 넘기기
+        model.addAttribute("missings", missings);
+        // 현재 실종기록의 갯수 넘기기
+        model.addAttribute("totalCnt", totalCnt);
+        // 실종 페이지의 갯수 넘기기
+        model.addAttribute("totalPage", totalPage);
+        // 현재 페이지의 이전 페이지 넘기기
+        model.addAttribute("lpage", lpage);
+        // 현재 페이지의 다음 페이지 넘기기
+        model.addAttribute("rpage", rpage);
+        // 현재 페이지 넘기기
+        model.addAttribute("page", page);
+
+        return "/usr/missing/list";
     }
 
 }

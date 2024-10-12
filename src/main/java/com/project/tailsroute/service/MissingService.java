@@ -2,8 +2,11 @@ package com.project.tailsroute.service;
 
 import com.project.tailsroute.repository.DogRepository;
 import com.project.tailsroute.repository.MissingRepository;
+import com.project.tailsroute.vo.Missing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class MissingService {
@@ -17,5 +20,13 @@ public class MissingService {
 
     public void write(int loginedMemberId, String name, String reportDate, String missingLocation, String breed, String color, String gender, String age, String rfid, String photoPath, String trait) {
         missingRepository.write(loginedMemberId, name, reportDate, missingLocation, breed, color, gender, age, rfid, photoPath, trait);
+    }
+
+    public int totalCnt() {
+        return missingRepository.totalCnt();
+    }
+
+    public List<Missing> list(int limitFrom, int itemsInAPage) {
+        return missingRepository.list(limitFrom, itemsInAPage);
     }
 }

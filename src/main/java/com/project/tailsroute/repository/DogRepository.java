@@ -1,5 +1,6 @@
 package com.project.tailsroute.repository;
 
+import com.project.tailsroute.vo.Dog;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -11,7 +12,7 @@ public interface DogRepository {
 			SELECT id
             FROM dog
             ORDER BY id DESC
-            LIMIT 0, 1;		
+            LIMIT 1;		
             	""")
     Integer lastNumber();
 
@@ -26,4 +27,12 @@ public interface DogRepository {
             photo = #{photoPath}
                     			""")
     void upload(int loginedMemberId, String dogName, Double dogWeight, String dogType, String photoPath);
+
+    @Select("""
+            SELECT *
+            FROM dog
+            WHERE memberId = #{loginedMemberId} 
+            LIMIT 0, 1;
+             """)
+    Dog getDogfile(int loginedMemberId);
 }

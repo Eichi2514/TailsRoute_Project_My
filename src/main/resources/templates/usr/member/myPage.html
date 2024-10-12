@@ -1,0 +1,39 @@
+<th:block th:replace="usr/common/head"/>
+<head>
+    <title>내 정보</title>
+    <link rel="stylesheet" href="/resource/css/memberMyPage.css"/>
+</head>
+<body>
+<script src="/resource/js/memberMyPage.js"></script>
+<div class="container">
+    <div class="myPage">
+        <div th:if="${member != null}">
+            <div class="title">내 정보</div>
+            <div th:text="'회원번호 : ' + ${member.id}"></div>
+            <div th:text="'등록일 : ' + ${member.regDate}"></div>
+            <div th:text="'수정일 : ' + ${member.updateDate}"></div>
+            <div th:text="'아이디 : ' + ${member.loginId}"></div>
+            <div th:text="'비밀번호 : ' + ${member.loginPw}"></div>
+            <div th:text="'등급 : ' + (${member.authLevel == 3 ? '일반회원' : '관리자'})"></div>
+            <div th:text="'이름 : ' + ${member.name}"></div>
+            <div th:text="'닉네임 : ' + ${member.nickname}"></div>
+            <div th:text="'성별 : ' + (${member.gender == 0 ? '여자' : '남자'})"></div>
+            <div th:text="'전화번호 : ' + ${member.cellphoneNum}"></div>
+        </div>
+    </div>
+    <div class="dogPage">
+        <div th:if="${dog != null}">
+            <div class="title">반려견 정보</div>
+            <img th:src="@{${dog.photo}}" alt="Dog Image"/>
+            <div th:text="'반려견 번호 : ' + ${dog.id}"></div>
+            <div th:text="'등록일 : ' + ${dog.regDate}"></div>
+            <div th:text="'수정일 : ' + ${dog.updateDate}"></div>
+            <div th:text="'이름 : ' + (${dog.name != '이름 없음' ? dog.name : '이름 없음'})"></div>
+            <div th:text="'체중 : ' + (${dog.weight != -1 ? dog.weight + ' kg' : '모름'})"></div>
+            <div th:text="'반려견 유형 : ' + ${dog.type}"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

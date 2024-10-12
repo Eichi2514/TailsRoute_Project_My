@@ -1,6 +1,7 @@
 package com.project.tailsroute.service;
 
 import com.project.tailsroute.repository.DogRepository;
+import com.project.tailsroute.vo.Dog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,5 +18,9 @@ public class DogService {
 
     public void upload(int loginedMemberId, String dogName, Double dogWeight, String dogType, String photoPath) {
         dogRepository.upload(loginedMemberId, dogName, dogWeight, dogType, photoPath);
+    }
+
+    public Dog getDogfile(int loginedMemberId) {
+        return dogRepository.getDogfile(loginedMemberId);
     }
 }

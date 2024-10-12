@@ -18,6 +18,83 @@ CREATE TABLE `member`(
                          delDate DATETIME COMMENT '탈퇴 날짜'
 );
 
+## 회원정보 테이블 테스트 데이터
+
+INSERT INTO `member` SET
+                         regDate = '2024-02-05 14:15:00',
+                         updateDate = '2024-03-10 16:30:00',
+                         loginId = 'admin',
+                         loginPw = 'pw_hash2',
+                         authLevel = 7,
+                         `name` = '관리자',
+                         nickname = '강아지왕',
+                         gender = 1,
+                         cellphoneNum = '010-8765-4321',
+                         delStatus = 0;
+
+INSERT INTO `member` SET
+    regDate = '2024-01-10 10:30:00',
+                         updateDate = '2024-02-10 12:00:00',
+                         loginId = 'user01',
+                         loginPw = 'pw_hash1',
+                         authLevel = 3,
+                         `name` = '김서준',
+                         nickname = '콩이의대장',
+                         gender = 1,
+                         cellphoneNum = '010-1234-5678',
+                         delStatus = 0;
+
+
+INSERT INTO `member` SET
+    regDate = '2024-03-20 09:45:00',
+                         updateDate = '2024-04-25 14:15:00',
+                         loginId = 'user02',
+                         loginPw = 'pw_hash3',
+                         authLevel = 3,
+                         `name` = '이지아',
+                         nickname = '바둑이의수호자',
+                         gender = 0,
+                         cellphoneNum = '010-1111-2222',
+                         delStatus = 1,
+                         delDate = '2024-05-01 10:30:00';
+
+INSERT INTO `member` SET
+    regDate = '2024-04-18 16:00:00',
+                         updateDate = '2024-05-20 09:00:00',
+                         loginId = 'user03',
+                         loginPw = 'pw_hash4',
+                         authLevel = 3,
+                         `name` = '박도윤',
+                         nickname = '두부의행복전도사',
+                         gender = 1,
+                         cellphoneNum = '010-3333-4444',
+                         delStatus = 0;
+
+INSERT INTO `member` SET
+    regDate = '2024-05-22 11:30:00',
+                         updateDate = '2024-06-10 15:45:00',
+                         loginId = 'user04',
+                         loginPw = 'pw_hash5',
+                         authLevel = 3,
+                         `name` = '최하은',
+                         nickname = '뭉치의천사',
+                         gender = 0,
+                         cellphoneNum = '010-5555-6666',
+                         delStatus = 0;
+
+INSERT INTO `member` SET
+    regDate = '2024-07-22 12:20:00',
+                         updateDate = '2024-08-01 12:40:00',
+                         loginId = 'asd',
+                         loginPw = 'asd',
+                         authLevel = 3,
+                         `name` = '유은희',
+                         nickname = '꾸미엄마',
+                         gender = 0,
+                         cellphoneNum = '010-7698-1532',
+                         delStatus = 0;
+
+
 ## 반려견 테이블
 CREATE TABLE `dog`(
                       id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
@@ -26,10 +103,44 @@ CREATE TABLE `dog`(
                       memberId INT(10) UNSIGNED NOT NULL COMMENT '주인 식별번호',
                       `name` CHAR(20) DEFAULT '이름 없음' COMMENT '이름',
                       weight INT(10) DEFAULT -1 COMMENT '체중 (-1=모름)',
-                      photo TEXT DEFAULT '기본 사진 url' COMMENT '사진',
+                      photo CHAR(50) NOT NULL COMMENT '사진',
                       `type` CHAR(20) NOT NULL COMMENT '소형, 중형, 대형'
 
 );
+
+INSERT INTO dog SET
+    regDate = '2024-01-01 10:00:00',
+    updateDate = '2024-01-01 10:00:00',
+    memberId = 1,
+    weight = 5,
+    photo = '/resource/photo/dog1.png',
+    `type` = '소형';
+
+INSERT INTO dog SET
+    regDate = '2024-02-15 14:30:00',
+    updateDate = '2024-02-15 14:30:00',
+    memberId = 3,
+    `name` = '바둑이',
+    photo = '/resource/photo/dog2.png',
+    `type` = '중형';
+
+INSERT INTO dog SET
+    regDate = '2024-03-20 09:15:00',
+    updateDate = '2024-03-20 09:15:00',
+    memberId = 5,
+    `name` = '뭉치',
+    weight = 15,
+    photo = '/resource/photo/dog3.png',
+    `type` = '대형';
+
+INSERT INTO dog SET
+    regDate = '2024-04-25 16:45:00',
+    updateDate = '2024-04-25 16:45:00',
+    memberId = 6,
+    `name` = '꾸미',
+    weight = 4,
+    photo = '/resource/photo/dog4.png',
+    `type` = '소형';
 
 ## 게시글 테이블
 CREATE TABLE article(
@@ -129,13 +240,18 @@ CREATE TABLE doghealth(
                           activityLevel FLOAT NOT NULL COMMENT '활동량(평균걸음수)'
 );
 
-SELECT *
-FROM dog
-ORDER BY id DESC
-    LIMIT 0, 1;
+## init 끝
+##############################################
+
+SELECT * FROM `member`;
+
+SELECT M.*, D.photo extra__dogPoto FROM `member` M LEFT JOIN dog D ON D.memberId = M.id WHERE M.id = 6 LIMIT 1;
+
+SELECT M.nickname, D.name
+FROM `member` M
+         LEFT JOIN dog D
+                   ON D.memberId = M.id;
+
+SELECT * FROM dog;
 
 SELECT * FROM missing;
-
-SHOW GRANTS FOR 'root'@'localhost';
-
-SELECT USER, HOST FROM mysql.user WHERE USER = 'root';

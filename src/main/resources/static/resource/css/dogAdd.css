@@ -47,7 +47,7 @@ body {
     font-weight: bold;
 }
 
-.profile{
+.profile {
     border-bottom: 1px solid;
     margin: auto;
     width: 1340px;
@@ -60,12 +60,12 @@ body {
     width: 1340px;
 }
 
-.border_box{
+.border_box {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
-.preview{
+.preview {
     top: 0;
     left: 0;
     width: 300px;
@@ -79,7 +79,7 @@ body {
     margin-top: 20px;
 }
 
-.upload_button{
+.upload_button {
     background: RGB(105, 105, 105);
     color: white;
     border-radius: 10px;

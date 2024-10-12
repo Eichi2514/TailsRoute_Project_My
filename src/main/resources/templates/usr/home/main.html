@@ -1,4 +1,4 @@
-<th:block th:replace="~{usr/common/head}"/>
+<th:block th:replace="usr/common/head"/>
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -8,21 +8,6 @@
 </head>
 <body>
 <script src="/resource/js/main.js"></script>
-<div th:if="${member != null}">
-    <div th:text="'회원번호 : ' + ${member.id}"></div>
-    <div th:text="'등록일 : ' + ${member.regDate}"></div>
-    <div th:text="'수정일 : ' + ${member.updateDate}"></div>
-    <div th:text="'아이디 : ' + ${member.loginId}"></div>
-    <div th:text="'비밀번호 : ' + ${member.loginPw}"></div>
-    <div th:text="'권한 레벨 : ' + ${member.authLevel}"></div>
-    <div th:text="'이름 : ' + ${member.name}"></div>
-    <div th:text="'닉네임 : ' + ${member.nickname}"></div>
-    <div th:text="'성별 : ' + (${member.gender == 0 ? '여자' : '남자'})"></div>
-    <div th:text="'전화번호 : ' + ${member.cellphoneNum}"></div>
-    <div th:text="'탈퇴 여부 : ' + (${member.delStatus ? '탈퇴 후' : '탈퇴 전'})"></div>
-    <div th:text="'탈퇴일 : ' + ${member.delDate}"></div>
-    <div th:text="'강아지 사진 : ' + ${member.extra__dogPoto}"></div>
-</div>
 </body>
 </html>
 

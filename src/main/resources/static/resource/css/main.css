@@ -1,8 +1,28 @@
 body {
-    background-color: #FFF3CD;
+    background-color: #FFFEF0;
     color: #4D3E3E;
     white-space: normal;
     word-break: keep-all;
+}
+
+.left_box{
+    top: 0;
+    left: 0;
+    position: absolute;
+    background-color: #FFF3CD;
+    width: 50vw;
+    height: 805px;
+    z-index: -1;
+}
+
+.right_box{
+    top: 0;
+    right: 0;
+    position: absolute;
+    background-color: #FFF3CD;
+    width: 50vw;
+    height: 718px;
+    z-index: -1;
 }
 
 .main_image, .main_box {

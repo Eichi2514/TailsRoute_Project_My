@@ -78,13 +78,13 @@ public class UsrDogController {
         String photoPath = null;
         if (!file.isEmpty()) {
 
-            String filePath = "src/main/resources/static/resource/photo/missing" + id + ".png";
+            String filePath = "src/main/resources/static/resource/photo/dog" + id + ".png";
             try {
                 // 파일 저장 전에 이미지 크기 조절
                 Thumbnails.of(file.getInputStream()).size(80, 80) // 원하는 사이즈로 조정
                         .toFile(new File(filePath));
 
-                photoPath = "/resource/photo/missing" + id + ".png"; // 웹에서 접근할 수 있는 경로
+                photoPath = "/resource/photo/dog" + id + ".png"; // 웹에서 접근할 수 있는 경로
             } catch (IOException e) {
                 return "redirect:/usr/missing/modify?missingId="+id;
             }

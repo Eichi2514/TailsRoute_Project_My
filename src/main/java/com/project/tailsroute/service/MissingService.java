@@ -37,4 +37,8 @@ public class MissingService {
     public void missingDelete(int missingId) {
         missingRepository.missingDelete(missingId);
     }
+
+    public void modify(int id, String name, String reportDate, String missingLocation, String breed, String color, String gender, String age, String rfid, String photoPath, String trait) {
+        missingRepository.modify(id, name, reportDate, missingLocation, breed, color, gender, age, rfid, photoPath, trait);
+    }
 }

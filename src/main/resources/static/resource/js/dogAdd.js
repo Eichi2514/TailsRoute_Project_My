@@ -57,3 +57,8 @@ $(document).ready(function () {
         fileReader.readAsDataURL(file); // 파일을 Data URL로 읽기
     }
 });
+
+function preview_clear() {
+    const $preview = $('.preview'); // 미리보기 이미지 선택
+    $preview.css('display', 'none');  // 미리보기 이미지 숨기기
+}

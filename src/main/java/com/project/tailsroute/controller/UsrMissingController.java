@@ -67,9 +67,11 @@ public class UsrMissingController {
 
     @PostMapping("/usr/missing/doDelete")
     @ResponseBody
-    public String doDelete(Model model, @RequestParam("missingId") int missingId, @RequestParam("memberId") int memberId) {
+    public String doDelete(Model model, @RequestParam("missingId") int missingId) {
 
-        if (rq.getLoginedMemberId() != memberId) {
+        Missing missing = missingService.missingArticle(missingId);
+
+        if (rq.getLoginedMemberId() != missing.getMemberId()) {
             return Ut.jsHistoryBack("F-1", Ut.f("삭제 권한이 없습니다"));
         }
 
@@ -78,13 +80,69 @@ public class UsrMissingController {
         return Ut.jsReplace("S-1", Ut.f("%s번 글이 삭제되었습니다", missingId), "/usr/missing/list");
     }
 
+    @GetMapping("/usr/missing/modify")
+    public String showModify(Model model, @RequestParam("missingId") int missingId) {
+        boolean isLogined = rq.isLogined();
 
-    @PostMapping("/usr/missing/write")
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        }
+
+        model.addAttribute("isLogined", isLogined);
+
+        Missing missing = missingService.missingArticle(missingId);
+
+        model.addAttribute("missing", missing);
+
+        return "/usr/missing/modify";
+    }
+
+    @PostMapping("/usr/missing/doModify")
+    public String modify(@RequestParam("id") int id, @RequestParam("name") String name, @RequestParam("reportDate") String reportDate, @RequestParam("reportTime") String reportTime, @RequestParam("missingLocation") String missingLocation, @RequestParam("breed") String breed,
+                        @RequestParam("color") String color, @RequestParam("gender") String gender, @RequestParam(value = "age", required = false) Integer age, @RequestParam(value = "RFID", required = false) String RFID,
+                        @RequestParam(value = "dog_photo", required = false) MultipartFile file, @RequestParam("trait") String trait) {
+
+        Missing missing = missingService.missingArticle(id);
+        String dogPhoto = missing.getPhoto();
+
+        if (rq.getLoginedMemberId() != missing.getMemberId()) {
+            return "redirect:/usr/missing/list";
+        }
+
+        String reportDate2 = reportDate + " " + reportTime;
+
+        String age2 = "불명";
+        if (age != null) age2 = Integer.toString(age);
+
+        // 파일 처리 로직
+        String photoPath = null;
+        if (!file.isEmpty()) {
+
+            String filePath = "src/main/resources/static/resource/photo/missing" + id + ".png";
+            try {
+                // 파일 저장 전에 이미지 크기 조절
+                Thumbnails.of(file.getInputStream()).size(80, 80) // 원하는 사이즈로 조정
+                        .toFile(new File(filePath));
+
+                photoPath = "/resource/photo/missing" + id + ".png"; // 웹에서 접근할 수 있는 경로
+            } catch (IOException e) {
+                return "redirect:/usr/missing/modify?missingId="+id;
+            }
+            // 데이터베이스에 반려견 정보 수정
+            missingService.modify(id, name, reportDate2, missingLocation, breed, color, gender, age2, RFID, photoPath, trait);
+        }else missingService.modify(id, name, reportDate2, missingLocation, breed, color, gender, age2, RFID, dogPhoto, trait);
+
+
+
+        return "redirect:/usr/missing/detail?missingId="+id;
+    }
+
+
+    @PostMapping("/usr/missing/doWrite")
     public String write(@RequestParam("name") String name, @RequestParam("reportDate") String reportDate, @RequestParam("reportTime") String reportTime, @RequestParam("missingLocation") String missingLocation, @RequestParam("breed") String breed,
                         @RequestParam("color") String color, @RequestParam("gender") String gender, @RequestParam(value = "age", required = false) Integer age, @RequestParam(value = "RFID", required = false) String RFID,
                         @RequestParam("dog_photo") MultipartFile file, @RequestParam("trait") String trait) {
-
-        boolean isLogined = rq.isLogined();
 
         String reportDate2 = reportDate + " " + reportTime;
 

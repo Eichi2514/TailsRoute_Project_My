@@ -1,10 +1,7 @@
 package com.project.tailsroute.repository;
 
 import com.project.tailsroute.vo.Missing;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -68,4 +65,20 @@ public interface MissingRepository {
             WHERE id = #{missingId}
                 """)
     void missingDelete(int missingId);
+
+    @Update("""
+			UPDATE missing
+			SET name = #{name},
+			reportDate = #{reportDate},
+			missingLocation = #{missingLocation},
+			breed = #{breed},
+			color = #{color},
+            gender = #{gender},
+            age = #{age},
+            RFID = COALESCE(#{rfid},"없음"),
+            photo = #{photoPath},
+            trait = #{trait}
+			WHERE id = #{missingId}
+			""")
+    void modify(int missingId, String name, String reportDate, String missingLocation, String breed, String color, String gender, String age, String rfid, String photoPath, String trait);
 }

@@ -13,7 +13,6 @@
             <a class="misssing_button" th:href="@{'../missing/modify?missingId='+${missing.id}}"
                th:if="${member.id == missing.memberId}">수정</a>
             <input type="hidden" name="missingId" th:value="${missing.id}" \>
-            <input type="hidden" name="memberId" th:value="${missing.memberId}" \>
             <button type="submit" class="misssing_button" th:if="${member.id == missing.memberId}">삭제</button>
         </form>
     </div>

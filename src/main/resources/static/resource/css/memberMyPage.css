@@ -24,3 +24,48 @@ body {
     width: 45%; /* 전체 폭을 사용할 수 있게 설정 */
     box-sizing: border-box; /* 패딩과 보더를 포함한 전체 크기 계산 */
 }
+
+.profile_title{
+    display: inline-block;
+}
+
+.profile {
+    border-bottom: 1px solid;
+    margin: auto;
+    width: 100%;
+    font-weight: bold;
+}
+
+.dogPage_image{
+    border-radius: 10px;
+    margin-top: 10px;
+    width: 100px;
+    height: 100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.myPage_text{
+    padding: 10px;
+    font-weight: bold;
+}
+
+.page_body{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px;
+}
+
+.upload_button_wrapper {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.upload_button {
+    background: RGB(105, 105, 105);
+    color: white;
+    border-radius: 10px;
+    height: 40px;
+    width: 100px;
+}

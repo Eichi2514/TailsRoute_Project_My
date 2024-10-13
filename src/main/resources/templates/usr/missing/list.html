@@ -58,7 +58,7 @@
 </div>
 
 
-<div class="pagination tw-flex tw-justify-center tw-items-center">
+<div class="pagination tw-flex tw-justify-center tw-items-center" th:if="${totalPage != 0}">
     <a class="pagination_left tw-p-[10px]" th:href="@{'list?page=' + ${lpage} + 'srt='+${srt}}">
         <i class="fa-solid fa-caret-left" style="font-size: 70px;"></i>
     </a>

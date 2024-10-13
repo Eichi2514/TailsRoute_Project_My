@@ -1,7 +1,9 @@
 package com.project.tailsroute.controller;
 
 import com.project.tailsroute.service.DogService;
+import com.project.tailsroute.vo.Dog;
 import com.project.tailsroute.vo.Member;
+import com.project.tailsroute.vo.Missing;
 import com.project.tailsroute.vo.Rq;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +43,63 @@ public class UsrDogController {
         return "/usr/dog/add";
     }
 
+    @GetMapping("/usr/dog/modify")
+    public String showModify(Model model, @RequestParam("dogId") int dogId) {
+        boolean isLogined = rq.isLogined();
+
+        Dog dog = dogService.getDogfileId(dogId);
+
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        }
+
+        if (rq.getLoginedMemberId() != dog.getMemberId()) {
+            return "redirect:/usr/home/main";
+        }
+
+        model.addAttribute("isLogined", isLogined);
+        model.addAttribute("dog", dog);
+
+        return "/usr/dog/modify";
+    }
+
+    @PostMapping("/usr/dog/doModify")
+    public String modify(@RequestParam("id") int id, @RequestParam("dog_name") String dogName, @RequestParam(value = "dog_weight", required = false) String dogWeight, @RequestParam("dog_type") String dogType, @RequestParam("dog_photo") MultipartFile file) {
+
+        Dog dog = dogService.getDogfileId(id);
+        String dogPhoto = dog.getPhoto();
+
+        if (rq.getLoginedMemberId() != dog.getMemberId()) {
+            return "redirect:/usr/home/main";
+        }
+
+        // 파일 처리 로직
+        String photoPath = null;
+        if (!file.isEmpty()) {
+
+            String filePath = "src/main/resources/static/resource/photo/missing" + id + ".png";
+            try {
+                // 파일 저장 전에 이미지 크기 조절
+                Thumbnails.of(file.getInputStream()).size(80, 80) // 원하는 사이즈로 조정
+                        .toFile(new File(filePath));
+
+                photoPath = "/resource/photo/missing" + id + ".png"; // 웹에서 접근할 수 있는 경로
+            } catch (IOException e) {
+                return "redirect:/usr/missing/modify?missingId="+id;
+            }
+            // 데이터베이스에 반려견 정보 수정
+            dogService.modify(id, dogName, dogWeight, dogType, photoPath);
+        }else dogService.modify(id, dogName, dogWeight, dogType, dogPhoto);
+
+
+
+        return "redirect:/usr/member/myPage";
+    }
+
 
     @PostMapping("/usr/dog/upload")
-    public String upload(@RequestParam("dog_name") String dogName, @RequestParam(value = "dog_weight", required = false) Double dogWeight, @RequestParam("dog_type") String dogType, @RequestParam("dog_photo") MultipartFile file) {
+    public String upload(@RequestParam("dog_name") String dogName, @RequestParam(value = "dog_weight", required = false) String dogWeight, @RequestParam("dog_type") String dogType, @RequestParam("dog_photo") MultipartFile file) {
 
         // 파일 처리 로직
         String photoPath = null;

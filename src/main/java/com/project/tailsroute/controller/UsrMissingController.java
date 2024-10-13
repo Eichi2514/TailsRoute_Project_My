@@ -39,6 +39,8 @@ public class UsrMissingController {
         if (isLogined) {
             Member member = rq.getLoginedMember();
             model.addAttribute("member", member);
+        } else{
+            return "redirect:/usr/member/login";
         }
 
         model.addAttribute("isLogined", isLogined);
@@ -93,6 +95,10 @@ public class UsrMissingController {
 
         Missing missing = missingService.missingArticle(missingId);
 
+        if (rq.getLoginedMemberId() != missing.getMemberId()) {
+            return "redirect:/usr/missing/list";
+        }
+
         model.addAttribute("missing", missing);
 
         return "/usr/missing/modify";
@@ -100,8 +106,8 @@ public class UsrMissingController {
 
     @PostMapping("/usr/missing/doModify")
     public String modify(@RequestParam("id") int id, @RequestParam("name") String name, @RequestParam("reportDate") String reportDate, @RequestParam("reportTime") String reportTime, @RequestParam("missingLocation") String missingLocation, @RequestParam("breed") String breed,
-                        @RequestParam("color") String color, @RequestParam("gender") String gender, @RequestParam(value = "age", required = false) Integer age, @RequestParam(value = "RFID", required = false) String RFID,
-                        @RequestParam(value = "dog_photo", required = false) MultipartFile file, @RequestParam("trait") String trait) {
+                         @RequestParam("color") String color, @RequestParam("gender") String gender, @RequestParam(value = "age", required = false) Integer age, @RequestParam(value = "RFID", required = false) String RFID,
+                         @RequestParam(value = "dog_photo", required = false) MultipartFile file, @RequestParam("trait") String trait) {
 
         Missing missing = missingService.missingArticle(id);
         String dogPhoto = missing.getPhoto();

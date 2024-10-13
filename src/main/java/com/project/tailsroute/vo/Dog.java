@@ -13,7 +13,7 @@ public class Dog {
     private String updateDate;
     private int memberId;
     private String name;
-    private int weight;
+    private String weight;
     private String photo;
     private String type;
 }

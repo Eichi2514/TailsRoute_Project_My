@@ -16,11 +16,21 @@ public class DogService {
         return (number != null) ? number : 0; // null일 경우 0을 반환
     }
 
-    public void upload(int loginedMemberId, String dogName, Double dogWeight, String dogType, String photoPath) {
+    public void upload(int loginedMemberId, String dogName, String dogWeight, String dogType, String photoPath) {
+        if (dogWeight.isEmpty()) dogWeight = "모름";
         dogRepository.upload(loginedMemberId, dogName, dogWeight, dogType, photoPath);
     }
 
     public Dog getDogfile(int loginedMemberId) {
         return dogRepository.getDogfile(loginedMemberId);
+    }
+
+    public Dog getDogfileId(int dogId) {
+        return dogRepository.getDogfileId(dogId);
+    }
+
+    public void modify(int dogId, String dogName, String dogWeight, String dogType, String photoPath) {
+        if (dogWeight.isEmpty()) dogWeight = "모름";
+        dogRepository.modify(dogId, dogName, dogWeight, dogType, photoPath);
     }
 }

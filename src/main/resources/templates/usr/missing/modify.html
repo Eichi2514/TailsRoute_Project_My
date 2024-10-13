@@ -7,7 +7,7 @@
 <body>
 <div class="title">실종신고 글수정</div>
 <div class="profile tw-p-5">
-    <div class="profile_title" th:text="${member.nickname}">사용자 정보</div>
+    <div class="profile_title" th:if="${member!=null}" th:text="${member.nickname}">사용자 정보</div>
 </div>
 <form action="/usr/missing/doModify" method="post" enctype="multipart/form-data">
     <input type="hidden" name="id" th:value="${missing.id}"/> <!-- hidden 필드로 ID 전달 -->

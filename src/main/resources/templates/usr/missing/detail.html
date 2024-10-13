@@ -7,9 +7,9 @@
 <body>
 <div class="title">실종동물찾기</div>
 <div class="profile tw-p-5 tw-flex tw-justify-between">
-    <div class="profile_title" th:text="${member.nickname}">사용자 정보</div>
+    <div class="profile_title" th:if="${member != null}" th:text="${member.nickname}">사용자 정보</div>
     <div>
-        <form th:action="@{'../missing/doDelete'}" method="post">
+        <form th:action="@{'../missing/doDelete'}" method="post" th:if="${member != null}">
             <a class="misssing_button" th:href="@{'../missing/modify?missingId='+${missing.id}}"
                th:if="${member.id == missing.memberId}">수정</a>
             <input type="hidden" name="missingId" th:value="${missing.id}" \>

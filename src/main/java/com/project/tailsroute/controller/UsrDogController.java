@@ -29,6 +29,11 @@ public class UsrDogController {
     @Autowired
     private DogService dogService;
 
+    @GetMapping("/usr/send/gps")
+    public String showGps(Model model) {
+        return "usr/send/gps";
+    }
+
     @GetMapping("/usr/dog/add")
     public String showAdd(Model model) {
         boolean isLogined = rq.isLogined();
@@ -124,5 +129,4 @@ public class UsrDogController {
 
         return "redirect:/usr/home/main"; // 메인 페이지로 리다이렉트
     }
-
 }

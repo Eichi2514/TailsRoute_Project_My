@@ -25,14 +25,8 @@ public class UsrDogController {
         this.rq = rq;
     }
 
-
     @Autowired
     private DogService dogService;
-
-    @GetMapping("/usr/send/gps")
-    public String showGps(Model model) {
-        return "usr/send/gps";
-    }
 
     @GetMapping("/usr/dog/add")
     public String showAdd(Model model) {

@@ -104,8 +104,8 @@ CREATE TABLE `dog`(
                       `name` CHAR(20) NOT NULL DEFAULT '이름 없음' COMMENT '이름',
                       weight CHAR(20) NOT NULL DEFAULT '모름' COMMENT '체중',
                       photo CHAR(50) NOT NULL COMMENT '사진',
-                      `type` CHAR(20) NOT NULL COMMENT '소형, 중형, 대형'
-
+                      `type` CHAR(20) NOT NULL COMMENT '소형, 중형, 대형',
+                      comPortName CHAR(20) COMMENT 'GPS 기기 연결 포트'
 );
 
 INSERT INTO dog SET
@@ -381,18 +381,14 @@ CREATE TABLE doghealth(
                           activityLevel FLOAT NOT NULL COMMENT '활동량(평균걸음수)'
 );
 
-## init 끝
-##############################################
-
-SELECT * FROM `member`;
-
-SELECT M.*, D.photo extra__dogPoto FROM `member` M LEFT JOIN dog D ON D.memberId = M.id WHERE M.id = 6 LIMIT 1;
-
-SELECT M.nickname, D.name
-FROM `member` M
-         LEFT JOIN dog D
-                   ON D.memberId = M.id;
-
-SELECT * FROM dog;
-
-SELECT * FROM missing;
+##반려견 행동범위 지정 테이블
+CREATE TABLE determinedLocation(
+                                   id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
+                                   regDate DATETIME NOT NULL COMMENT '추천 날짜',
+                                   updateDate DATETIME NOT NULL COMMENT '수정 날짜',
+                                   memberId INT(10) UNSIGNED NOT NULL COMMENT '생성자 식별번호',
+                                   dogId INT(10) UNSIGNED NOT NULL COMMENT '반려견 식별번호',
+                                   latitude FLOAT NOT NULL COMMENT '설정한 위도',
+                                   longitude FLOAT NOT NULL COMMENT '설정한 경도',
+                                   chack INT(1) UNSIGNED DEFAULT 1 COMMENT '범위 벗어났는지 여부'
+);

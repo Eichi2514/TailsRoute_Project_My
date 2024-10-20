@@ -5,18 +5,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 <body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $(".head_profile").click(function (event) {
-            event.stopPropagation();
-            $(".head_profile_bar").removeClass("tw-hidden");
-        });
-        $(document).click(function () {
-            $(".head_profile_bar").addClass("tw-hidden");
-        });
-    });
-</script>
 <div class="tw-fixed tw-h-[60px] tw-w-full tw-z-20" style="background-color: #4D3E3E;">
     <div class="tw-container tw-mx-auto tw-flex tw-justify-between tw-items-baseline">
         <a href="../home/main" class="tw-text-white tw-text-2xl tw-pl-[20px]">TailsRoute</a>
@@ -48,13 +36,17 @@
                 </li>
             </ul>
         </div>
-        <div class="head_profile tw-cursor-pointer tw-text-white tw-text-lg tw-relative" th:if="${!isLogined}"><a
-                href="../member/login" class="tw-mr-[30px]">로그인</a></div>
+        <div class="head_profile tw-cursor-pointer tw-text-white tw-text-lg tw-relative" th:if="${!isLogined}">
+            <a href="../member/login" class="tw-mr-[30px]">로그인</a>
+        </div>
         <div class="head_profile tw-cursor-pointer tw-text-white tw-text-lg tw-relative" th:if="${isLogined}">
-            <div th:if="${member.extra__dogPoto == null}" class="tw-mr-[30px]">프로필</div>
+            <div th:if="${member.extra__dogPoto == null}" class="tw-mr-[30px]"
+                 th:onclick="'this.nextElementSibling.classList.toggle(&quot;tw-hidden&quot;)'">프로필
+            </div>
 
             <img th:if="${member.extra__dogPoto != null}" th:src="@{${member.extra__dogPoto}}" alt="Profile Image"
-                 class="tw-w-[45px] tw-h-[45px] tw-rounded-full tw-mr-[30px] tw-mb-[5px] tw-inline-block tw-border tw-border-transparent hover:tw-border-white"/>
+                 class="tw-w-[45px] tw-h-[45px] tw-rounded-full tw-mr-[30px] tw-mb-[5px] tw-inline-block tw-border tw-border-transparent hover:tw-border-white"
+                 th:onclick="'this.nextElementSibling.classList.toggle(&quot;tw-hidden&quot;)'"/>
 
             <div class="tw-hidden head_profile_bar tw-z-30 tw-cursor-default tw-mt-[15px] tw-absolute tw-w-[400px] tw-h-[350px] tw-bg-[#FFF3CD] tw-border tw-border-[#4D3E3E] tw-rounded-[30px] tw-flex tw-flex-col tw-items-center tw-justify-center tw-gap-2 tw-right-0">
                 <div class="head_profile_id tw-text-[#4D3E3E]" th:text="${member.getLoginId}">user01</div>
@@ -75,7 +67,6 @@
                        class="tw-no-underline tw-text-center tw-border tw-border-[#4D3E3E] tw-text-[#4D3E3E] tw-w-[170px] tw-p-2.5 tw-px-5 tw-rounded-l-full tw-transition-colors tw-duration-300 hover:tw-bg-[#E6DCA8]">
                         <i class="fa-solid fa-circle-plus"></i> 반려견 추가
                     </a>
-                    <!--로그아웃 주소 http://localhost:8081/usr/member/doLogout 이걸로 했는데 바꿀거면 아래 href 수정하면돼-->
                     <a href="../member/doLogout"
                        class="tw-no-underline tw-text-center tw-border tw-border-[#4D3E3E] tw-text-[#4D3E3E] tw-w-[170px] tw-p-2.5 tw-px-5 tw-rounded-r-full tw-transition-colors tw-duration-300 hover:tw-bg-[#E6DCA8]">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i> 로그아웃

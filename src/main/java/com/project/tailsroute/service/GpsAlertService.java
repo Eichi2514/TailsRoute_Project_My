@@ -1,8 +1,8 @@
 package com.project.tailsroute.service;
 
 import com.fazecast.jSerialComm.SerialPort;
-import com.project.tailsroute.vo.DeterminedLocation;
-import com.project.tailsroute.vo.Dog;
+import com.project.tailsroute.repository.GpsAlertRepository;
+import com.project.tailsroute.vo.GpsAlert;
 import com.twilio.Twilio; // Twilio API를 사용하기 위한 클래스 임포트
 import com.twilio.rest.api.v2010.account.Message; // 메시지를 전송하기 위한 클래스 임포트
 import com.twilio.type.PhoneNumber; // 전화번호 형식을 정의하기 위한 클래스 임포트
@@ -26,20 +26,20 @@ public class GpsAlertService {
     private static final double EARTH_RADIUS = 6371.0; // 지구 반지름 (km 단위)
 
     @Autowired
-    DeterminedLocationService determinedLocationService;
+    GpsAlertRepository gpsAlertRepository;
 
     // 두 GPS 좌표를 받아 거리 계산 후 SMS 전송 여부 결정
-    public void checkDistanceAndSendSms(double lat1, double lon1, DeterminedLocation determinedLocation) {
+    public void checkDistanceAndSendSms(double lat1, double lon1, GpsAlert gpsAlert) {
 
-        double lat2 = determinedLocation.getLatitude();
-        double lon2 = determinedLocation.getLongitude();
-        String dogName = determinedLocation.getExtra__dogName();
-        int chack = determinedLocation.getChack();
+        double lat2 = gpsAlert.getLatitude();
+        double lon2 = gpsAlert.getLongitude();
+        String dogName = gpsAlert.getExtra__dogName();
+        int chack = gpsAlert.getChack();
 
         double distance = calculateDistance(lat1, lon1, lat2, lon2); // 거리 계산
 
         if (distance > 1.0 && chack == 1) { // 1km 이상 떨어져 있을 때
-            sendSms("아이고! "+dogName+"(이)가 정해진 장소를 떠났네요. 위치를 확인해 주세요!", determinedLocation); // SMS 전송
+            sendSms("아이고! "+dogName+"(이)가 정해진 장소를 떠났네요. 위치를 확인해 주세요!", gpsAlert); // SMS 전송
             chack = 0;
         } else { // 다시 구역 안으로 들어왔을때
             chack = 1;
@@ -61,11 +61,11 @@ public class GpsAlertService {
     }
 
     // SMS를 전송하는 메서드
-    private void sendSms(String messageContent, DeterminedLocation determinedLocation) {
+    private void sendSms(String messageContent, GpsAlert gpsAlert) {
         // Twilio API 초기화 (계정 SID와 인증 토큰 사용)
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
 
-        String userCellphoneNum = determinedLocation.getExtra__cellphoneNum();
+        String userCellphoneNum = gpsAlert.getExtra__cellphoneNum();
 
         // SMS 메시지를 생성하고 전송
         Message message = Message.creator(
@@ -84,7 +84,12 @@ public class GpsAlertService {
     @PostConstruct
     public void startGpsDataListener() {
 
-        List<DeterminedLocation> determinedLocations = determinedLocationService.All();
+        List<GpsAlert> GpsAlerts = gpsAlertRepository.All();
+
+        System.err.println("GPS 갯수 : " +GpsAlerts.size());
+        for (GpsAlert gpsAlert : GpsAlerts) {
+            System.err.println("GPS들 : " +gpsAlert);
+        }
 
         /*
         String comPortName = determinedLocation.getExtra__comPortName(); // GPS 기기 연결 포트
@@ -96,8 +101,9 @@ public class GpsAlertService {
         */
 
         // GPS 데이터를 읽고 처리하는 메서드 호출
-        for (DeterminedLocation determinedLocation : determinedLocations) {
-            readGpsData(determinedLocation); // GPS 데이터 읽기 시작
+        for (GpsAlert gpsAlert : GpsAlerts) {
+            // 각 GpsAlert에 대해 새로운 쓰레드를 생성하여 readGpsData 실행
+            new Thread(() -> readGpsData(gpsAlert)).start();
         }
     }
 
@@ -107,13 +113,13 @@ public class GpsAlertService {
      * lat2 : 비교할 고정된 위도
      * lon2 : 비교할 고정된 경도
      */
-    public void readGpsData(DeterminedLocation determinedLocation) {
+    public void readGpsData(GpsAlert gpsAlert) {
         // 아두이노와 통신하기 위한 COM 포트 설정
-        SerialPort comPort = SerialPort.getCommPort(determinedLocation.getExtra__comPortName()); // 지정된 COM 포트 열기
+        SerialPort comPort = SerialPort.getCommPort(gpsAlert.getExtra__comPortName()); // 지정된 COM 포트 열기
         comPort.setComPortParameters(9600, 8, 1, 0); // 포트의 통신 설정 (9600bps, 데이터 비트 8, 스톱 비트 1, 패리티 없음)
         comPort.openPort(); // 포트 열기
 
-        System.out.println("Arduino와 연결되었습니다."); // 포트 연결 성공 메시지 출력
+        System.out.println(gpsAlert.getExtra__comPortName()+" 연결되었습니다."); // 포트 연결 성공 메시지 출력
 
         // 데이터를 지속적으로 읽는 루프
         while (true) {
@@ -132,7 +138,7 @@ public class GpsAlertService {
                         double longitude = Double.parseDouble(gpsData[1].trim()); // 두 번째 값: 경도
 
                         // 거리 계산 후 기준 거리 이상일 경우 SMS 전송
-                        checkDistanceAndSendSms(latitude, longitude, determinedLocation);
+                        checkDistanceAndSendSms(latitude, longitude, gpsAlert);
                     } else {
                         System.out.println("유효하지 않은 GPS 데이터 형식입니다."); // GPS 데이터 형식이 잘못된 경우 출력
                     }
@@ -143,11 +149,28 @@ public class GpsAlertService {
 
             // 1초 대기 후 다시 데이터 읽기 시도
             try {
-                Thread.sleep(1000); // 1초 동안 대기
+                Thread.sleep(5000); // 5초 동안 대기
             } catch (InterruptedException e) { // 인터럽트 발생 시 오류 처리
                 e.printStackTrace(); // 스택 트레이스 출력
             }
         }
+    }
+
+    public void saveLocation(int dogId, double latitude, double longitude) {
+        // System.err.println("서비스 : " + latitude + ", " + longitude);
+        gpsAlertRepository.saveLocation(dogId, latitude, longitude);
+    }
+
+    public GpsAlert getGpsAlert(int dogId) {
+        return gpsAlertRepository.getGpsAlert(dogId);
+    }
+
+    public void updateLocation(int dogId, double latitude, double longitude) {
+        gpsAlertRepository.updateLocation(dogId, latitude, longitude);
+    }
+
+    public void deleteLocation(int dogId) {
+        gpsAlertRepository.deleteLocation(dogId);
     }
 }
 

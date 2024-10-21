@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeterminedLocation {
-    private int memberId;
+public class GpsAlert {
     private int dogId;
     private double latitude;
     private double longitude;

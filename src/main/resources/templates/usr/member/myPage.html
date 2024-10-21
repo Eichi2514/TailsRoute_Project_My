@@ -70,8 +70,17 @@
                 <span class="myPage_text" th:if="${dog.comPortName!=null}">○</span>
             </div>
             <div>
-                <button class="upload_button" th:if="${dog.comPortName!=null}"
-                        th:onclick="|location.href='@{/usr/home/main}'|">위치 등록
+                <button class="upload_button"
+                        th:if="${dog.comPortName != null && locationChack == false}"
+                        th:onclick="'location.href=\'/usr/gpsAlert/add?dogId=' + ${dog.id} + '\';'">위치 등록
+                </button>
+                <button class="upload_button"
+                        th:if="${dog.comPortName != null && locationChack == true}"
+                        th:onclick="'location.href=\'/usr/gpsAlert/modify?dogId=' + ${dog.id} + '\';'">위치 수정
+                </button>
+                <button class="upload_button"
+                        th:if="${dog.comPortName != null && locationChack == true}"
+                        th:onclick="'deleteLocation(' + ${dog.id} + ')'">위치 삭제
                 </button>
             </div>
         </div>

@@ -140,7 +140,8 @@ INSERT INTO dog SET
     `name` = '꾸미',
     weight = 4,
     photo = '/resource/photo/dog4.png',
-    `type` = '소형';
+    `type` = '소형',
+    comPortName = "COM7";
 
 ## 게시글 테이블
 CREATE TABLE article(
@@ -382,13 +383,12 @@ CREATE TABLE doghealth(
 );
 
 ##반려견 행동범위 지정 테이블
-CREATE TABLE determinedLocation(
-                                   id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
-                                   regDate DATETIME NOT NULL COMMENT '추천 날짜',
-                                   updateDate DATETIME NOT NULL COMMENT '수정 날짜',
-                                   memberId INT(10) UNSIGNED NOT NULL COMMENT '생성자 식별번호',
-                                   dogId INT(10) UNSIGNED NOT NULL COMMENT '반려견 식별번호',
-                                   latitude FLOAT NOT NULL COMMENT '설정한 위도',
-                                   longitude FLOAT NOT NULL COMMENT '설정한 경도',
-                                   chack INT(1) UNSIGNED DEFAULT 1 COMMENT '범위 벗어났는지 여부'
+CREATE TABLE gpsAlert(
+                         id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
+                         regDate DATETIME NOT NULL COMMENT '등록 날짜',
+                         updateDate DATETIME NOT NULL COMMENT '수정 날짜',
+                         dogId INT(10) UNSIGNED NOT NULL COMMENT '반려견 식별번호',
+                         latitude DECIMAL(10, 7) NOT NULL COMMENT '설정한 위도',
+                         longitude DECIMAL(10, 7) NOT NULL COMMENT '설정한 경도',
+                         chack INT(1) UNSIGNED DEFAULT 0 COMMENT '범위 벗어났는지 여부'
 );

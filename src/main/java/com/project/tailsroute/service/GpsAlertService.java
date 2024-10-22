@@ -6,14 +6,22 @@ import com.project.tailsroute.vo.GpsAlert;
 import com.twilio.Twilio; // Twilio API를 사용하기 위한 클래스 임포트
 import com.twilio.rest.api.v2010.account.Message; // 메시지를 전송하기 위한 클래스 임포트
 import com.twilio.type.PhoneNumber; // 전화번호 형식을 정의하기 위한 클래스 임포트
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 import javax.annotation.PostConstruct; // @PostConstruct 사용을 위한 임포트
 import java.util.List;
 
 @Service
 public class GpsAlertService {
+
+    @Value("${GOOGLE_MAP_API_KEY}")
+    private String API_KEY;
+
+    private static final String GEOCODING_API_URL = "https://maps.googleapis.com/maps/api/geocode/json";
 
     // Twilio 계정의 SID와 인증 토큰을 저장
 
@@ -171,6 +179,23 @@ public class GpsAlertService {
 
     public void deleteLocation(int dogId) {
         gpsAlertRepository.deleteLocation(dogId);
+    }
+
+
+    public String getPlaceName(double lat, double lng) {
+        String url = GEOCODING_API_URL + "?latlng=" + lat + "," + lng + "&key=" + API_KEY + "&language=ko";
+        RestTemplate restTemplate = new RestTemplate();
+
+        // API 호출
+        String response = restTemplate.getForObject(url, String.class);
+
+        // JSON 파싱
+        JSONObject json = new JSONObject(response);
+        if ("OK".equals(json.getString("status"))) {
+            return json.getJSONArray("results").getJSONObject(0).getString("formatted_address");
+        } else {
+            return "Address not found";
+        }
     }
 }
 

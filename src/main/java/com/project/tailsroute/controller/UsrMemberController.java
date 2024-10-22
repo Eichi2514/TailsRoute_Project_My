@@ -100,20 +100,19 @@ public class UsrMemberController {
 
         boolean locationChack;
 
+        if (dog != null) {
         GpsAlert gpsAlert = gpsAlertService.getGpsAlert(dog.getId());
+            if (gpsAlert == null) {
+                locationChack = false;
+            }else {
+                locationChack = true;
 
-        if (gpsAlert == null) {
-            locationChack = false;
-        }else {
-            locationChack = true;
-
-            String location = gpsAlertService.getPlaceName(gpsAlert.getLatitude(), gpsAlert.getLongitude());
-            location = location.substring(5);
-            model.addAttribute("location", location);
+                String location = gpsAlertService.getPlaceName(gpsAlert.getLatitude(), gpsAlert.getLongitude());
+                location = location.substring(5);
+                model.addAttribute("location", location);
+            }
+            model.addAttribute("locationChack", locationChack);
         }
-
-
-        model.addAttribute("locationChack", locationChack);
 
         model.addAttribute("isLogined", isLogined);
         model.addAttribute("dog", dog);

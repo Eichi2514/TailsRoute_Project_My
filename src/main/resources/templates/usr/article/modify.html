@@ -1,0 +1,75 @@
+<th:block th:replace="usr/common/head"/>
+<head>
+	<title>글 수정</title>
+	<link rel="stylesheet" href="/resource/css/article.css"/>
+	<script>
+		const params = {};
+
+		let isAlreadyAddGoodRp;
+		let isAlreadyAddBadRp;
+
+		let currentId;
+	</script>
+	<script src="/resource/js/article.js"></script>
+</head>
+
+<section class="mt-24 text-xl px-4">
+	<div class="mx-auto">
+		<form onsubmit="ArticleModify__submit(this); return false;" th:action="@{/article/doModify}" method="POST">
+			<input type="hidden" name="id" th:value="${article.id}" />
+			<input type="hidden" name="body" />
+			<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+				<tbody>
+				<tr>
+					<th style="text-align: center;">ID</th>
+					<td style="text-align: center;" th:text="${article.id}"></td>
+				</tr>
+				<tr>
+					<th style="text-align: center;">Registration Date</th>
+					<td style="text-align: center;" th:text="${#strings.substring(article.regDate, 0, 10)}"></td>
+				</tr>
+				<tr>
+					<th style="text-align: center;">Modified date</th>
+					<td style="text-align: center;" th:text="${article.updateDate}"></td>
+				</tr>
+				<tr>
+					<th style="text-align: center;">Writer</th>
+					<td style="text-align: center;" th:text="${article.extra__writer}"></td>
+				</tr>
+				<tr>
+					<th style="text-align: center;">Title</th>
+					<td style="text-align: center;">
+						<input name="title" th:value="${article.title}" type="text" autocomplete="off" placeholder="새 제목을 입력해"
+							   class="input input-bordered input-primary w-full max-w-xs input-sm" />
+					</td>
+				</tr>
+				<tr>
+					<th style="text-align: center;">Body</th>
+					<td style="text-align: center;">
+						<div class="toast-ui-editor">
+							<script type="text/x-template" th:text="${article.body}"></script>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td style="text-align: center;">
+						<button class="btn btn-primary">수정</button>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</form>
+		<div class="btns">
+			<button class="btn" type="button" onclick="history.back()">뒤로가기</button>
+			<!-- 수정 가능한 경우 수정 버튼 -->
+			<th:block th:if="${article.userCanModify}">
+				<a class="btn" th:href="@{/article/modify(id=${article.id})}">수정</a>
+			</th:block>
+			<!-- 삭제 가능한 경우 삭제 버튼 -->
+			<th:block th:if="${article.userCanDelete}">
+				<a class="btn" th:href="@{/article/doDelete(id=${article.id})}">삭제</a>
+			</th:block>
+		</div>
+	</div>
+</section>

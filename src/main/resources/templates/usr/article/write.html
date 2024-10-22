@@ -1,0 +1,67 @@
+<th:block th:replace="usr/common/head"/>
+<head>
+	<title>글 작성</title>
+	<link rel="stylesheet" href="/resource/css/article.css"/>
+	<script>
+		const params = {};
+
+		let isAlreadyAddGoodRp;
+		let isAlreadyAddBadRp;
+
+		let currentId = [[${currentId}]];
+	</script>
+	<script src="/resource/js/article.js"></script>
+</head>
+<body>
+<section class="mt-24 text-xl px-4">
+	<div class="mx-auto">
+		<form onsubmit="ArticleWrite__submit(this); return false;" th:action="@{/article/doWrite}" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="body" />
+			<input type="hidden" th:value="${currentId}">
+			<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+				<tbody>
+				<tr>
+					<th>게시판</th>
+					<td style="text-align: center;">
+						<select name="boardId">
+							<option value="" disabled th:selected="${boardId == null}">게시판을 선택해주세요.</option>
+							<option th:value="1" th:text="'공지사항'" th:selected="${boardId == 1}"></option>
+							<option th:value="2" th:text="'자유'" th:selected="${boardId == 2}"></option>
+							<option th:value="3" th:text="'질의응답'" th:selected="${boardId == 3}"></option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>제목</th>
+					<td style="text-align: center;">
+						<input class="input input-bordered input-primary input-sm w-full max-w-xs" name="title" autocomplete="off" type="text" placeholder="제목을 입력하세요" />
+					</td>
+				</tr>
+				<tr>
+					<th>첨부 이미지</th>
+					<td>
+						<input id="fileInput" placeholder="이미지를 선택해주세요" type="file" th:name="'file__article__' + ${currentId} + '__extra__Img__1'" />
+					</td>
+				</tr>
+				<tr>
+					<th>내용</th>
+					<td style="text-align: center;">
+						<div class="toast-ui-editor" id="editor">
+							<textarea th:name="body"></textarea>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td style="text-align: center;">
+						<button class="btn btn-primary">작성</button>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</form>
+		<div class="btns">
+			<button class="btn" type="button" onclick="history.back()">뒤로가기</button>
+		</div>
+	</div>
+</section>

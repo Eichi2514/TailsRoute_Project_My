@@ -1,0 +1,110 @@
+<!-- 공통 head 파일을 불러옴 -->
+<th:block th:replace="usr/common/head"/>
+<head>
+    <title>글 목록</title>
+    <link rel="stylesheet" href="/resource/css/article.css"/>
+    <script>
+        const params = {};
+        let isAlreadyAddGoodRp;
+        let isAlreadyAddBadRp;
+        let currentId;
+    </script>
+    <script src="/resource/js/article.js"></script>
+</head>
+<body>
+    <div class="mx-auto">
+        <div class="mb-4 flex">
+            <div th:text="${articlesCount} + '개'"></div>
+            <div class="flex-grow"></div>
+            <form th:action="@{/article/list}">
+                <input type="hidden" name="boardId" th:value="${param.boardId}"/>
+                <div class="flex">
+                    <select class="select select-sm select-bordered max-w-xs" name="searchKeywordTypeCode"
+                            th:data-value="${param.searchKeywordTypeCode}">
+                        <option value="title">title</option>
+                        <option value="body">body</option>
+                        <option value="title,body">title+body</option>
+                        <option value="writer">writer</option>
+                    </select>
+                    <label class="ml-3 input input-bordered input-sm flex items-center gap-2">
+                        <input type="text" placeholder="Search" name="searchKeyword" th:value="${param.searchKeyword}"/>
+                        <button type="submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                                 class="h-4 w-4 opacity-70">
+                                <path fill-rule="evenodd"
+                                      d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                                      clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </label>
+                </div>
+            </form>
+        </div>
+
+        <!-- 게시글 목록 테이블 -->
+        <table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+            <thead>
+            <tr>
+                <th style="text-align: center;">ID</th>
+                <th style="text-align: center;">Registration Date</th>
+                <th style="text-align: center;">Title</th>
+                <th style="text-align: center;">Writer</th>
+                <th style="text-align: center;">Like</th>
+                <th style="text-align: center;">Dislike</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 게시글 목록이 있는 경우 -->
+            <tr th:each="article : ${articles}" class="hover" th:if="${articles != null}">
+                <td style="text-align: center;" th:text="${article.id}"></td>
+                <td style="text-align: center;" th:text="${article.regDate.substring(0, 10)}"></td>
+                <td style="text-align: center;">
+                    <a class="hover:underline" th:href="@{'/article/detail?id=' + ${article.id}}"
+                       th:text="${article.title}">
+                <span th:if="${article.extra__repliesCount > 0}" style="color: red;">[<span
+                        th:text="${article.extra__repliesCount}"></span>]</span>
+                    </a>
+                </td>
+                <td style="text-align: center;" th:text="${article.extra__writer}"></td>
+                <td style="text-align: center;" th:text="${article.goodReactionPoint}"></td>
+                <td style="text-align: center;" th:text="${article.badReactionPoint}"></td>
+            </tr>
+
+            <!-- 게시글이 없는 경우 -->
+            <tr th:if="${articles == null}">
+                <td colspan="6" style="text-align: center;">게시글이 없습니다</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 동적 페이징 -->
+    <div class="pagination flex justify-center mt-3">
+        <div th:with="paginationLen=3,
+                            startPage=${page - paginationLen >= 1} ? ${page - paginationLen} : 1,
+                            endPage=${page + paginationLen <= pagesCount} ? ${page + paginationLen} : pagesCount,
+                            baseUri='?boardId=' + ${param.boardId} + '&searchKeywordTypeCode=' + ${param.searchKeywordTypeCode} + '&searchKeyword=' + ${param.searchKeyword}">
+            <!-- 처음 페이지로 이동 버튼 -->
+            <div th:if="${startPage > 1}">
+                <a class="btn btn-sm" th:href="${'list&page=1'}">1</a>
+            </div>
+            <div th:if="${startPage > 2}">
+                <button class="btn btn-sm btn-disabled">...</button>
+            </div>
+
+            <!-- 페이지 번호 반복 출력 -->
+            <div th:each="i : ${#numbers.sequence(startPage, endPage)}">
+                <a class="btn btn-sm" th:classappend="${param.page == i ? 'btn-active' : ''}"
+                   th:href="${'list&page=' + i}" th:text="${i}"></a>
+            </div>
+
+            <!-- 마지막 페이지로 이동 버튼 -->
+            <div th:if="${endPage < pagesCount - 1}">
+                <button class="btn btn-sm btn-disabled">...</button>
+            </div>
+            <div th:if="${endPage < pagesCount}">
+                <a class="btn btn-sm" th:href="${'list&page=' + pagesCount}" th:text="${pagesCount}"></a>
+            </div>
+        </div>
+    </div>
+</body>

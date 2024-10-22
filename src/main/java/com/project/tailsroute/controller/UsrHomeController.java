@@ -25,15 +25,14 @@ public class UsrHomeController {
     @GetMapping("/usr/home/main")
     public String showMain(Model model) {
         boolean isLogined = rq.isLogined();
-
         if (isLogined) {
             Member member = rq.getLoginedMember();
             model.addAttribute("member", member);
         }
+        model.addAttribute("isLogined", isLogined);
 
         List<Missing> missings = missingService.list(0, 10, "전체");
 
-        model.addAttribute("isLogined", isLogined);
         model.addAttribute("missings", missings);
         return "usr/home/main";
     }

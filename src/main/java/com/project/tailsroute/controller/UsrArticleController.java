@@ -49,6 +49,9 @@ public class UsrArticleController {
 		model.addAttribute("isLogined", isLogined);
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
+		System.err.println(id + "번 글");
+		System.err.println(rq.getLoginedMemberId() + "번 회원 접속중");
+		System.err.println("내용" + article);
 
 		ResultData usersReactionRd = reactionPointService.usersReaction(rq.getLoginedMemberId(), "article", id);
 
@@ -170,7 +173,10 @@ public class UsrArticleController {
 		}
 		model.addAttribute("isLogined", isLogined);
 
-		int currentId = articleService.getCurrentArticleId();
+		Integer currentId = articleService.getCurrentArticleId();
+		if (currentId == null) {
+			currentId = 1;
+		}
 
 		model.addAttribute("currentId", currentId);
 
@@ -215,7 +221,7 @@ public class UsrArticleController {
 	}
 
 	@GetMapping("/usr/article/list")
-	public String showList(Model model, @RequestParam(defaultValue = "1") int boardId,
+	public String showList(Model model, @RequestParam(defaultValue = "0") int boardId,
 			@RequestParam(defaultValue = "1") int page,
 			@RequestParam(defaultValue = "title,body") String searchKeywordTypeCode,
 			@RequestParam(defaultValue = "") String searchKeyword){

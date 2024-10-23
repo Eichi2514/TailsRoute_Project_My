@@ -58,6 +58,12 @@ public class ArticleService {
 		int limitFrom = (page - 1) * itemsInAPage;
 		int limitTake = itemsInAPage;
 
+		System.err.println("boardId : " + boardId);
+		System.err.println("limitFrom : " + limitFrom);
+		System.err.println("limitTake : " + limitTake);
+		System.err.println("searchKeywordTypeCode : " + searchKeywordTypeCode);
+		System.err.println("searchKeyword : " + searchKeyword);
+
 		return articleRepository.getForPrintArticles(boardId, limitFrom, limitTake, searchKeywordTypeCode,
 				searchKeyword);
 	}
@@ -66,7 +72,7 @@ public class ArticleService {
 		return articleRepository.getArticles();
 	}
 
-	public int getCurrentArticleId() {
+	public Integer getCurrentArticleId() {
 		return articleRepository.getCurrentArticleId();
 
 	}

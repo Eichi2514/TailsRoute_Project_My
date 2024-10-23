@@ -147,10 +147,6 @@ public class Rq {
         return Ut.jsReplace(msg, uri);
     }
 
-    public String getImgUri(int id) {
-        return "/common/genFile/file/article/" + id + "/extra/Img/1";
-    }
-
     public String getProfileFallbackImgUri() {
         return "https://via.placeholder.com/150/?text=*^_^*";
     }

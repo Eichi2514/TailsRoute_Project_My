@@ -53,7 +53,6 @@
             <th style="text-align: center;">Title</th>
             <th style="text-align: center;">Writer</th>
             <th style="text-align: center;">Like</th>
-            <th style="text-align: center;">Dislike</th>
         </tr>
         </thead>
         <tbody>
@@ -61,21 +60,21 @@
         <tr th:each="article : ${articles}" class="hover" th:if="${articles != null}">
             <td style="text-align: center;" th:text="${article.id}"></td>
             <td style="text-align: center;" th:text="${article.regDate.substring(0, 10)}"></td>
-            <td style="text-align: center;">
+            <td style="text-align: center;" th:if="${article.extra__repliesCount} > 0">
                 <a class="hover:underline"
-                   th:if="${article.extra__repliesCount} > 0"
                    th:href="@{'../article/detail?id=' + ${article.id}}"
-                   th:text="${article.title} + ' | [' + ${article.extra__repliesCount} + ']'" >
+                   th:text="${article.title}" >
                 </a>
+                <span th:text="' [ ' + ${article.extra__repliesCount} + ' ]'" style="color: red; font-weight: bold;"></span>
+            </td>
+            <td style="text-align: center;" th:if="${article.extra__repliesCount} <= 0">
                 <a class="hover:underline"
-                   th:if="${article.extra__repliesCount} <= 0"
                    th:href="@{'../article/detail?id=' + ${article.id}}"
                    th:text="${article.title}" >
                 </a>
             </td>
             <td style="text-align: center;" th:text="${article.extra__writer}"></td>
             <td style="text-align: center;" th:text="${article.goodReactionPoint}"></td>
-            <td style="text-align: center;" th:text="${article.badReactionPoint}"></td>
         </tr>
 
         <!-- 게시글이 없는 경우 -->

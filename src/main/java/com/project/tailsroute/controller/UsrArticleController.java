@@ -27,9 +27,6 @@ public class UsrArticleController {
 	private ArticleService articleService;
 
 	@Autowired
-	private GenFileService genFileService;
-
-	@Autowired
 	private BoardService boardService;
 
 	@Autowired
@@ -49,9 +46,9 @@ public class UsrArticleController {
 		model.addAttribute("isLogined", isLogined);
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
-		System.err.println(id + "번 글");
-		System.err.println(rq.getLoginedMemberId() + "번 회원 접속중");
-		System.err.println("내용" + article);
+		// System.err.println(id + "번 글");
+		// System.err.println(rq.getLoginedMemberId() + "번 회원 접속중");
+		// System.err.println("내용" + article);
 
 		ResultData usersReactionRd = reactionPointService.usersReaction(rq.getLoginedMemberId(), "article", id);
 
@@ -212,10 +209,6 @@ public class UsrArticleController {
 
 		for (String fileInputName : fileMap.keySet()) {
 			MultipartFile multipartFile = fileMap.get(fileInputName);
-
-			if (multipartFile.isEmpty() == false) {
-				genFileService.save(multipartFile, id);
-			}
 		}
 
 		return Ut.jsReplace(writeArticleRd.getResultCode(), writeArticleRd.getMsg(), "../article/detail?id=" + id);

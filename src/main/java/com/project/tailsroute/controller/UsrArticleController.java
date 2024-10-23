@@ -170,6 +170,8 @@ public class UsrArticleController {
 		if (isLogined) {
 			Member member = rq.getLoginedMember();
 			model.addAttribute("member", member);
+		}else{
+			return "redirect:/usr/member/login";
 		}
 		model.addAttribute("isLogined", isLogined);
 
@@ -223,7 +225,7 @@ public class UsrArticleController {
 	@GetMapping("/usr/article/list")
 	public String showList(Model model, @RequestParam(defaultValue = "0") int boardId,
 			@RequestParam(defaultValue = "1") int page,
-			@RequestParam(defaultValue = "title,body") String searchKeywordTypeCode,
+			@RequestParam(defaultValue = "전체") String searchKeywordTypeCode,
 			@RequestParam(defaultValue = "") String searchKeyword){
 
 		boolean isLogined = rq.isLogined();

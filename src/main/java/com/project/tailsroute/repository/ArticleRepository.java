@@ -51,23 +51,29 @@ public interface ArticleRepository {
     public Article getArticleById(int id);
 
     @Select("""
-            SELECT A.*, M.nickname AS extra__writer, IFNULL(COUNT(R.id), 0) AS extra__repliesCount
-            FROM article AS A
-            LEFT JOIN `member` AS M
-            ON A.memberId = M.id
-            LEFT JOIN `reply` AS R\s
-            ON A.id = R.relId
-            WHERE 1=1
-            AND (#{boardId} = 0 OR A.boardId = #{boardId})
-            AND (
-            (#{searchKeywordTypeCode} = 'title' AND A.title LIKE CONCAT('%', #{searchKeyword}, '%')) OR
-            (#{searchKeywordTypeCode} = 'body' AND A.body LIKE CONCAT('%', #{searchKeyword}, '%')) OR
-            (#{searchKeywordTypeCode} = 'writer' AND M.nickname LIKE CONCAT('%', #{searchKeyword}, '%')) OR
-            (#{searchKeywordTypeCode} = 'title,body')
-            )
-            GROUP BY A.id
-            ORDER BY A.id DESC
-            LIMIT #{limitFrom}, #{limitTake}
+                SELECT A.*, M.nickname AS extra__writer, IFNULL(COUNT(R.id), 0) AS extra__repliesCount
+                FROM article AS A
+                LEFT JOIN `member` AS M
+                ON A.memberId = M.id
+                LEFT JOIN `reply` AS R
+                ON A.id = R.relId
+                WHERE 1=1
+                AND (#{boardId} = 0 OR A.boardId = #{boardId})
+                AND (
+                    (#{searchKeyword} = '') OR (
+                        (#{searchKeywordTypeCode} = '제목' AND A.title LIKE CONCAT('%', #{searchKeyword}, '%')) OR
+                        (#{searchKeywordTypeCode} = '내용' AND A.body LIKE CONCAT('%', #{searchKeyword}, '%')) OR
+                        (#{searchKeywordTypeCode} = '작성자' AND M.nickname LIKE CONCAT('%', #{searchKeyword}, '%')) OR
+                        (#{searchKeywordTypeCode} = '전체' AND (
+                            A.title LIKE CONCAT('%', #{searchKeyword}, '%') OR
+                            A.body LIKE CONCAT('%', #{searchKeyword}, '%') OR
+                            M.nickname LIKE CONCAT('%', #{searchKeyword}, '%')
+                        ))
+                    )
+                )
+                GROUP BY A.id
+                ORDER BY A.id DESC
+                LIMIT #{limitFrom}, #{limitTake}
             """)
     public List<Article> getForPrintArticles(int boardId, int limitFrom, int limitTake, String searchKeywordTypeCode, String searchKeyword);
 
@@ -89,17 +95,21 @@ public interface ArticleRepository {
             FROM article AS A
             LEFT JOIN `member` AS M
             ON A.memberId = M.id
-            LEFT JOIN `reply` AS R\s
-            ON A.id = R.relId
             WHERE 1=1
             AND (#{boardId} = 0 OR A.boardId = #{boardId})
-            AND (
-            (#{searchKeywordTypeCode} = 'title' AND A.title LIKE CONCAT('%', #{searchKeyword}, '%')) OR
-            (#{searchKeywordTypeCode} = 'body' AND A.body LIKE CONCAT('%', #{searchKeyword}, '%')) OR
-            (#{searchKeywordTypeCode} = 'writer' AND M.nickname LIKE CONCAT('%', #{searchKeyword}, '%')) OR
-            (#{searchKeywordTypeCode} = 'title,body')
-            )
-            """)
+                AND (
+                    (#{searchKeyword} = '') OR (
+                        (#{searchKeywordTypeCode} = '제목' AND A.title LIKE CONCAT('%', #{searchKeyword}, '%')) OR
+                        (#{searchKeywordTypeCode} = '내용' AND A.body LIKE CONCAT('%', #{searchKeyword}, '%')) OR
+                        (#{searchKeywordTypeCode} = '작성자' AND M.nickname LIKE CONCAT('%', #{searchKeyword}, '%')) OR
+                        (#{searchKeywordTypeCode} = '전체' AND (
+                            A.title LIKE CONCAT('%', #{searchKeyword}, '%') OR
+                            A.body LIKE CONCAT('%', #{searchKeyword}, '%') OR
+                            M.nickname LIKE CONCAT('%', #{searchKeyword}, '%')
+                        ))
+                    )
+                )
+                """)
     public int getArticleCount(int boardId, String searchKeywordTypeCode, String searchKeyword);
 
 

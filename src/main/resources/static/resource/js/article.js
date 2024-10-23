@@ -1,27 +1,3 @@
-$(document).ready(function () {
-    function ArticleWrite__submit(form) {
-        form.title.value = form.title.value.trim();
-
-        if (form.title.value.length === 0) {
-            alert('제목을 입력하세요');
-            return false;
-        }
-
-        const editor = $(form).find('.toast-ui-editor').data('data-toast-editor');
-        const markdown = editor.getMarkdown().trim();
-
-        if (markdown.length === 0) {
-            alert('내용을 입력하세요');
-            return false;
-        }
-
-        $('#fileInput').attr('name', 'file__article__' + currentId +'__extra__Img__1');
-
-        form.body.value = markdown;
-        form.submit();
-    }
-});
-
 function ArticleModify__submit(form) {
     // 제목 공백 제거
     form.title.value = $.trim(form.title.value);
@@ -73,77 +49,6 @@ $(document).ready(function () {
     setTimeout(ArticleDetail__doIncreaseHitCount, 2000);
 });
 
-<!-- 좋아요 싫어요 처리 -->
-function checkRP() {
-    if (isAlreadyAddGoodRp) {
-        $('#likeButton').toggleClass('btn-outline');
-    } else if (isAlreadyAddBadRp) {
-        $('#DislikeButton').toggleClass('btn-outline');
-    }
-}
-
-function doGoodReaction(articleId) {
-    if (params.memberId === 0) {
-        if (confirm('로그인 창으로 이동할래?')) {
-            let currentUri = encodeURIComponent(window.location.href);
-            window.location.href = '/usr/member/login?afterLoginUri=' + currentUri;
-        }
-        return;
-    }
-
-    $.ajax({
-        url: '/usr/reactionPoint/doGoodReaction',  // URL
-        type: 'POST',                                    // HTTP 메서드
-        data: {relTypeCode: 'article', relId: articleId},  // 전송할 데이터
-        dataType: 'json',                                // 응답 데이터 타입
-        success: function (data) {                        // 성공 시 콜백
-            if (data.resultCode.startsWith('S-')) {
-                $('#likeButton').toggleClass('btn-outline');
-                $('#likeCount').text(data.data1);
-                $('.likeCount').text(data.data1);
-            } else {
-                alert(data.msg);
-            }
-        },
-        error: function () {                              // 오류 발생 시 콜백
-            alert('좋아요 오류 발생');
-        }
-    });
-}
-
-function doBadReaction(articleId) {
-    if (params.memberId === 0) {
-        if (confirm('로그인 창으로 이동할래?')) {
-            let currentUri = encodeURIComponent(window.location.href);
-            window.location.href = /*[[@{/member/login}]]*/ +'?afterLoginUri=' + currentUri;
-        }
-        return;
-    }
-
-    $.ajax({
-        url: '/usr/reactionPoint/doBadReaction',  // URL
-        type: 'POST',                                   // HTTP 메서드
-        data: {relTypeCode: 'article', relId: articleId},  // 전송할 데이터
-        dataType: 'json',                               // 응답 데이터 타입
-        success: function (data) {                       // 성공 시 콜백
-            if (data.resultCode.startsWith('S-')) {
-                $('#DislikeButton').toggleClass('btn-outline');
-                $('#DislikeCount').text(data.data2);
-                $('.DislikeCount').text(data.data2);
-            } else {
-                alert(data.msg);
-            }
-        },
-        error: function () {                             // 오류 발생 시 콜백
-            alert('싫어요 오류 발생');
-        }
-    });
-}
-
-$(document).ready(function () {
-    checkRP();
-});
-
 <!-- 댓글 수정 -->
 
 function toggleModifybtn(replyId) {
@@ -179,7 +84,7 @@ function ReplyWrite__submit(form) {
     form.body.value = form.body.value.trim();
 
     if (form.body.value.length < 3) {
-        alert('3글자 이상 입력해');
+        alert('내용이 너무 짧습니다');
         form.body.focus();
         return false;
     }

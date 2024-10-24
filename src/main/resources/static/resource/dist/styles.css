@@ -107,7 +107,7 @@
 }
 
 /*
-! tailwindcss v3.4.13 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.14 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -550,7 +550,7 @@ video {
 
 /* Make elements with the HTML hidden attribute stay hidden by default */
 
-[hidden] {
+[hidden]:where(:not([hidden="until-found"])) {
   display: none;
 }
 
@@ -604,12 +604,12 @@ video {
   right: 0px;
 }
 
-.tw-z-30 {
-  z-index: 30;
-}
-
 .tw-z-20 {
   z-index: 20;
+}
+
+.tw-z-30 {
+  z-index: 30;
 }
 
 .tw-mx-auto {
@@ -653,10 +653,6 @@ video {
   margin-top: 15px;
 }
 
-.tw-mt-10 {
-  margin-top: 2.5rem;
-}
-
 .tw-block {
   display: block;
 }
@@ -693,8 +689,12 @@ video {
   height: 100%;
 }
 
-.tw-h-\[70px\] {
-  height: 70px;
+.tw-h-\[500px\] {
+  height: 500px;
+}
+
+.tw-h-\[600px\] {
+  height: 600px;
 }
 
 .tw-w-\[100px\] {
@@ -733,20 +733,12 @@ video {
   width: 100%;
 }
 
-.tw-w-\[1440px\] {
-  width: 1440px;
-}
-
-.tw-w-\[200px\] {
-  width: 200px;
-}
-
-.tw-w-\[300px\] {
-  width: 300px;
-}
-
 .tw-flex-1 {
   flex: 1 1 0%;
+}
+
+.tw-flex-grow {
+  flex-grow: 1;
 }
 
 .tw-cursor-default {
@@ -759,6 +751,10 @@ video {
 
 .tw-flex-col {
   flex-direction: column;
+}
+
+.tw-items-start {
+  align-items: flex-start;
 }
 
 .tw-items-center {
@@ -822,6 +818,11 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.tw-bg-\[\#4D3E3E\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(77 62 62 / var(--tw-bg-opacity));
+}
+
 .tw-p-2 {
   padding: 0.5rem;
 }
@@ -836,6 +837,14 @@ video {
 
 .tw-p-\[10px\] {
   padding: 10px;
+}
+
+.tw-p-10 {
+  padding: 2.5rem;
+}
+
+.tw-p-3 {
+  padding: 0.75rem;
 }
 
 .tw-px-5 {
@@ -876,10 +885,6 @@ video {
   padding-right: 20px;
 }
 
-.tw-pr-\[30px\] {
-  padding-right: 30px;
-}
-
 .tw-text-center {
   text-align: center;
 }
@@ -900,6 +905,10 @@ video {
 .tw-text-lg {
   font-size: 1.125rem;
   line-height: 1.75rem;
+}
+
+.tw-text-\[30px\] {
+  font-size: 30px;
 }
 
 .tw-font-bold {

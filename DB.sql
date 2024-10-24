@@ -152,7 +152,9 @@ CREATE TABLE article(
                         boardId INT(10) UNSIGNED NOT NULL COMMENT '게시판 식별번호',
                         title CHAR(100) NOT NULL COMMENT '제목',
                         `body` TEXT NOT NULL COMMENT '내용',
-                        hitCount INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '조회수'
+                        hitCount INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '조회수',
+                        goodReactionPoint int(10) unsigned not null default 0 COMMENT '좋아요',
+                        badReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '싫어요'
 );
 
 ## 게시판 테이블
@@ -204,7 +206,9 @@ CREATE TABLE reply (
                        memberId INT(10) UNSIGNED NOT NULL COMMENT '작성자 식별번호',
                        relTypeCode CHAR(50) NOT NULL COMMENT '작성대상 식별코드',
                        relId INT(10) UNSIGNED NOT NULL COMMENT '작성대상 식별번호',
-                       `body` TEXT NOT NULL COMMENT '내용'
+                       `body` TEXT NOT NULL COMMENT '내용',
+                       goodReactionPoint int(10) unsigned not null default 0 COMMENT '좋아요',
+                       badReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '싫어요'
 );
 
 ## 알람 테이블
@@ -415,3 +419,12 @@ CREATE TABLE gpsAlert(
                          longitude DECIMAL(10, 7) NOT NULL COMMENT '설정한 경도',
                          chack INT(1) UNSIGNED DEFAULT 0 COMMENT '범위 벗어났는지 여부'
 );
+
+INSERT INTO article
+SET
+regDate = NOW() + INTERVAL FLOOR(RAND() * 100000000) SECOND,
+updateDate = NOW() + INTERVAL FLOOR(RAND() * 100000000) SECOND,
+memberId = FLOOR(1 + RAND() * 6),
+boardId = FLOOR(1 + RAND() * 3),
+title = CONCAT('제목', FLOOR(RAND() * 10000)),
+`body` = CONCAT('내용', FLOOR(RAND() * 10000));

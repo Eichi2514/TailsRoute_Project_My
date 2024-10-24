@@ -20,7 +20,7 @@ public class ReplyService {
 	}
 
 	public List<Reply> getForPrintReplies(int loginedMemberId, String relTypeCode, int id) {
-		List<Reply> replies = replyRepository.getForPrintReplies(loginedMemberId, relTypeCode, id);
+		List<Reply> replies = replyRepository.getForPrintReplies(relTypeCode, id);
 
 		for (Reply reply : replies) {
 			controlForPrintData(loginedMemberId, reply);
@@ -70,4 +70,55 @@ public class ReplyService {
 		replyRepository.modifyReply(id, body);
 	}
 
+	public void deleteReply(int id) {
+		replyRepository.deleteReply(id);
+	}
+
+	public int getGoodRP(int relId) {
+		return replyRepository.getGoodRP(relId);
+	}
+
+	public int getBadRP(int relId) {
+		return replyRepository.getBadRP(relId);
+	}
+
+	public ResultData increaseGoodReactionPoint(int relId) {
+		int affectedRow = replyRepository.increaseGoodReactionPoint(relId);
+
+		if (affectedRow == 0) {
+			return ResultData.from("F-1", "없는 게시물");
+		}
+
+		return ResultData.from("S-1", "좋아요 증가", "affectedRow", affectedRow);
+	}
+
+	public ResultData increaseBadReactionPoint(int relId) {
+		int affectedRow = replyRepository.increaseBadReactionPoint(relId);
+
+		if (affectedRow == 0) {
+			return ResultData.from("F-1", "없는 게시물");
+		}
+
+		return ResultData.from("S-1", "싫어요 증가", "affectedRow", affectedRow);
+	}
+
+	public ResultData decreaseGoodReactionPoint(int relId) {
+		int affectedRow = replyRepository.decreaseGoodReactionPoint(relId);
+
+		if (affectedRow == 0) {
+			return ResultData.from("F-1", "없는 게시물");
+		}
+
+		return ResultData.from("S-1", "좋아요 감소", "affectedRow", affectedRow);
+	}
+
+	public ResultData decreaseBadReactionPoint(int relId) {
+		int affectedRow = replyRepository.decreaseBadReactionPoint(relId);
+
+		if (affectedRow == 0) {
+			return ResultData.from("F-1", "없는 게시물");
+		}
+
+		return ResultData.from("S-1", "싫어요 감소", "affectedRow", affectedRow);
+	}
 }

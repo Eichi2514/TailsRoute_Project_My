@@ -1,10 +1,7 @@
 package com.project.tailsroute.repository;
 
 import com.project.tailsroute.vo.Reply;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -20,7 +17,7 @@ public interface ReplyRepository {
 			AND relId = #{relId}
 			ORDER BY R.id ASC;
 				""")
-	public List<Reply> getForPrintReplies(int loginedMemberId, String relTypeCode, int relId);
+	public List<Reply> getForPrintReplies(String relTypeCode, int relId);
 
 	@Insert("""
 			INSERT INTO reply
@@ -50,4 +47,52 @@ public interface ReplyRepository {
 			WHERE id = #{id}
 				""")
 	public void modifyReply(int id, String body);
+
+	@Delete("""
+            DELETE FROM reply 
+            WHERE id = #{id}
+                """)
+	void deleteReply(int id);
+
+	@Select("""
+            SELECT goodReactionPoint
+            FROM reply
+            WHERE id = #{relId}
+            """)
+	public int getGoodRP(int relId);
+
+	@Select("""
+            SELECT badReactionPoint
+            FROM reply
+            WHERE id = #{relId}
+            """)
+	public int getBadRP(int relId);
+
+	@Update("""
+            UPDATE reply
+            SET goodReactionPoint = goodReactionPoint + 1
+            WHERE id = #{relId}
+            """)
+	public int increaseGoodReactionPoint(int relId);
+
+	@Update("""
+            UPDATE reply
+            SET goodReactionPoint = goodReactionPoint - 1
+            WHERE id = #{relId}
+            """)
+	public int decreaseGoodReactionPoint(int relId);
+
+	@Update("""
+            UPDATE reply
+            SET badReactionPoint = badReactionPoint + 1
+            WHERE id = #{relId}
+            """)
+	public int increaseBadReactionPoint(int relId);
+
+	@Update("""
+            UPDATE reply
+            SET badReactionPoint = badReactionPoint - 1
+            WHERE id = #{relId}
+            """)
+	public int decreaseBadReactionPoint(int relId);
 }

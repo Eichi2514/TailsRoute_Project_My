@@ -4,15 +4,14 @@ package com.project.tailsroute.controller;
 import com.project.tailsroute.service.ReactionPointService;
 import com.project.tailsroute.service.ReplyService;
 import com.project.tailsroute.util.Ut;
+import com.project.tailsroute.vo.Article;
 import com.project.tailsroute.vo.Reply;
 import com.project.tailsroute.vo.ResultData;
 import com.project.tailsroute.vo.Rq;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class UsrReplyController {
@@ -65,6 +64,25 @@ public class UsrReplyController {
 		reply = replyService.getReply(id);
 
 		return reply.getBody();
+	}
+
+	@PostMapping("/usr/reply/doDelete")
+	@ResponseBody
+	public String doDelete(int id) {
+
+		Reply reply = replyService.getReply(id);
+
+		if (reply == null) {
+			return Ut.jsHistoryBack("F-1", Ut.f("%d번 댓글은 존재하지 않습니다", id));
+		}
+
+		ResultData loginedMemberCanDeleteRd = replyService.userCanDelete(rq.getLoginedMemberId(), reply);
+
+		if (loginedMemberCanDeleteRd.isSuccess()) {
+			replyService.deleteReply(id);
+		}
+
+		return "success";
 	}
 
 }

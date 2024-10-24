@@ -3,26 +3,9 @@
 	<title>글 작성</title>
 	<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
 	<link rel="stylesheet" href="/resource/css/article.css"/>
-	<style>
-		.image-preview {
-			max-width: 100%;
-			height: auto;
-			display: block;
-			margin-bottom: 10px;
-		}
-	</style>
 	<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 	<script src="/resource/js/article.js"></script>
 	<script>
-		// 사용자 정보 유지
-		const params = {};
-		let isAlreadyAddGoodRp;
-		let isAlreadyAddBadRp;
-		let currentId = [[${currentId}]];
-
-		// Toast UI Editor 전역 변수 선언
-		let editor;
-
 		// Toast UI Editor 초기화
 		function initializeEditor() {
 			editor = new toastui.Editor({

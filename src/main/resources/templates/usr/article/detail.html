@@ -3,9 +3,10 @@
     <title>상세보기</title>
     <link rel="stylesheet" href="/resource/css/article.css"/>
     <script>
+
         const params = {};
         params.id = [[${param.id}]];
-        params.memberId = [[${loginedMemberId}]];
+
 
         let isAlreadyAddGoodRp = [[${isAlreadyAddGoodRp}]];
         let isAlreadyAddBadRp = [[${isAlreadyAddBadRp}]];
@@ -19,73 +20,62 @@
             }
         }
 
-        function doGoodReaction(articleId) {
-            if (params.memberId === 0) {
-                if (confirm('로그인 창으로 이동하시겠습니까?')) {
-                    let currentUri = encodeURIComponent(window.location.href);
-                    window.location.href = '/usr/member/login?afterLoginUri=' + currentUri;
-                }
-                return;
-            }
-
-            $.ajax({
-                url: '/usr/reactionPoint/doGoodReaction',  // URL
-                type: 'POST',                                    // HTTP 메서드
-                data: {relTypeCode: 'article', relId: articleId},  // 전송할 데이터
-                dataType: 'json',                                // 응답 데이터 타입
-                success: function (data) {                        // 성공 시 콜백
-                    if (data.resultCode.startsWith('S-')) {
-                        $('#likeButton').toggleClass('btn-outline');
-                        $('#likeCount').text(data.data1);
-                        $('.likeCount').text(data.data1);
-                    } else {
-                        alert(data.msg);
-                    }
-                },
-                error: function () {                              // 오류 발생 시 콜백
-                    alert('좋아요 오류 발생');
-                }
-            });
-        }
-
-        function doBadReaction(articleId) {
-            if (params.memberId === 0) {
-                if (confirm('로그인 창으로 이동하시겠습니까?')) {
-                    let currentUri = encodeURIComponent(window.location.href);
-                    window.location.href = '/usr/member/login?afterLoginUri=' + currentUri;
-                }
-                return;
-            }
-
-            $.ajax({
-                url: '/usr/reactionPoint/doBadReaction',  // URL
-                type: 'POST',                                   // HTTP 메서드
-                data: {relTypeCode: 'article', relId: articleId},  // 전송할 데이터
-                dataType: 'json',                               // 응답 데이터 타입
-                success: function (data) {                       // 성공 시 콜백
-                    if (data.resultCode.startsWith('S-')) {
-                        $('#DislikeButton').toggleClass('btn-outline');
-                        $('#DislikeCount').text(data.data2);
-                        $('.DislikeCount').text(data.data2);
-                    } else {
-                        alert(data.msg);
-                    }
-                },
-                error: function () {                             // 오류 발생 시 콜백
-                    alert('싫어요 오류 발생');
-                }
-            });
-        }
-
         $(document).ready(function () {
             checkRP();
+            setTimeout(ArticleDetail__doIncreaseHitCount, 2000);
         });
+
+        <!-- 조회수 증가 함수 -->
+        function ArticleDetail__doIncreaseHitCount() {
+            const localStorageKey = 'article__' + params.id + '__alreadyOnView';
+
+            if (localStorage.getItem(localStorageKey)) {
+                return;
+            }
+
+            localStorage.setItem(localStorageKey, true);
+
+            $.ajax({
+                url: '/usr/article/doIncreaseHitCountRd',  // URL
+                type: 'POST',                                // HTTP 메서드를 POST로 변경
+                data: {
+                    id: params.id,
+                    ajaxMode: 'Y'
+                },       // 요청 데이터
+                dataType: 'json',                           // 응답 데이터 타입
+                success: function (data) {                  // 성공 시 콜백 함수
+                    $('.article-detail__hit-count').empty().html(data.data1);
+                },
+                error: function () {                        // 에러 시 콜백 함수
+                    console.error('조회수 증가 실패');
+                }
+            });
+        }
+
+        <!-- 댓글 작성 -->
+        function ReplyWrite__submit(form) {
+            form.body.value = form.body.value.trim();
+
+            if (form.body.value.length < 3) {
+                alert('내용이 너무 짧습니다');
+                form.body.focus();
+                return false;
+            }
+
+            form.submit();
+        }
     </script>
     <script src="/resource/js/article.js"></script>
 </head>
 <body>
 <div class="title">게시글 목록</div>
 <div class="article_body">
+    <div th:if="${member != null}">
+        <a class="article_write" th:href="|@{../article/modify?id=}${article.id}|"
+           th:if="${member.id == article.memberId}">수정</a>
+        <a class="article_write" th:href="|@{../article/doDelete?id=}${article.id}|"
+           th:if="${member.id == article.memberId}">삭제</a>
+    </div>
     <section class="mt-24 text-xl px-4">
         <div class="mx-auto">
             <!-- 타임리프 사용 -->
@@ -118,12 +108,10 @@
                 <tr>
                     <th>LIKE</th>
                     <td>
-                        <button id="likeButton"
-                                th:text="|👍 LIKE|">
+                        <button th:text="추천" th:onclick="'doGoodReaction(\'article\', ' + ${article.id} + ')'">
                         </button>
                     </td>
                 </tr>
-
                 <tr>
                     <th>Views</th>
                     <td><span class="article-detail__hit-count" th:text="${article.hitCount}"></span></td>
@@ -179,6 +167,9 @@
                     <th>내용</th>
                     <th>작성자</th>
                     <th>수정</th>
+                    <th>삭제</th>
+                    <th>추천수</th>
+                    <th>추천</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -186,20 +177,30 @@
                     <td th:text="${reply.regDate}"></td>
                     <td th:text="${reply.updateDate}"></td>
                     <td>
-                        <div id="reply-${reply.id}" th:text="${reply.body}"></div>
-                        <form id="modify-form-${reply.id}" style="display:none;"
+                        <div th:id="'reply-' + ${reply.id}" th:text="${reply.body}"></div>
+                        <form th:id="'modify-form-' + ${reply.id}" style="display:none;"
                               onsubmit="doModifyReply(${reply.id}); return false;">
-                            <input type="text" name="reply-text-${reply.id}" th:value="${reply.body}"/>
+                            <input type="text" th:name="'reply-text-' + ${reply.id}" th:value="${reply.body}"/>
                         </form>
                     </td>
                     <td th:text="${reply.extra__writer}"></td>
                     <td>
-                        <button id="modify-btn-${reply.id}" class="btn btn-outline"
-                                onclick="toggleModifybtn(${reply.id})">
-                            수정
+                        <button th:id="'modify-btn-' + ${reply.id}" class="btn btn-outline"
+                                th:text="'수정'"
+                                th:onclick="'toggleModifybtn(' + ${reply.id} + ')'"></button>
+                        <input type="hidden" th:name="'reply-text-'+${reply.id}" th:value="${reply.body}"/>
+                        <button th:id="'save-btn-' + ${reply.id}" class="btn btn-outline" style="display:none;"
+                                th:text="'저장'" type="button"
+                                th:onclick="'doModifyReply(' + ${reply.id} + ')'"></button>
+
+                    </td>
+                    <td>
+                        <button th:text="삭제" th:onclick="'doDeleteReply(' + ${reply.id} + ')'">
                         </button>
-                        <button id="save-btn-${reply.id}" class="btn btn-outline" style="display:none;"
-                                onclick="doModifyReply(${reply.id})">저장
+                    </td>
+                    <td th:id="'replylikeCount' + ${reply.id}" th:text="${reply.goodReactionPoint}"></td>
+                    <td>
+                        <button th:text="추천" th:onclick="'doGoodReaction(\'reply\', ' + ${reply.id} + ')'">
                         </button>
                     </td>
                 </tr>
@@ -208,4 +209,85 @@
         </div>
     </section>
 </div>
+
+<script>
+    // 댓글 수정 버튼 클릭 시 실행되는 함수
+    function toggleModifybtn(replyId) {
+        // 수정 버튼 숨기고 저장 버튼 표시
+        $('#modify-btn-' + replyId).hide();
+        $('#save-btn-' + replyId).show();
+        $('#reply-' + replyId).hide();
+        $('#modify-form-' + replyId).show();
+    }
+
+    // 댓글 저장 버튼 클릭 시 실행되는 함수
+    function doModifyReply(replyId) {
+        let form = $('#modify-form-' + replyId);
+        let text = form.find('input[name="reply-text-' + replyId + '"]').val();
+
+        $.ajax({
+            url: '/usr/reply/doModify',
+            type: 'POST',                                // HTTP 메서드를 POST로 변경
+            data: {
+                id: replyId,
+                body: text,
+                ajaxMode: 'Y'
+            },       // 요청 데이터
+            dataType: 'text',              // 응답 데이터 타입을 text로 변경
+            success: function (data) {    // 성공 시 콜백
+                $('#modify-form-' + replyId).hide();
+                $('#reply-' + replyId).text(data); // 응답에서 body 문자열을 사용
+                $('#reply-' + replyId).show();
+                $('#save-btn-' + replyId).hide();
+                $('#modify-btn-' + replyId).show();
+            },
+            error: function () {          // 오류 발생 시 콜백
+                alert('댓글 수정에 실패했습니다' + replyId + ", " + text);
+            }
+        });
+    }
+
+    // 댓글 삭제 버튼 클릭 시 실행되는 함수
+    function doDeleteReply(replyId) {
+        $.ajax({
+            url: '/usr/reply/doDelete',
+            type: 'POST',                                // HTTP 메서드를 POST로 변경
+            data: {
+                id: replyId,
+                ajaxMode: 'Y'
+            },       // 요청 데이터
+            dataType: 'text',              // 응답 데이터 타입을 text로 변경
+            success: function (data) {// 성공 시 콜백
+                location.reload();
+            },
+            error: function () {          // 오류 발생 시 콜백
+                alert('댓글 삭제에 실패했습니다');
+            }
+        });
+    }
+
+    // 좋아요 버튼 클릭 시 실행되는 함수
+    function doGoodReaction(relTypeCode, relId) {
+        $.ajax({
+            url: '/usr/reactionPoint/doGoodReaction',
+            type: 'POST',                                // HTTP 메서드를 POST로 변경
+            data: {
+                relTypeCode: relTypeCode,
+                relId: relId,
+                ajaxMode: 'Y'
+            },      // 요청 데이터
+            dataType: 'json',
+            success: function (data) {// 성공 시 콜백
+                if(relTypeCode == 'article') {
+                    $('#likeCount').text(data.data1); // 응답에서 body 문자열을 사용
+                }else if(relTypeCode == 'reply'){
+                    $('#replylikeCount' + relId).text(data.data1); // 응답에서 body 문자열을 사용
+                }
+            },
+            error: function () {          // 오류 발생 시 콜백
+                alert('추천을 실패했습니다');
+            }
+        });
+    }
+</script>
 </body>

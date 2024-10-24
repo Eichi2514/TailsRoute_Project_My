@@ -2,12 +2,6 @@
 <head>
     <title>글 목록</title>
     <link rel="stylesheet" href="/resource/css/article.css"/>
-    <script>
-        const params = {};
-        let isAlreadyAddGoodRp;
-        let isAlreadyAddBadRp;
-        let currentId;
-    </script>
     <script src="/resource/js/article.js"></script>
 </head>
 <body>
@@ -15,6 +9,15 @@
 <div class="article_body">
     <div class="mb-4 flex">
         <div th:text="${articlesCount} + '개'"></div>
+        <div>
+            <a href="../article/list?boardId=1&page=1">공지사항</a>
+        </div>
+        <div>
+            <a href="../article/list?boardId=2&page=1">자유게시판</a>
+        </div>
+        <div>
+            <a href="../article/list?boardId=3&page=1">QnA</a>
+        </div>
         <div class="flex-grow"></div>
         <form th:action="@{../article/list}">
             <div class="tw-flex tw-gap-2">

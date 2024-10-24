@@ -43,25 +43,24 @@ public class UsrArticleController {
 			Member member = rq.getLoginedMember();
 			model.addAttribute("member", member);
 		}
+
 		model.addAttribute("isLogined", isLogined);
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
+
+		if (article == null) {
+			return "redirect:/usr/article/list";
+		}
+
 		// System.err.println(id + "번 글");
 		// System.err.println(rq.getLoginedMemberId() + "번 회원 접속중");
 		// System.err.println("내용" + article);
 
-		ResultData usersReactionRd = reactionPointService.usersReaction(rq.getLoginedMemberId(), "article", id);
-
-		if (usersReactionRd.isSuccess()) {
-			model.addAttribute("userCanMakeReaction", usersReactionRd.isSuccess());
-		}
+		model.addAttribute("article", article);
 
 		List<Reply> replies = replyService.getForPrintReplies(rq.getLoginedMemberId(), "article", id);
 
 		int repliesCount = replies.size();
-
-		model.addAttribute("article", article);
-
 		model.addAttribute("replies", replies);
 		model.addAttribute("repliesCount", repliesCount);
 
@@ -97,13 +96,19 @@ public class UsrArticleController {
 		if (isLogined) {
 			Member member = rq.getLoginedMember();
 			model.addAttribute("member", member);
+		}else {
+			return "redirect:/usr/member/login";
 		}
 		model.addAttribute("isLogined", isLogined);
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
-		if (article == null) {
-			return Ut.jsHistoryBack("F-1", Ut.f("%d번 게시글은 없습니다", id));
+
+		ResultData userCanModifyRd = articleService.userCanModify(rq.getLoginedMemberId(), article);
+
+
+		if (article == null || userCanModifyRd.isFail()) {
+			return "redirect:/usr/article/list";
 		}
 
 		model.addAttribute("article", article);
@@ -137,7 +142,7 @@ public class UsrArticleController {
 		return Ut.jsReplace(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "../article/detail?id=" + id);
 	}
 
-	@PostMapping("/usr/article/doDelete")
+	@GetMapping("/usr/article/doDelete")
 	@ResponseBody
 	public String doDelete(int id) {
 

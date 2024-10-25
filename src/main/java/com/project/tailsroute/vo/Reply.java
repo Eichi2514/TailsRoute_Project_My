@@ -21,7 +21,11 @@ public class Reply {
 
 	private String extra__writer;
 
+	private String extra__dogPhoto;
+
 	private String extra__sumReactionPoint;
+
+	private String extra__reactionPoint;
 
 	private boolean userCanModify;
 	private boolean userCanDelete;

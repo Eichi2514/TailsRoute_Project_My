@@ -9,15 +9,19 @@ import java.util.List;
 public interface ReplyRepository {
 
 	@Select("""
-			SELECT R.*, M.nickname AS extra__writer
-			FROM reply AS R
-			INNER JOIN `member` AS M
-			ON R.memberId = M.id
-			WHERE relTypeCode = #{relTypeCode}
-			AND relId = #{relId}
-			ORDER BY R.id ASC;
+			SELECT R.*,  M.nickname AS extra__writer, D.photo AS extra__dogPhoto, RP.point AS extra__reactionPoint
+   			FROM reply AS R
+   			LEFT JOIN dog AS D
+   			ON R.memberId = D.memberId
+   			LEFT JOIN MEMBER AS M
+    		ON R.memberId = M.id
+   			LEFT JOIN reactionPoint AS RP
+   			ON R.id = RP.relId AND RP.relTypeCode = "reply" AND RP.memberId = #{loginedMemberId}
+   			WHERE R.relTypeCode = #{relTypeCode}
+			AND R.relId = #{relId}
+   			ORDER BY R.id ASC;
 				""")
-	public List<Reply> getForPrintReplies(String relTypeCode, int relId);
+	public List<Reply> getForPrintReplies(int loginedMemberId, String relTypeCode, int relId);
 
 	@Insert("""
 			INSERT INTO reply
@@ -34,8 +38,10 @@ public interface ReplyRepository {
 	public int getLastInsertId();
 
 	@Select("""
-				SELECT R.*
+				SELECT R.*, D.photo AS extra__dogPhoto
 				FROM reply AS R
+				INNER JOIN dog AS D
+            	ON R.memberId = D.memberId
 				WHERE R.id = #{id}
 			""")
 	Reply getReply(int id);

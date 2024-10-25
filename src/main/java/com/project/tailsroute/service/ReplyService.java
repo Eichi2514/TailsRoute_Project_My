@@ -20,7 +20,7 @@ public class ReplyService {
 	}
 
 	public List<Reply> getForPrintReplies(int loginedMemberId, String relTypeCode, int id) {
-		List<Reply> replies = replyRepository.getForPrintReplies(relTypeCode, id);
+		List<Reply> replies = replyRepository.getForPrintReplies(loginedMemberId, relTypeCode, id);
 
 		for (Reply reply : replies) {
 			controlForPrintData(loginedMemberId, reply);

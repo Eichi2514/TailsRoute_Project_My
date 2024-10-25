@@ -35,10 +35,12 @@ public interface ArticleRepository {
     public void modifyArticle(int id, String title, String body);
 
     @Select("""
-            SELECT A.*, M.nickname AS extra__writer
+            SELECT A.*, M.nickname AS extra__writer, D.photo AS extra__dogPoto
             FROM article AS A
             INNER JOIN `member` AS M
             ON A.memberId = M.id
+            INNER JOIN dog AS D
+            ON A.memberId = D.memberId
             WHERE A.id = #{id}
             	""")
     public Article getForPrintArticle(int id);

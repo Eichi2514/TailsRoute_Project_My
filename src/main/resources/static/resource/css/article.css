@@ -46,3 +46,8 @@ input, select, textarea{
     justify-content: center;
     align-items: center;
 }
+
+.reply_body{
+    padding: 20px;
+    border-top: 1px solid;
+}

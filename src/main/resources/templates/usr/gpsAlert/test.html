@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>GPS Alert</title>
+</head>
+<body>
+<h1>위치 정보 확인</h1>
+<button id="getLocation">위치 얻기</button>
+<p id="location"></p>
+
+<script>
+    document.getElementById("getLocation").onclick = function() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+            document.getElementById("location").innerHTML = "지오로케이션을 지원하지 않습니다.";
+        }
+    };
+
+    function showPosition(position) {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        document.getElementById("location").innerHTML = `위도: ${lat}, 경도: ${lon}`;
+
+        // 로컬 스토리지에 위도와 경도 저장
+        localStorage.setItem("latitude", lat);
+        localStorage.setItem("longitude", lon);
+    }
+
+    function showError(error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                document.getElementById("location").innerHTML = "사용자가 위치 정보 접근을 거부했습니다.";
+                break;
+            case error.POSITION_UNAVAILABLE:
+                document.getElementById("location").innerHTML = "위치 정보가 사용 불가능합니다.";
+                break;
+            case error.TIMEOUT:
+                document.getElementById("location").innerHTML = "위치 정보 요청이 시간 초과되었습니다.";
+                break;
+            case error.UNKNOWN_ERROR:
+                document.getElementById("location").innerHTML = "알 수 없는 오류가 발생했습니다.";
+                break;
+        }
+    }
+</script>
+</body>
+</html>

@@ -166,7 +166,7 @@ public class GpsAlertService {
 
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                System.err.println(gpsAlert.getExtra__comPortName() + " 실행중 : " + number + "회");
+                // System.err.println(gpsAlert.getExtra__comPortName() + " 실행중 : " + number + "회");
                 number++;
 
                 if (comPort.bytesAvailable() > 0) {
@@ -180,6 +180,9 @@ public class GpsAlertService {
                         if (gpsData.length == 2) {
                             double latitude = Double.parseDouble(gpsData[0].trim());
                             double longitude = Double.parseDouble(gpsData[1].trim());
+
+                            System.err.println(latitude);
+                            System.err.println(longitude);
 
                             checkDistanceAndSendSms(latitude, longitude, gpsAlert);
                         } else {

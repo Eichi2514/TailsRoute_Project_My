@@ -130,4 +130,18 @@ public class UsrGpsAlertController {
                     .body("위치 삭제에 실패했습니다: " + e.getMessage());
         }
     }
+
+    @GetMapping("/usr/gpsAlert/test")
+    public String showAdd(Model model) {
+        boolean isLogined = rq.isLogined();
+
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        }
+
+        model.addAttribute("isLogined", isLogined);
+
+        return "/usr/gpsAlert/test";
+    }
 }

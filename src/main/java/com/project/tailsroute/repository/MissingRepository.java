@@ -40,16 +40,20 @@ public interface MissingRepository {
 				""")
     int totalCnt(String str);
 
-	@Select("""        
+    @Select("""        
 			SELECT S.*, M.name AS extra__ownerName, M.cellphoneNum AS extra__ownerCellphoneNum
         	FROM missing S
         	LEFT JOIN `member` M
         	ON M.id = S.memberId
-        	WHERE S.missingLocation LIKE CONCAT('%', #{str}, '%') OR #{str} = '전체'
+        	WHERE (
+                S.missingLocation LIKE CONCAT('%', #{str}, '%') 
+                OR S.missingLocation LIKE CONCAT('%', #{str2}, '%')
+            ) 
+        	OR #{str} = '전체'
        	    ORDER BY S.id DESC
         	LIMIT #{limitFrom}, #{itemsInAPage}        
         		""")
-    List<Missing> list(int limitFrom, int itemsInAPage, String str);
+    List<Missing> list(int limitFrom, int itemsInAPage, String str, String str2);
 
     @Select("""        
 			SELECT S.*, M.name AS extra__ownerName, M.cellphoneNum AS extra__ownerCellphoneNum

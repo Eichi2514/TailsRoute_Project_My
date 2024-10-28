@@ -421,6 +421,17 @@ CREATE TABLE gpsAlert(
                          switch INT(1) UNSIGNED DEFAULT 0 COMMENT 'gps 알림 온오프 여부'
 );
 
+## GPS 수신 정보 동의 테이블
+CREATE TABLE gpsChack(
+                         id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
+                         memberId INT(10) UNSIGNED NOT NULL COMMENT '접속자 식별번호',
+                         regDate DATETIME NOT NULL COMMENT '등록 날짜',
+                         updateDate DATETIME NOT NULL COMMENT '수정 날짜',
+                         latitude DECIMAL(10, 7) COMMENT '현재 위도',
+                         longitude DECIMAL(10, 7) COMMENT '현재 경도',
+                         location VARCHAR(100) COMMENT '장소'
+);
+
 INSERT INTO article
 SET
 regDate = NOW() + INTERVAL FLOOR(RAND() * 100000000) SECOND,

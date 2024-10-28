@@ -111,7 +111,7 @@ public class GpsAlertService {
 
         double distance = calculateDistance(lat1, lon1, lat2, lon2); // 거리 계산
 
-        if (distance > 1.0 && chack == 0) { // 1km 이상 떨어져 있을 때
+        if (distance > 0.5 && chack == 0) { // 500m 이상 떨어져 있을 때
             // sendSms("아이고! " + dogName + "(이)가 정해진 장소를 떠났네요. 위치를 확인해 주세요!", gpsAlert); // SMS 전송
             gpsAlertRepository.toggleChack(1, gpsAlert.getId());
             chack = 1;
@@ -137,7 +137,7 @@ public class GpsAlertService {
 
     // SMS를 전송하는 메서드
     private void sendSms(String messageContent, GpsAlert gpsAlert) {
-        String userCellphoneNum = gpsAlert.getExtra__cellphoneNum();
+        // String userCellphoneNum = gpsAlert.getExtra__cellphoneNum();
 
         // String toNumber = userCellphoneNum; // 수신자 번호
         String toNumber = "01022296877"; // 수신자 번호

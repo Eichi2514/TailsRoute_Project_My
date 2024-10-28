@@ -63,7 +63,7 @@ public class MissingService {
         } else if (str.equals("제주특별자치도")) {
             str2 = "제주";
         }
-        System.err.println(str + ", " + str2);
+        // System.err.println(str + ", " + str2);
         return missingRepository.list(limitFrom, itemsInAPage, str, str2);
     }
 

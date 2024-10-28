@@ -37,9 +37,9 @@ public interface ArticleRepository {
     @Select("""
             SELECT A.*, M.nickname AS extra__writer, D.photo AS extra__dogPoto
             FROM article AS A
-            INNER JOIN `member` AS M
+            LEFT JOIN `member` AS M
             ON A.memberId = M.id
-            INNER JOIN dog AS D
+            LEFT JOIN dog AS D
             ON A.memberId = D.memberId
             WHERE A.id = #{id}
             	""")
@@ -83,7 +83,7 @@ public interface ArticleRepository {
     @Select("""
             SELECT A.* , M.nickname AS extra__writer
             FROM article AS A
-            INNER JOIN `member` AS M
+            LEFT JOIN `member` AS M
             ON A.memberId = M.id
             ORDER BY A.id DESC
             """)

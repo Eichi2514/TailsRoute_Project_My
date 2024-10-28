@@ -40,7 +40,7 @@ public interface ReplyRepository {
 	@Select("""
 				SELECT R.*, D.photo AS extra__dogPhoto
 				FROM reply AS R
-				INNER JOIN dog AS D
+				LEFT JOIN dog AS D
             	ON R.memberId = D.memberId
 				WHERE R.id = #{id}
 			""")

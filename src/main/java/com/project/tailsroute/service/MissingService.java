@@ -99,4 +99,8 @@ public class MissingService {
         if (missingLocation.contains("제주")) return new String[]{"제주", "제주특별자치도"};
         return null;
     }
+
+    public int findMissingId() {
+        return missingRepository.findMissingId();
+    }
 }

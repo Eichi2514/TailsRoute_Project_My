@@ -24,13 +24,13 @@ import java.util.List;
 @Controller
 public class UsrMissingController {
     private final Rq rq;
-    @Autowired
-    private GpsChackService gpsChackService;
 
     public UsrMissingController(Rq rq) {
         this.rq = rq;
     }
 
+    @Autowired
+    private GpsChackService gpsChackService;
 
     @Autowired
     private MissingService missingService;
@@ -122,24 +122,6 @@ public class UsrMissingController {
             return "redirect:/usr/missing/list";
         }
 
-        String[] locations = missingService.getRegionCode(missingLocation);
-
-        if (locations != null) {
-            int[] memberIds = gpsChackService.getRegionCode(locations);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // 원하는 형식 지정
-
-            for (int memberId : memberIds) {
-                Alarms alarm = new Alarms();
-                alarm.setMemberId(memberId);
-                alarm.setAlarm_date(LocalDate.now().format(formatter)); // 형식화된 문자열로 설정
-                alarm.setMessage("주위 사용자가 " +name+"(을)를 잃어버렸습니다 도와주세요!"); // 적절한 메시지 설정
-                alarm.setSite("redirect:/usr/missing/detail?missingId=" + id);       // 적절한 사이트 설정
-
-                alarmService.saveAlarm(alarm);
-            }
-        }
-
-
         String reportDate2 = reportDate + " " + reportTime;
 
         String age2 = "불명";
@@ -200,6 +182,25 @@ public class UsrMissingController {
 
         // 데이터베이스에 반려견 정보 저장
         missingService.write(rq.getLoginedMemberId(), name, reportDate2, missingLocation, breed, color, gender, age2, RFID, photoPath, trait);
+
+        int id = missingService.findMissingId();
+
+        String[] locations = missingService.getRegionCode(missingLocation);
+
+        if (locations != null) {
+            int[] memberIds = gpsChackService.getRegionCode(locations);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // 원하는 형식 지정
+
+            for (int memberId : memberIds) {
+                Alarms alarm = new Alarms();
+                alarm.setMemberId(memberId);
+                alarm.setAlarm_date(LocalDate.now().format(formatter)); // 형식화된 문자열로 설정
+                alarm.setMessage("주위 사용자가 " +name+"(을)를 잃어버렸습니다 도와주세요!"); // 적절한 메시지 설정
+                alarm.setSite("/usr/missing/detail?missingId=" + id);       // 적절한 사이트 설정
+
+                alarmService.saveAlarm(alarm);
+            }
+        }
 
         return "redirect:/usr/missing/list"; // 메인 페이지로 리다이렉트
     }

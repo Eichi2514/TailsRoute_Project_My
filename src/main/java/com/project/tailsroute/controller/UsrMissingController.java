@@ -1,11 +1,10 @@
 package com.project.tailsroute.controller;
 
+import com.project.tailsroute.service.AlarmService;
+import com.project.tailsroute.service.GpsChackService;
 import com.project.tailsroute.service.MissingService;
 import com.project.tailsroute.util.Ut;
-import com.project.tailsroute.vo.Dog;
-import com.project.tailsroute.vo.Member;
-import com.project.tailsroute.vo.Missing;
-import com.project.tailsroute.vo.Rq;
+import com.project.tailsroute.vo.*;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,11 +17,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
 public class UsrMissingController {
     private final Rq rq;
+    @Autowired
+    private GpsChackService gpsChackService;
 
     public UsrMissingController(Rq rq) {
         this.rq = rq;
@@ -32,6 +35,9 @@ public class UsrMissingController {
     @Autowired
     private MissingService missingService;
 
+    @Autowired
+    private AlarmService alarmService;
+
     @GetMapping("/usr/missing/write")
     public String showWrite(Model model) {
         boolean isLogined = rq.isLogined();
@@ -39,7 +45,7 @@ public class UsrMissingController {
         if (isLogined) {
             Member member = rq.getLoginedMember();
             model.addAttribute("member", member);
-        } else{
+        } else {
             return "redirect:/usr/member/login";
         }
 
@@ -116,6 +122,24 @@ public class UsrMissingController {
             return "redirect:/usr/missing/list";
         }
 
+        String[] locations = missingService.getRegionCode(missingLocation);
+
+        if (locations != null) {
+            int[] memberIds = gpsChackService.getRegionCode(locations);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // 원하는 형식 지정
+
+            for (int memberId : memberIds) {
+                Alarms alarm = new Alarms();
+                alarm.setMemberId(memberId);
+                alarm.setAlarm_date(LocalDate.now().format(formatter)); // 형식화된 문자열로 설정
+                alarm.setMessage("주위 사용자가 " +name+"(을)를 잃어버렸습니다 도와주세요!"); // 적절한 메시지 설정
+                alarm.setSite("redirect:/usr/missing/detail?missingId=" + id);       // 적절한 사이트 설정
+
+                alarmService.saveAlarm(alarm);
+            }
+        }
+
+
         String reportDate2 = reportDate + " " + reportTime;
 
         String age2 = "불명";
@@ -133,15 +157,15 @@ public class UsrMissingController {
 
                 photoPath = "/resource/photo/missing" + id + ".png"; // 웹에서 접근할 수 있는 경로
             } catch (IOException e) {
-                return "redirect:/usr/missing/modify?missingId="+id;
+                return "redirect:/usr/missing/modify?missingId=" + id;
             }
             // 데이터베이스에 반려견 정보 수정
             missingService.modify(id, name, reportDate2, missingLocation, breed, color, gender, age2, RFID, photoPath, trait);
-        }else missingService.modify(id, name, reportDate2, missingLocation, breed, color, gender, age2, RFID, dogPhoto, trait);
+        } else
+            missingService.modify(id, name, reportDate2, missingLocation, breed, color, gender, age2, RFID, dogPhoto, trait);
 
 
-
-        return "redirect:/usr/missing/detail?missingId="+id;
+        return "redirect:/usr/missing/detail?missingId=" + id;
     }
 
 

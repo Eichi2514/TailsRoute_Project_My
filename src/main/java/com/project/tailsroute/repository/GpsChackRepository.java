@@ -47,4 +47,14 @@ public interface GpsChackRepository {
             WHERE memberId = #{memberId}
             """)
 	void update(double latitude, double longitude, String location, int memberId);
+
+	@Select("""
+		   SELECT memberId
+           FROM gpsChack
+           WHERE (
+                location LIKE CONCAT('%', #{location1}, '%') 
+                OR location LIKE CONCAT('%', #{location2}, '%')
+            ) 		
+             """)
+    int[] getRegionCode(String location1, String location2);
 }

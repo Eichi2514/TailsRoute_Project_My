@@ -135,12 +135,12 @@ public class UsrMissingController {
             try {
                 // 파일 저장 전에 이미지 크기 조절
                 Thumbnails.of(file.getInputStream())
-                        .size(80, 80) // 원하는 사이즈로 조정
+                        .size(800, 800) // 원하는 사이즈로 조정
                         .toFile(new File(filePath));
 
                 photoPath = "/uploads/photo/missing" + id + ".png"; // 웹에서 접근할 수 있는 경로
             } catch (IOException e) {
-                return "redirect:/usr/missing/modify?missingId=" + id;
+                return "redirect:/usr/home/main";
             }
         } else {
             // 파일이 없는 경우 기존 사진 경로 사용
@@ -178,12 +178,12 @@ public class UsrMissingController {
             try {
                 // 파일 저장 전에 이미지 크기 조절
                 Thumbnails.of(file.getInputStream())
-                        .size(80, 80) // 원하는 사이즈로 조정
+                        .size(800, 800) // 원하는 사이즈로 조정
                         .toFile(new File(filePath));
 
                 photoPath = "/uploads/photo/missing" + number + ".png"; // 웹에서 접근할 수 있는 경로
             } catch (IOException e) {
-                return "redirect:/usr/dog/add";
+                return "redirect:/usr/home/main";
             }
         }
 

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>웹 푸시 알림 예제</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery 추가 -->
+    <script>
+        const PUBLIC_KEY = /*[[${PUBLIC_KEY}]]*/ ''; // 타임리프에서 PUBLIC_KEY 가져오기
+
+        // 서비스 워커 등록
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('serviceWorker.js')
+                .then(function(registration) {
+                    console.log('Service Worker 등록 성공:', registration.scope);
+                    subscribeUser(); // 서비스 워커 등록 후 사용자 구독
+                })
+                .catch(function(error) {
+                    console.error('Service Worker 등록 실패:', error);
+                });
+        } else {
+            console.error('서비스 워커를 지원하지 않는 브라우저입니다.');
+        }
+
+        function subscribeUser() {
+            Notification.requestPermission().then(function(result) {
+                if (result === 'granted') {
+                    console.log('알림 권한이 허용되었습니다.');
+
+                    // 사용자 구독 로직 추가
+                    navigator.serviceWorker.ready.then(function(registration) {
+                        const applicationServerKey = urlB64ToUint8Array(PUBLIC_KEY); // VAPID 키 입력
+                        registration.pushManager.subscribe({
+                            userVisibleOnly: true,
+                            applicationServerKey: applicationServerKey
+                        }).then(function(subscription) {
+                            console.log('사용자 구독:', subscription);
+
+                            // 구독 정보를 서버로 전송
+                            const subscriptionData = {
+                                endpoint: subscription.endpoint,
+                                keys: {
+                                    p256dh: Array.from(subscription.getKey('p256dh')),
+                                    auth: Array.from(subscription.getKey('auth'))
+                                }
+                            };
+
+                            console.log('전송할 구독 데이터:', subscriptionData); // 구독 데이터 로그 출력
+
+                            // 구독 정보를 서버로 AJAX 요청으로 전송
+                            $.ajax({
+                                url: '../../subscribe',  // 서버 URL
+                                type: 'POST',       // HTTP 메서드
+                                contentType: 'application/json', // JSON 형식으로 데이터 전송
+                                data: JSON.stringify(subscriptionData), // 요청 데이터를 JSON 형식으로 변환
+                                dataType: 'json', // 응답 데이터 타입
+                                success: function(data) { // 성공 시 콜백 함수
+                                    console.log('서버 응답:', data);
+                                },
+                                error: function() { // 에러 시 콜백 함수
+                                    console.error('구독 정보 전송 실패');
+                                }
+                            });
+                        }).catch(function(err) {
+                            console.error('구독 실패:', err);
+                        });
+                    });
+                } else {
+                    console.log('알림 권한이 거부되었습니다.');
+                }
+            });
+        }
+
+        // Base64 URL 형식의 VAPID 키를 Uint8Array로 변환하는 함수
+        function urlB64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding)
+                .replace(/-/g, '+')
+                .replace(/_/g, '/');
+            const rawData = window.atob(base64);
+            return new Uint8Array([...rawData].map(char => char.charCodeAt(0)));
+        }
+    </script>
+</head>
+<body>
+<h1>웹 푸시 알림 테스트</h1>
+</body>
+</html>

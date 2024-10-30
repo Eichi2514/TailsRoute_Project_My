@@ -56,7 +56,7 @@ $(document).ready(function () {
     $form.on('submit', function (event) {
         // 파일이 선택되지 않은 경우
         if (!$inputFile[0].files.length) {
-            alert('파일을 업로드해 주세요.'); // 경고 메시지 표시
+            alert('사진을 업로드해 주세요.'); // 경고 메시지 표시
             event.preventDefault(); // 폼 제출을 막음
         }
     });

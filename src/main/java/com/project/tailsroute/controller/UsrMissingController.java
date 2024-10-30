@@ -75,7 +75,7 @@ public class UsrMissingController {
 
     @PostMapping("/usr/missing/doDelete")
     @ResponseBody
-    public String doDelete(Model model, @RequestParam("missingId") int missingId) {
+    public String doDelete(@RequestParam("missingId") int missingId) {
 
         Missing missing = missingService.missingArticle(missingId);
 
@@ -126,14 +126,11 @@ public class UsrMissingController {
         String age2 = (age != null) ? Integer.toString(age) : "불명";
 
         // 파일 처리 로직
-        String photoPath = null;
+        String photoPath;
         if (!file.isEmpty()) {
             // 파일 저장 시 절대 경로 사용
             String uploadDir = "uploads" + File.separator + "photo"; // 저장할 디렉토리
             String filePath = uploadDir + File.separator + "missing" + id + ".png"; // 저장할 파일 경로
-
-            // 상위 디렉토리 생성
-            new File(uploadDir).mkdirs();
 
             try {
                 // 파일 저장 전에 이미지 크기 조절
@@ -177,9 +174,6 @@ public class UsrMissingController {
             // 절대 경로를 사용하여 저장
             String uploadDir = "uploads" + File.separator + "photo"; // 저장할 디렉토리
             String filePath = uploadDir + File.separator + "missing" + number + ".png"; // 저장할 파일 경로
-
-            // 상위 디렉토리 생성
-            new File(uploadDir).mkdirs();
 
             try {
                 // 파일 저장 전에 이미지 크기 조절

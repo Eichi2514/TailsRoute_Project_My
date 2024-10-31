@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.PostConstruct;
-
 @Controller
 public class UsrGpsAlertController {
 
@@ -33,10 +31,10 @@ public class UsrGpsAlertController {
     @Autowired
     private GpsAlertService gpsAlertService;
 
-    // 프로젝트 시작 시 GPS 데이터 수신을 시작하는 메서드 (한번만 실행됨)
-    @PostConstruct
-    public void startGpsDataListener() {
-       gpsAlertService.startGpsDataListener();
+    @GetMapping("/usr/gpsAlert/start")
+    public String startGpsDataListener() {
+        gpsAlertService.startGpsDataListener();
+        return "redirect:/usr/home/main";
     }
 
     @GetMapping("/usr/gpsAlert/add")
@@ -92,7 +90,6 @@ public class UsrGpsAlertController {
             gpsAlertService.restartGpsDataListener();
             return ResponseEntity.ok("위치가 등록되었습니다");
         } catch (Exception e) {
-            e.printStackTrace(); // 에러 메시지를 콘솔에 출력
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("위치 추가에 실패했습니다: " + e.getMessage());
         }
@@ -110,7 +107,6 @@ public class UsrGpsAlertController {
             gpsAlertService.restartGpsDataListener();
             return ResponseEntity.ok("위치가 수정되었습니다");
         } catch (Exception e) {
-            e.printStackTrace(); // 에러 메시지를 콘솔에 출력
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("위치 수정에 실패했습니다: " + e.getMessage());
         }
@@ -125,7 +121,6 @@ public class UsrGpsAlertController {
             gpsAlertService.restartGpsDataListener();
             return ResponseEntity.ok("위치가 삭제되었습니다");
         } catch (Exception e) {
-            e.printStackTrace(); // 에러 메시지를 콘솔에 출력
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("위치 삭제에 실패했습니다: " + e.getMessage());
         }

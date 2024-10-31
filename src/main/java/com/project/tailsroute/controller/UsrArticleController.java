@@ -119,7 +119,7 @@ public class UsrArticleController {
 	// 로그인 체크 -> 유무 체크 -> 권한 체크 -> 수정
 	@PostMapping("/usr/article/doModify")
 	@ResponseBody
-	public String doModify(int id, String title, String body) {
+	public String doModify(String boardId, int id, String title, String body) {
 
 		Article article = articleService.getArticleById(id);
 
@@ -134,7 +134,7 @@ public class UsrArticleController {
 		}
 
 		if (userCanModifyRd.isSuccess()) {
-			articleService.modifyArticle(id, title, body);
+			articleService.modifyArticle(boardId, id, title, body);
 		}
 
 		article = articleService.getArticleById(id);

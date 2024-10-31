@@ -31,8 +31,8 @@ public class ArticleService {
 		articleRepository.deleteArticle(id);
 	}
 
-	public void modifyArticle(int id, String title, String body) {
-		articleRepository.modifyArticle(id, title, body);
+	public void modifyArticle(String boardId, int id, String title, String body) {
+		articleRepository.modifyArticle(boardId, id, title, body);
 	}
 
 	public Article getForPrintArticle(int loginedMemberId, int id) {

@@ -161,7 +161,7 @@ public class UsrMissingController {
 
         String reportDate2 = reportDate + " " + reportTime;
 
-        String age2 = "모름";
+        String age2 = "불명";
         if (age != null) age2 = Integer.toString(age);
 
 

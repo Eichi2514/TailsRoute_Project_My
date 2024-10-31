@@ -16,11 +16,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 public class UsrMemberController {
-
-    @Value("${GOOGLE_MAP_API_KEY}")
-    private String API_KEY;
 
     private final Rq rq;
 
@@ -48,35 +48,46 @@ public class UsrMemberController {
 
         model.addAttribute("isLogined", isLogined);
 
+
         return "usr/member/login";
     }
 
     @PostMapping("/usr/member/doLogin")
-    @ResponseBody // 로그인 결과를 JSON 형태로 반환
-    public String doLogin(HttpServletRequest req, @RequestParam("loginId") String loginId, @RequestParam("loginPw") String loginPw) {
-
-        System.err.println(loginId);
+    @ResponseBody
+    public Map<String, Object> doLogin(HttpServletRequest req, @RequestParam("loginId") String loginId, @RequestParam("loginPw") String loginPw) {
+        Map<String, Object> response = new HashMap<>();
 
         if (Ut.isEmptyOrNull(loginId)) {
-            return Ut.jsHistoryBack("F-1", "loginId 입력 x");
+            response.put("resultCode", "F-1");
+            response.put("jsAction", "history.back(); alert('loginId 입력 x');");
+            return response;
         }
+
         if (Ut.isEmptyOrNull(loginPw)) {
-            return Ut.jsHistoryBack("F-2", "loginPw 입력 x");
+            response.put("resultCode", "F-2");
+            response.put("jsAction", "history.back(); alert('loginPw 입력 x');");
+            return response;
         }
 
         Member member = memberService.getMemberByLoginId(loginId);
         if (member == null) {
-            return Ut.jsHistoryBack("F-3", Ut.f("%s는(은) 존재 x", loginId));
+            response.put("resultCode", "F-3");
+            response.put("jsAction", String.format("history.back(); alert('%s는(은) 존재하지 않습니다.');", loginId));
+            return response;
         }
 
-        if (member.getLoginPw().equals(loginPw) == false) {
-            return Ut.jsHistoryBack("F-4", Ut.f("비밀번호 틀림"));
+        if (!member.getLoginPw().equals(loginPw)) {
+            response.put("resultCode", "F-4");
+            response.put("jsAction", "history.back(); alert('비밀번호가 틀렸습니다.');");
+            return response;
         }
 
         rq.login(member);
-
-        return Ut.jsReplace("S-1", Ut.f("%s님 환영합니다", member.getNickname()), "/usr/home/main");
+        response.put("resultCode", "S-1");
+        response.put("jsAction", String.format("location.href = '/usr/home/main'; alert('%s님 환영합니다.');", member.getNickname()));
+        return response;
     }
+
 
     @RequestMapping("/usr/member/doLogout")
     @ResponseBody
@@ -101,7 +112,7 @@ public class UsrMemberController {
         boolean locationChack;
 
         if (dog != null) {
-        GpsAlert gpsAlert = gpsAlertService.getGpsAlert(dog.getId());
+            GpsAlert gpsAlert = gpsAlertService.getGpsAlert(dog.getId());
             if (gpsAlert == null) {
                 locationChack = false;
             }else {

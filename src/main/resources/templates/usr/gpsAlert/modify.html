@@ -20,7 +20,7 @@
     <div class="upload_map tw-p-2">
         <span>
             <label for="searchInput"></label>
-            <input class="upload_input" type="text" id="searchInput" placeholder="주소를 입력해주세요">
+            <input class="upload_input" type="text" id="searchInput" placeholder="주소를 입력해주세요" th:value="${location}">
             <button class="upload_button" onclick="searchPlace()">검색</button>
         </span>
         <button class="upload_button" th:onclick="'getCenterCoordinates(' + ${dogId} + ',false)'">등록</button>

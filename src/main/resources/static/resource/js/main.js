@@ -4,13 +4,13 @@ $(document).ready(function () {
     var totalItems = $('.misssing_item').length - 2; // 총 이미지 개수
 
     // 왼쪽 버튼 클릭 시 이벤트
-    $('.left_btn').on('click', function () {
+    $('.left_btn').on('click', function() {
         index = (index > 0) ? index - 1 : totalItems - 1; // 인덱스 감소, 맨 처음이면 마지막으로 이동
         updateSlider();
     });
 
     // 오른쪽 버튼 클릭 시 이벤트
-    $('.right_btn').on('click', function () {
+    $('.right_btn').on('click', function() {
         index = (index < totalItems - 1) ? index + 1 : 0; // 인덱스 증가, 맨 끝이면 처음으로 이동
         updateSlider();
     });
@@ -22,15 +22,15 @@ $(document).ready(function () {
         $slider.css('transform', 'translateX(' + newTransformValue + 'px)'); // 슬라이드 이동
     }
 
-    // 5초마다 오른쪽 버튼 클릭 효과 추가
-    setInterval(function () {
+    // 설정 시간마다 오른쪽 버튼 클릭 효과 추가
+    setInterval(function() {
         index = (index < totalItems - 1) ? index + 1 : 0; // 인덱스 증가, 맨 끝이면 처음으로 이동
         updateSlider();
-    }, 5000);
+    }, 3000);
 
     let timeout;
 
-    $(document).mousemove(function () {
+    $(document).mousemove(function() {
         // 버튼을 보이게 합니다.
         $('.left_btn').fadeIn();
         $('.right_btn').fadeIn();
@@ -38,8 +38,8 @@ $(document).ready(function () {
         // 이전 타이머가 있다면 클리어합니다.
         clearTimeout(timeout);
 
-        // 5초 후에 버튼을 숨기는 타이머 설정
-        timeout = setTimeout(function () {
+        // 설정 시간 후에 버튼을 숨기는 타이머 설정
+        timeout = setTimeout(function() {
             $('.left_btn').fadeOut();
             $('.right_btn').fadeOut();
         }, 1000);

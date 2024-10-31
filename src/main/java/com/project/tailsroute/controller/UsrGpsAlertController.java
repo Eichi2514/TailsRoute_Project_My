@@ -69,6 +69,9 @@ public class UsrGpsAlertController {
             double longitude = gpsAlert.getLongitude();
             model.addAttribute("latitude", latitude);
             model.addAttribute("longitude", longitude);
+            String location = gpsAlertService.getPlaceName(gpsAlert.getLatitude(), gpsAlert.getLongitude());
+            location = location.substring(5);
+            model.addAttribute("location", location);
         }
 
         model.addAttribute("GOOGLE_MAP_API_KEY", API_KEY);

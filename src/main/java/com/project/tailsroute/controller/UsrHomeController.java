@@ -1,6 +1,5 @@
 package com.project.tailsroute.controller;
 
-import com.project.tailsroute.service.GpsAlertService;
 import com.project.tailsroute.service.GpsChackService;
 import com.project.tailsroute.service.MissingService;
 import com.project.tailsroute.vo.GpsChack;
@@ -24,9 +23,6 @@ public class UsrHomeController {
 
     @Value("${GOOGLE_MAP_API_KEY}")
     private String API_KEY;
-
-    @Autowired
-    private GpsAlertService gpsAlertService;
 
     @Autowired
     private MissingService missingService;

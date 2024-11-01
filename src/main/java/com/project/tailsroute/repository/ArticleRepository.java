@@ -33,7 +33,7 @@ public interface ArticleRepository {
             `body` = #{body}
             WHERE id = #{id}
             """)
-    public void modifyArticle(String boardId, int id, String title, String body);
+    public void modifyArticle(int boardId, int id, String title, String body);
 
     @Select("""
             SELECT A.*, M.nickname AS extra__writer, D.photo AS extra__dogPoto

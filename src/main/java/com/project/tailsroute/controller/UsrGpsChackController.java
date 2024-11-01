@@ -1,10 +1,8 @@
 package com.project.tailsroute.controller;
 
 
-
 import com.project.tailsroute.service.GpsAlertService;
 import com.project.tailsroute.service.GpsChackService;
-import com.project.tailsroute.vo.GpsChack;
 import com.project.tailsroute.vo.Member;
 import com.project.tailsroute.vo.Rq;
 import org.springframework.beans.factory.annotation.Autowired;

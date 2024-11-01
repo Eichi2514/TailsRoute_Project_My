@@ -3,7 +3,6 @@ package com.project.tailsroute.controller;
 import com.project.tailsroute.service.DogService;
 import com.project.tailsroute.vo.Dog;
 import com.project.tailsroute.vo.Member;
-import com.project.tailsroute.vo.Missing;
 import com.project.tailsroute.vo.Rq;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,16 +73,17 @@ public class UsrDogController {
         }
 
         // 파일 처리 로직
-        String photoPath = null;
+        String photoPath;
         if (!file.isEmpty()) {
 
-            String filePath = "src/main/resources/static/resource/photo/dog" + id + ".png";
+            String uploadDir = "uploads" + File.separator + "photo"; // 저장할 디렉토리
+            String filePath = uploadDir + File.separator + "dog" + id + ".png"; // 저장할 파일 경로
             try {
                 // 파일 저장 전에 이미지 크기 조절
-                Thumbnails.of(file.getInputStream()).size(80, 80) // 원하는 사이즈로 조정
+                Thumbnails.of(file.getInputStream()).size(800, 800) // 원하는 사이즈로 조정
                         .toFile(new File(filePath));
 
-                photoPath = "/resource/photo/dog" + id + ".png"; // 웹에서 접근할 수 있는 경로
+                photoPath = "/uploads/photo/dog" + id + ".png"; // 웹에서 접근할 수 있는 경로
             } catch (IOException e) {
                 return "redirect:/usr/missing/modify?missingId="+id;
             }
@@ -106,13 +106,14 @@ public class UsrDogController {
             int number = dogService.lastNumber(); // 데이터베이스에서 가져온 마지막 ID
             number++;
 
-            String filePath = "src/main/resources/static/resource/photo/dog" + number + ".png";
+            String uploadDir = "uploads" + File.separator + "photo"; // 저장할 디렉토리
+            String filePath = uploadDir + File.separator + "missing" + number + ".png"; // 저장할 파일 경로
             try {
                 // 파일 저장 전에 이미지 크기 조절
-                Thumbnails.of(file.getInputStream()).size(80, 80) // 원하는 사이즈로 조정
+                Thumbnails.of(file.getInputStream()).size(800, 800) // 원하는 사이즈로 조정
                         .toFile(new File(filePath));
 
-                photoPath = "/resource/photo/dog" + number + ".png"; // 웹에서 접근할 수 있는 경로
+                photoPath = "/uploads/photo/missing" + number + ".png"; // 웹에서 접근할 수 있는 경로
             } catch (IOException e) {
                 return "redirect:/usr/dog/add";
             }

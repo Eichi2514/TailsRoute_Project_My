@@ -102,7 +102,7 @@ CREATE TABLE `dog`(
                       updateDate DATETIME NOT NULL COMMENT '수정 날짜',
                       memberId INT(10) UNSIGNED NOT NULL COMMENT '주인 식별번호',
                       `name` CHAR(20) NOT NULL DEFAULT '이름 없음' COMMENT '이름',
-                      weight CHAR(20) NOT NULL DEFAULT '모름' COMMENT '체중',
+                      weight CHAR(20) NOT NULL DEFAULT '불명' COMMENT '체중',
                       photo CHAR(50) NOT NULL COMMENT '사진',
                       `type` CHAR(20) NOT NULL COMMENT '소형, 중형, 대형',
                       comPortName CHAR(20) COMMENT 'GPS 기기 연결 포트'
@@ -187,6 +187,12 @@ updateDate = NOW(),
 `code` = 'QnA',
 `name` = '질의응답';
 
+INSERT INTO board
+SET regDate = NOW(),
+updateDate = NOW(),
+`code` = 'recommend',
+`name` = '추천합니다';
+
 ## 리액션(좋아요, 싫어요) 테이블
 CREATE TABLE reactionPoint(
                               id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
@@ -232,7 +238,10 @@ CREATE TABLE essentials (
                             regDate DATETIME NOT NULL COMMENT '생성 날짜',
                             updateDate DATETIME NOT NULL COMMENT '수정 날짜',
                             memberId INT(10) UNSIGNED NOT NULL COMMENT '생성자 식별번호',
-                            itemType CHAR(20) NOT NULL COMMENT '생필품 종류',
+                            itemType CHAR(50) NOT NULL COMMENT '생필품 종류',
+                            productPicture TEXT NOT NULL COMMENT '생필품 사진',
+                            productPrice TEXT NOT NULL COMMENT '생필품 가격',
+                            productLink TEXT NOT NULL COMMENT '생필품 링크',
                             purchaseDate DATE NOT NULL COMMENT '구매 날짜',
                             usageCycle INT(10) NOT NULL COMMENT '사용주기',
                             timing INT(10) NOT NULL COMMENT '알림 시기'
@@ -256,7 +265,7 @@ CREATE TABLE missing(
                         breed CHAR(30) NOT NULL COMMENT '품종',
                         color CHAR(30) NOT NULL COMMENT '색상',
                         gender CHAR(30) NOT NULL COMMENT '성별',
-                        age CHAR(30) DEFAULT '모름' COMMENT '나이',
+                        age CHAR(30) DEFAULT '불명' COMMENT '나이',
                         photo TEXT NOT NULL COMMENT '사진',
                         RFID CHAR(30) DEFAULT '없음' COMMENT '마이크로칩 번호',
                         trait TEXT NOT NULL COMMENT '특징'
@@ -478,9 +487,6 @@ CREATE TABLE gpsChack(
                          longitude DECIMAL(10, 7) COMMENT '현재 경도',
                          location VARCHAR(100) COMMENT '장소'
 );
-
-USE `tails_route`;
-SHOW TABLES;
 
 INSERT INTO article
 SET

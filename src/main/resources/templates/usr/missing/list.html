@@ -9,8 +9,8 @@
 <div class="profile tw-p-5">
     <div class="profile_title" th:text="|total : ${totalCnt}개|">페이지 수</div>
     <div class="tw-pl-5">
-        <select class="str tw-border-box tw-p-2" id="str" name="str" required
-                onchange="location.href='list?page=1&str=' + this.value;">
+        <label for="str">
+        </label><select class="str tw-border-box tw-p-2" id="str" name="str" required onchange="location.href='list?page=1&str=' + this.value;">
             <option value="${str}" th:text="${str}"></option>
             <option th:if="${str != '전체'}" value="전체">전체</option>
             <option th:if="${str != '인천광역시'}" value="인천광역시">인천광역시</option>
@@ -58,7 +58,7 @@
 </div>
 
 <div class="pagination tw-flex tw-justify-center tw-items-center" th:if="${totalPage != 0}">
-    <a class="pagination_left tw-p-[10px]" th:href="@{'list?page=' + ${lpage} + 'str='+${str}}">
+    <a class="pagination_left tw-p-[10px]" th:href="@{'list?page=' + ${lpage} + '&str='+${str}}">
         <i class="fa-solid fa-caret-left" style="font-size: 70px;"></i>
     </a>
 
@@ -67,7 +67,7 @@
         <!-- 처음 페이지로 이동 -->
         <div th:if="${startPage > 1}">
             <a class="tw-text-[50px] tw-pl-[10px] tw-pr-[10px]"
-               th:href="@{'list?page=1&' + 'str='+${str}}">1</a>
+               th:href="@{'list?page=1' + '&str='+${str}}">1</a>
         </div>
 
         <!-- 중간 생략 버튼 -->
@@ -99,7 +99,4 @@
         <i class="fa-solid fa-caret-right" style="font-size: 70px;"></i>
     </a>
 </div>
-
-
 </body>
-</html>

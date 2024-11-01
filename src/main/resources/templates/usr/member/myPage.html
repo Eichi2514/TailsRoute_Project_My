@@ -58,7 +58,7 @@
             </div>
             <div>
                 <label>체중</label>
-                <span class="myPage_text" th:text="(${dog.weight != '모름' ? dog.weight + ' kg' : dog.weight})"></span>
+                <span class="myPage_text" th:text="(${dog.weight != '불명' ? dog.weight + ' kg' : dog.weight})"></span>
             </div>
             <div>
                 <label>반려견 유형</label>
@@ -66,8 +66,8 @@
             </div>
             <div>
                 <label>GPS 보유 여부</label>
-                <span class="myPage_text" th:if="${dog.comPortName==null}">Ⅹ</span>
-                <span class="myPage_text" th:if="${dog.comPortName!=null}">○</span>
+                <span class="myPage_text" th:if="${dog.comPortName==null}">없음</span>
+                <span class="myPage_text" th:if="${dog.comPortName!=null}">있음</span>
             </div>
             <div class="myPage_text" th:if="${location!=null}" th:text="${location}"></div>
             <div th:if="${dog.comPortName != null}">
@@ -103,5 +103,3 @@
     </div>
 </div>
 </body>
-</html>
-

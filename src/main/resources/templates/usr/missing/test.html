@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이미지 마우스 따라다니기</title>
+    <style>
+        #follow-image {
+            position: absolute;
+            width: 50px; /* 이미지 크기 조절 */
+            height: 50px;
+            pointer-events: none; /* 이미지가 클릭되지 않도록 */
+        }
+        .bg__1{
+            background: #FAF3E0;
+        }
+        .bg__2{
+            background: #FDEDD0;
+        }
+        .bg__3{
+            background: #3A3A3A;
+        }
+        .bg__4{
+            background: #4B5D67;
+        }
+        .bg__5{
+            background: #7DAF82;
+        }
+        .bg__6{
+            background: #5C8D6D;
+        }
+        .bg__7{
+            background: #FF6F61;
+        }
+    </style>
+</head>
+<body>
+<img id="follow-image" th:src="@{/resource/photo/dog1.png}" alt="이미지"/>
+<div class="bg__1">배경색: #FAF3E0 (아주 옅은 베이지)</div>
+<div class="bg__2">메인 배너 배경: #FDEDD0 (연한 살구색)</div>
+<div class="bg__3">기본 텍스트 색상: #3A3A3A (딥 그레이)</div>
+<div class="bg__4">헤더 텍스트: #4B5D67 (다크 블루-그레이)</div>
+<div class="bg__5">버튼 색상: #7DAF82 (연한 녹색)</div>
+<div class="bg__6">호버 버튼 색상: #5C8D6D (진한 녹색)</div>
+<div class="bg__7">아이콘 강조 색상: #FF6F61 (연한 코랄)</div>
+
+<script>
+    // JavaScript로 마우스 이벤트 추가
+    const followImage = document.getElementById('follow-image');
+    let posX = 0, posY = 0;
+
+    document.addEventListener('mousemove', (event) => {
+        posX = event.pageX;
+        posY = event.pageY;
+    });
+
+    function animate() {
+        const currentX = parseFloat(followImage.style.left) || 0;
+        const currentY = parseFloat(followImage.style.top) || 0;
+
+        // 0.1은 이동 속도를 조절하는 계수로, 값이 작을수록 느리게 따라옵니다.
+        followImage.style.left = currentX + (posX - currentX) * 0.1 + 'px';
+        followImage.style.top = currentY + (posY - currentY) * 0.1 + 'px';
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+
+</script>
+</body>
+</html>

@@ -48,4 +48,9 @@ public class UsrHomeController {
         model.addAttribute("missings", missings);
         return "usr/home/main";
     }
+
+    @GetMapping("/usr/home/main3")
+    public String showMain3(Model model) {
+        return "usr/home/main3";
+    }
 }

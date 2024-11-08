@@ -51,6 +51,10 @@ public class UsrHomeController {
 
     @GetMapping("/usr/home/main3")
     public String showMain3(Model model) {
+
+        List<Missing> missings = missingService.list(0, 10, "전체");
+
+        model.addAttribute("missings", missings);
         return "usr/home/main3";
     }
 }

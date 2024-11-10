@@ -612,6 +612,10 @@ video {
   top: -7px;
 }
 
+.tw-right-5 {
+  right: 1.25rem;
+}
+
 .tw-z-20 {
   z-index: 20;
 }
@@ -907,6 +911,16 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.tw-bg-\[\#FDE0D4\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 224 212 / var(--tw-bg-opacity));
+}
+
+.tw-bg-\[\#EDE0D4\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(237 224 212 / var(--tw-bg-opacity));
+}
+
 .tw-p-10 {
   padding: 2.5rem;
 }
@@ -927,12 +941,12 @@ video {
   padding: 10px;
 }
 
-.tw-p-\[20px\] {
-  padding: 20px;
-}
-
 .tw-p-\[50px\] {
   padding: 50px;
+}
+
+.tw-p-\[100px\] {
+  padding: 100px;
 }
 
 .tw-px-5 {
@@ -947,6 +961,10 @@ video {
 
 .tw-pb-\[9px\] {
   padding-bottom: 9px;
+}
+
+.tw-pl-2 {
+  padding-left: 0.5rem;
 }
 
 .tw-pl-5 {
@@ -975,6 +993,14 @@ video {
 
 .tw-pr-\[20px\] {
   padding-right: 20px;
+}
+
+.tw-pt-2 {
+  padding-top: 0.5rem;
+}
+
+.tw-pt-4 {
+  padding-top: 1rem;
 }
 
 .tw-text-center {
@@ -1020,6 +1046,14 @@ video {
 .tw-text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
+}
+
+.tw-text-\[15px\] {
+  font-size: 15px;
+}
+
+.tw-text-\[12px\] {
+  font-size: 12px;
 }
 
 .tw-font-bold {

@@ -246,6 +246,50 @@ public class UsrArticleController {
 		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page, searchKeywordTypeCode,
 				searchKeyword);
 
+		for (Article article : articles) {
+			article.setPoto(articleService.extractFirstImageSrc(article.getBody()));
+			article.setBody(articleService.removeHtmlTags(article.getBody()));
+		}
+
+		model.addAttribute("articles", articles);
+		model.addAttribute("articlesCount", articlesCount);
+		model.addAttribute("pagesCount", pagesCount);
+		model.addAttribute("board", board);
+		model.addAttribute("page", page);
+		model.addAttribute("searchKeywordTypeCode", searchKeywordTypeCode);
+		model.addAttribute("searchKeyword", searchKeyword);
+		model.addAttribute("boardId", boardId);
+
+		return "usr/article/list2";
+	}
+
+	@GetMapping("/usr/article/list2")
+	public String showList2(Model model, @RequestParam(defaultValue = "0") int boardId,
+						   @RequestParam(defaultValue = "1") int page,
+						   @RequestParam(defaultValue = "전체") String searchKeywordTypeCode,
+						   @RequestParam(defaultValue = "") String searchKeyword){
+
+		boolean isLogined = rq.isLogined();
+		if (isLogined) {
+			Member member = rq.getLoginedMember();
+			model.addAttribute("member", member);
+		}
+		model.addAttribute("isLogined", isLogined);
+
+		Board board = boardService.getBoardById(boardId);
+
+		int articlesCount = articleService.getArticlesCount(boardId, searchKeywordTypeCode, searchKeyword);
+
+		// 한페이지에 글 10개
+		// 글 20개 -> 2page
+		// 글 25개 -> 3page
+		int itemsInAPage = 10;
+
+		int pagesCount = (int) Math.ceil(articlesCount / (double) itemsInAPage);
+
+		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page, searchKeywordTypeCode,
+				searchKeyword);
+
 		model.addAttribute("articles", articles);
 		model.addAttribute("articlesCount", articlesCount);
 		model.addAttribute("pagesCount", pagesCount);

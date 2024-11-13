@@ -4,8 +4,11 @@ import com.project.tailsroute.repository.ArticleRepository;
 import com.project.tailsroute.util.Ut;
 import com.project.tailsroute.vo.Article;
 import com.project.tailsroute.vo.ResultData;
+import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.util.List;
 
@@ -14,6 +17,22 @@ public class ArticleService {
 
 	@Autowired
 	private ArticleRepository articleRepository;
+
+	public String extractFirstImageSrc(String html) {
+
+		Document document = Jsoup.parse(html); // HTML 파싱
+		Element firstImage = document.select("img").first(); // 첫 번째 <img> 태그 선택
+
+		if (firstImage != null) {
+			return firstImage.attr("src"); // src 속성 반환
+		}
+
+		return null; // <img> 태그가 없으면 null 반환
+	}
+
+	public String removeHtmlTags(String html) {
+		return html.replaceAll("<[^>]*>", "");
+	}
 
 	public ResultData writeArticle(int memberId, String title, String body, String boardId) {
 		articleRepository.writeArticle(memberId, title, body, boardId);

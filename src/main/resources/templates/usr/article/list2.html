@@ -130,7 +130,7 @@
                     </div>
                 </div>
 
-                <a class="button" th:href="@{../article/write}">작성하기</a>
+                <a class="link" th:href="@{../article/write}">작성하기</a>
             </div>
         </form>
         <div class="tw-p-10">
@@ -140,15 +140,15 @@
                      th:src="@{${article.extra__dogPoto}}" alt="Profile Image"/>
                 <img class="list_main_dogPoto" th:if="${article.extra__dogPoto == null}"
                      th:src="@{/resource/photo/default.png}" alt="Default Profile Image"/>
-                <a class="list_main_body" th:href="@{'../article/detail?id=' + ${article.id}}">
+                <a class="list_main_body link" th:href="@{'../article/detail?id=' + ${article.id}}">
                     <div>
-                        <span class="tw-hover:underline" th:text="${#strings.abbreviate(article.title,30)}"></span>
+                        <span class="tw-text-3xl tw-hover:underline" th:text="${#strings.abbreviate(article.title,30)}"></span>
                         <span th:text="' [ ' + ${article.extra__repliesCount} + ' ]'"
                               th:if="${article.extra__repliesCount} > 0"
                               style="color: red; font-weight: bold;"></span>
                     </div>
                     <div>
-                        <span th:text="${#strings.abbreviate(article.body,30)}"></span>
+                        <span class="tw-text-2xl" th:text="${#strings.abbreviate(article.body,30)}"></span>
                     </div>
                 </a>
                 <div class="list_main_poot">

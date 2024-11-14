@@ -27,7 +27,6 @@ input, select, option{
 }
 
 .link:hover {
-    color: blue;
     text-decoration: underline;
 }
 
@@ -124,8 +123,8 @@ input, select, option{
 }
 
 .list_main_dogPoto{
-    width: 45px;
-    height: 45px;
+    width: 70px;
+    height: 70px;
     border-radius: 100%;
 }
 
@@ -133,8 +132,10 @@ input, select, option{
     flex-grow: 1;
 }
 
-.list_main_poot_img{
-    width: 45px;
-    height: 45px;
+.list_main_poot_img {
+    width: 150px;
+    height: 70px;
     border-radius: 5px;
+    object-fit: cover;
+    object-position: center;
 }

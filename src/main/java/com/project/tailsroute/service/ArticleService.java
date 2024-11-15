@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @Service
@@ -65,7 +68,7 @@ public class ArticleService {
 	}
 
 	public List<Article> getForPrintArticles(int boardId, int itemsInAPage, int page, String searchKeywordTypeCode,
-											 String searchKeyword) {
+											 String searchKeyword, int memberId) {
 
 		int limitFrom = (page - 1) * itemsInAPage;
 		int limitTake = itemsInAPage;
@@ -77,7 +80,7 @@ public class ArticleService {
 		// System.err.println("searchKeyword : " + searchKeyword);
 
 		return articleRepository.getForPrintArticles(boardId, limitFrom, limitTake, searchKeywordTypeCode,
-				searchKeyword);
+				searchKeyword, memberId);
 	}
 
 	public List<Article> getArticles() {
@@ -114,8 +117,8 @@ public class ArticleService {
 		return ResultData.from("S-1", Ut.f("%d번 게시글을 수정했습니다", article.getId()), "수정된 게시글", article);
 	}
 
-	public int getArticlesCount(int boardId, String searchKeywordTypeCode, String searchKeyword) {
-		return articleRepository.getArticleCount(boardId, searchKeywordTypeCode, searchKeyword);
+	public int getArticlesCount(int boardId, String searchKeywordTypeCode, String searchKeyword, int memberId) {
+		return articleRepository.getArticleCount(boardId, searchKeywordTypeCode, searchKeyword, memberId);
 	}
 
 	public ResultData increaseHitCount(int id) {
@@ -181,4 +184,19 @@ public class ArticleService {
 		return articleRepository.getBadRP(relId);
 	}
 
+    public List<Article> getMainArticles(int boardId) {
+		return articleRepository.getMainArticles(boardId);
+    }
+
+	public boolean isNew(String regDateStr) {
+		try {
+			// 날짜만 파싱하도록 수정
+			String dateOnly = regDateStr.split(" ")[0]; // 시간 부분을 제거
+			LocalDate regDate = LocalDate.parse(dateOnly, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			return !regDate.isBefore(LocalDate.now()); // 오늘이거나 미래 날짜일 경우 true
+		} catch (DateTimeParseException e) {
+			System.err.println("Invalid date format for regDate: " + regDateStr);
+			return false;
+		}
+	}
 }

@@ -1,5 +1,6 @@
 body{
     background: #f9f5eb;
+    white-space: nowrap;
 }
 
 .bo{
@@ -28,6 +29,10 @@ input, select, option{
 
 .link:hover {
     text-decoration: underline;
+}
+
+.underline{
+    border-bottom :1px solid #DADADA;
 }
 
 .list_head{
@@ -75,6 +80,7 @@ input, select, option{
     height: 50%;
     padding: 20px;
     font-weight: bold;
+    white-space: normal;
 }
 
 .list_body{
@@ -108,13 +114,17 @@ input, select, option{
     font-size: 1.5rem;
 }
 
-.list_board{
-    width: 80%;
-    font-size: 2rem;
-    text-align: center;
-    border-radius: 10px;
-    border: 1px solid;
+.list_board_title{
+    font-size: 1.5em;
+    border-bottom: 1px solid #DADADA;
     padding: 10px;
+    width: 80%;
+}
+
+.list_board{
+    width: 100%;
+    padding-top: 30px;
+    padding-left: 30px;
 }
 
 .list_main{
@@ -130,6 +140,7 @@ input, select, option{
 
 .list_main_body{
     flex-grow: 1;
+    height: 70px;
 }
 
 .list_main_poot_img {
@@ -138,4 +149,11 @@ input, select, option{
     border-radius: 5px;
     object-fit: cover;
     object-position: center;
+}
+
+.new-icon{
+    border-radius: 100%;
+    background: #ff6f61;
+    color: white;
+    padding: 0 4px;
 }

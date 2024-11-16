@@ -265,10 +265,4 @@ public class UsrMissingController {
         return "/usr/missing/list";
     }
 
-    @GetMapping("/usr/missing/test")
-    public String test(Model model) {
-
-        return "/usr/missing/test";
-    }
-
 }

@@ -1,0 +1,936 @@
+<div id="heads">
+  <th:block th:replace="usr/common/head"/>
+</div>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map Search</title>
+  <script async defer th:src="'https://maps.googleapis.com/maps/api/js?key=' + ${GOOGLE_ROUTE_API_KEY} + '&callback=initMap&libraries=places'"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    html {
+      background-color: #FFFEF0;
+    }
+    .enterMap {
+      margin-top: 70px;
+      padding-left: 10px;
+      padding-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #F2F2EB;
+      width: 45%;
+      height: 50px;
+      margin-left: 3%;
+      display: inline-block;
+      position: absolute;
+    }
+    .WalkingSchedule, .WalkingTrail {
+      margin-top: 130px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #F2F2EB;
+      display: inline-block;
+      width: 45%;
+      height: 690px;
+      margin-left: 3%;
+    }
+    .information {
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #F2F2EB;
+      display: inline-block;
+      width: 93%;
+      height: 110px;
+      margin-left: 3%;
+    }
+    /* 팝업 창 스타일 */
+    .modal {
+      display: none; /* 기본적으로 숨김 */
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4); /* 배경 어둡게 */
+      overflow: auto;
+    }
+
+    .modal-content {
+      background-color: #F2F2EB;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 600px;
+      border-radius: 10px;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    #routePicture canvas {
+      width: 200px;
+      height: auto;
+    }
+    th{
+      padding: 10px;
+      text-align: center;
+      border: 1px solid #ccc;
+    }
+
+    th#purchaseDateHeader,
+    th#alarmDateHeader {
+      width: 110px;
+    }
+    th#usageCycleHeader,
+    th#deleteHeader,
+    th#recommendHearder {
+      width: 100px;
+    }
+
+    td {
+      padding: 10px; /* 각 td 요소의 내부 여백 */
+      border: 1px solid #ccc; /* 셀 경계선 */
+      text-align: center; /* 텍스트 가운데 정렬 */
+    }
+  </style>
+</head>
+<body>
+<div class="enterMap">
+  <input type="text" id="locationInput" placeholder="주소를 입력해주세요" />
+  <button onclick="searchLocation()">찿기</button>
+  <div id="distanceDisplay" style="display: inline-block">거리: 0 km</div>
+  <button id="clearPathButton">이전 루트</button>
+  <button id="savePathButton">루트 저장</button>
+  <button id="loadPathButton">루트 불러오기</button>
+</div>
+<div class="WalkingTrail" id="walkingTrailMap"></div>
+<div class="WalkingSchedule">
+  <table id="WalkingTable">
+    <thead>
+    <tr>
+      <th id="routeNameHeader">산책명<span class="sort-arrow" id="routeNameArrow"></span></th>
+      <th id="routeLocationHeader">산책 지역<span class="sort-arrow" id="routeLocationArrow"></span></th>
+      <th id="purchaseDateHeader">산책 날짜<span class="sort-arrow" id="purchaseDateArrow">▲</span></th>
+      <th id="purchaseTimeHeader">산책 시간<span class="sort-arrow" id="purchaseTimeArrow"></span></th>
+      <th id="routedistanceHeader">산책 거리<span class="sort-arrow" id="routedistanceArrow"></span></th>
+      <th id="modifyHeader">수정</th>
+      <th id="deleteHeader">삭제</th>
+      <th id="recommendHearder">추천</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 데이터가 여기에 추가됩니다. -->
+    </tbody>
+  </table>
+</div>
+<div class="information"></div>
+
+<div id="addRoutePopup" class="modal" style="display: none;">
+  <div class="modal-content">
+    <span class="close" id="closeRoutePopup">&times;</span>
+    <h2>산책 일정 관리</h2>
+
+    <!-- 산책 시간 입력 -->
+    <label for="routeName">산책명</label>
+    <input type="text" id="routeName" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border" /><br/><br/>
+
+    <!-- 일정 날짜 입력-->
+    <label for="scheduleDate">산책 날짜 선택</label>
+    <input type="date" id="scheduleDate" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border" /><br/><br/>
+
+    <!-- 산책 시간 입력 -->
+    <label for="scheduleTime">산책 시간 선택</label>
+    <input type="time" id="scheduleTime" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border" /> ~
+    <input type="time" id="scheduleTime1" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border" /><br/><br/>
+
+    <!-- 산책 루트 -->
+    <label for="routePicture">산책 루트</label>
+    <br>
+    <span id="routePicture" style="display: inline-block; width: 400px; height: 300px;">
+      <div class="WalkingTrail" id="walkingTrailMap1" style=" width: 500px; height: 300px; bottom:120px;"></div>
+    </span><br/><br/>
+
+    <!-- 산책 거리 -->
+    <label for="routedistance">산책 거리</label>
+    <span id="routedistance" style="display: inline-block;"></span><br/><br/>
+
+    <!-- 산책 지역 -->
+    <label for="routeLocation">산책 지역</label>
+    <span id="routeLocation" style="display: inline-block;"></span><br/><br/>
+
+    <!-- 버튼들 -->
+    <button id="createScheduleBtn">일정 생성</button>
+    <button id="updateScheduleBtn">일정 수정</button>
+  </div>
+</div>
+
+<script>
+  let map;
+  let marker;
+  let polyline; // Polyline 객체 추가
+  let path = []; // 경로를 저장할 배열
+  let walks = []; // 전역 변수로 walks 정의
+  let currentSortColumn = ''; // 현재 정렬된 열을 추적하기 위한 변수
+  let isAscending = true; // 정렬 방향을 추적하기 위한 변수
+  let wmemberId = [[${member.id}]];
+  var RE = 6371.00877; // 지구 반경(km)
+  var GRID = 5.0; // 격자 간격(km)
+  var SLAT1 = 30.0; // 투영 위도1(degree)
+  var SLAT2 = 60.0; // 투영 위도2(degree)
+  var OLON = 126.0; // 기준점 경도(degree)
+  var OLAT = 38.0; // 기준점 위도(degree)
+  var XO = 43; // 기준점 X좌표(GRID)
+  var YO = 136; // 기준점 Y좌표(GRID)
+
+  function dfs_xy_conv(code, v1, v2) {
+    var DEGRAD = Math.PI / 180.0;
+    var RADDEG = 180.0 / Math.PI;
+
+    var re = RE / GRID;
+    var slat1 = SLAT1 * DEGRAD;
+    var slat2 = SLAT2 * DEGRAD;
+    var olon = OLON * DEGRAD;
+    var olat = OLAT * DEGRAD;
+
+    var sn = Math.tan(Math.PI * 0.25 + slat2 * 0.5) / Math.tan(Math.PI * 0.25 + slat1 * 0.5);
+    sn = Math.log(Math.cos(slat1) / Math.cos(slat2)) / Math.log(sn);
+    var sf = Math.tan(Math.PI * 0.25 + slat1 * 0.5);
+    sf = Math.pow(sf, sn) * Math.cos(slat1) / sn;
+    var ro = Math.tan(Math.PI * 0.25 + olat * 0.5);
+    ro = re * sf / Math.pow(ro, sn);
+
+    var rs = {};
+    if (code == "toXY") {
+      rs['lat'] = v1; // 위도
+      rs['lng'] = v2; // 경도
+      var ra = Math.tan(Math.PI * 0.25 + (v1) * DEGRAD * 0.5);
+      ra = re * sf / Math.pow(ra, sn);
+      var theta = v2 * DEGRAD - olon;
+      if (theta > Math.PI) theta -= 2.0 * Math.PI;
+      if (theta < -Math.PI) theta += 2.0 * Math.PI;
+      theta *= sn;
+      rs['x'] = Math.floor(ra * Math.sin(theta) + XO + 0.5);
+      rs['y'] = Math.floor(ro - ra * Math.cos(theta) + YO + 0.5);
+    } else {
+      rs['x'] = v1; // X좌표
+      rs['y'] = v2; // Y좌표
+      var xn = v1 - XO;
+      var yn = ro - v2 + YO;
+      ra = Math.sqrt(xn * xn + yn * yn);
+      if (sn < 0.0) ra = -ra;
+      var alat = Math.pow((re * sf / ra), (1.0 / sn));
+      alat = 2.0 * Math.atan(alat) - Math.PI * 0.5;
+
+      if (Math.abs(xn) <= 0.0) {
+        theta = 0.0;
+      } else {
+        if (Math.abs(yn) <= 0.0) {
+          theta = Math.PI * 0.5;
+          if (xn < 0.0) theta = -theta;
+        } else {
+          theta = Math.atan2(xn, yn);
+        }
+      }
+      var alon = theta / sn + olon;
+      rs['lat'] = alat * RADDEG; // 변환된 위도
+      rs['lng'] = alon * RADDEG; // 변환된 경도
+    }
+    return rs; // 결과 반환
+  }
+
+  // 위경도를 격자 좌표로 변환하는 함수
+  function convertLatLngToGrid(latitude, longitude) {
+    var result = dfs_xy_conv("toXY", latitude, longitude);
+    return {
+      nx: String(result.x), // nx를 문자열로 변환
+      ny: String(result.y)  // ny를 문자열로 변환
+    };
+  }
+  function initMap() {
+    const latitude = [[${gpsCheck.latitude}]];
+    const longitude = [[${gpsCheck.longitude}]];
+    const initialPosition = { lat: latitude, lng: longitude };
+    map = new google.maps.Map(document.getElementById("walkingTrailMap"), {
+      center: initialPosition,
+      zoom: 15,
+    });
+    const map1 = new google.maps.Map(document.getElementById("walkingTrailMap1"), {
+      center: initialPosition,
+      zoom: 15,
+    });
+    marker = new google.maps.Marker({
+      position: initialPosition,
+      map: map, map1,
+      title: "My location",
+    });
+
+
+    polyline1 = new google.maps.Polyline({
+      path: path,
+      geodesic: true,
+      strokeColor: '#FF0000',
+      icons: [{
+        icon: {
+          path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+          scale: 3,
+          strokeColor: '#0000FF',
+        },
+        offset: '100%',
+        repeat: '200px' // 화살표를 경로를 따라 20px 간격으로 반복
+      }],
+    });
+
+    polyline2 = new google.maps.Polyline({
+      path: path,
+      geodesic: true,
+      strokeColor: '#FF0000',
+      icons: [{
+        icon: {
+          path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+          scale: 3,
+          strokeColor: '#0000FF',
+        },
+        offset: '100%',
+        repeat: '200px'
+      }],
+    });
+    polyline1.setMap(map); // 지도에 polyline 추가
+    polyline2.setMap(map1);
+
+
+// 지도 클릭 이벤트 리스너 추가
+    google.maps.event.addListener(map, 'click', function(event) {
+      // 클릭한 위치의 위도와 경도 가져오기
+      const latLng = event.latLng;
+
+      // 경로 배열에 추가
+      path.push({ lat: latLng.lat(), lng: latLng.lng() });
+
+      // 새로운 포인트를 Polyline에 추가
+      polyline2.setPath(path);
+    });
+    function openPopup(isEditMode = false,routeName = '', scheduleDate = '', scheduleTime = '', scheduleTime1 = '') {
+
+      if (!isEditMode) {
+        document.getElementById("routeName").value = '';
+        document.getElementById("scheduleDate").value = '';
+        document.getElementById("scheduleTime").value = '';
+        document.getElementById("scheduleTime1").value = '';
+      } else {
+        document.getElementById("routeName").value = routeName;
+        document.getElementById("scheduleDate").value = scheduleDate;
+        document.getElementById("scheduleTime").value = scheduleTime;
+        document.getElementById("scheduleTime1").value = scheduleTime1;
+      }
+
+      // 팝업 열기
+      document.getElementById("addRoutePopup").style.display = "block";
+
+      if (isEditMode) {
+        // 수정 모드일 때
+        document.getElementById("createScheduleBtn").style.display = "none"; // 일정 생성 버튼 숨김
+        document.getElementById("updateScheduleBtn").style.display = "block"; // 일정 수정 버튼 보임
+      } else {
+        // 생성 모드일 때
+        document.getElementById("createScheduleBtn").style.display = "block"; // 일정 생성 버튼 보임
+        document.getElementById("updateScheduleBtn").style.display = "none"; // 일정 수정 버튼 숨김
+      }
+    }
+
+    document.getElementById("createScheduleBtn").addEventListener("click", function() {
+      // 입력 필드에서 값 가져오기
+      const routeName = document.getElementById("routeName").value;
+      const scheduleDate = document.getElementById("scheduleDate").value;
+      const scheduleTime = document.getElementById("scheduleTime").value;
+      const scheduleTime1 = document.getElementById("scheduleTime1").value;
+
+      // 경로 거리와 지역 정보는 ID나 클래스 등을 통해 가져올 수 있습니다.
+      const routedistanceText = document.getElementById("routedistance").textContent; // "2.5 km"
+      const routedistance = parseFloat(routedistanceText.match(/[0-9.]+/)[0]);
+      const routeLocation = document.getElementById("routeLocation").textContent; // 예: "서울시 강남구"
+
+      const data = JSON.stringify({ path: path });
+
+      // 새로운 Walk 객체 생성
+      const walkData = {
+        memberId: wmemberId,
+        routeName: routeName,
+        purchaseDate: scheduleDate,
+        purchaseTime: `${scheduleTime} ~ ${scheduleTime1}`, // 시간 형식 지정
+        routePicture: data,
+        routedistance: routedistance, // 문자열을 숫자로 변환
+        location: routeLocation
+      };
+      console.log(walkData);
+
+      // AJAX 요청을 보내기
+      fetch('/usr/walk/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(walkData) // Walk 객체를 JSON 문자열로 변환
+      })
+              .then(response => {
+                if (response.ok) {
+                  return response.text(); // 성공적인 응답
+                }
+                throw new Error('Network response was not ok.');
+              })
+              .then(data => {
+                console.log('성공:', data); // 성공 메시지 출력
+                window.location.reload();
+                document.getElementById("addRoutePopup").style.display = "none"; // 팝업 닫기
+              })
+              .catch((error) => {
+                console.error('실패:', error); // 오류 메시지 출력
+                alert('일정 생성 중 오류가 발생했습니다.');
+              });
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+      fetchWalks(wmemberId);
+    });
+    function renderWalks(walksData) {
+      const tableBody = document.querySelector("#WalkingTable tbody");
+      tableBody.innerHTML = ""; // 기존 내용을 지웁니다.
+
+      walksData.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td class="ellipsis">${item.routeName}</td>
+            <td>${item.location}</td>
+            <td>${item.purchaseDate}</td>
+            <td>${item.purchaseTime}</td>
+            <td>${item.routedistance}</td>
+            <td>
+            <button class="modify-btn"
+                        data-route-name="${item.routeName}"
+                        data-location="${item.location}"
+                        data-purchase-date="${item.purchaseDate}"
+                        data-purchase-time="${item.purchaseTime}"
+                        data-route-distance="${item.routedistance}">🔧</button></td>
+            <td>
+            <button class="delete-btn"
+                        data-route-name="${item.routeName}"
+                        data-location="${item.location}"
+                        data-purchase-date="${item.purchaseDate}"
+                        data-purchase-time="${item.purchaseTime}"
+                        data-route-distance="${item.routedistance}">🗑</button></td>
+            <td><button class="article-btn"
+                        data-route-name="${item.routeName}"
+                        data-location="${item.location}"
+                        data-purchase-date="${item.purchaseDate}"
+                        data-purchase-time="${item.purchaseTime}"
+                        data-route-distance="${item.routedistance}>👍</button></td>
+        `;
+
+        tableBody.appendChild(row);
+      });
+
+
+
+      const modifyButtons = document.querySelectorAll(".modify-btn");
+      modifyButtons.forEach(button => {
+        button.addEventListener("click", function (event) {
+          event.stopPropagation();
+          // 버튼에 설정된 데이터 속성에서 값 가져오기
+          const routeName = this.getAttribute("data-route-name");
+          const purchaseDate = this.getAttribute("data-purchase-date");
+          const purchaseTime = this.getAttribute("data-purchase-time");
+
+          // purchaseTime에서 시작 시간과 종료 시간을 구분하여 scheduleTime과 scheduleTime1에 넣기
+          const [scheduleTime, scheduleTime1] = purchaseTime.split(' ~ ');
+
+          // 수정 모드로 팝업 열기
+          openPopup(true, routeName, purchaseDate, scheduleTime, scheduleTime1);
+        });
+      });
+
+      // 삭제 버튼 클릭 이벤트 설정
+      const deleteButtons = document.querySelectorAll(".delete-btn");
+      deleteButtons.forEach(button => {
+        button.addEventListener("click", function (event) {
+          event.stopPropagation(); // 부모 요소의 클릭 이벤트가 발생하지 않도록 방지
+          const routeName = this.getAttribute("data-route-name");
+          const location = this.getAttribute("data-location");
+          const purchaseDate = this.getAttribute("data-purchase-date");
+          const purchaseTime = this.getAttribute("data-purchase-time");
+          const routedistance = this.getAttribute("data-route-distance");
+
+          // 알림창 표시
+          const confirmDelete = confirm("정말로 삭제하시겠습니까?");
+
+          if (confirmDelete) {
+            // 사용자가 "예"를 선택했을 때만 삭제 함수 호출
+            deleteWalk(routeName, location, purchaseDate, purchaseTime,routedistance);
+          } else {
+            // 사용자가 "아니오"를 선택했을 때는 삭제 취소
+            console.log("삭제가 취소되었습니다.");
+          }
+        });
+      });
+      // 추천 버튼 클릭 이벤트 설정
+      const articleButtons = document.querySelectorAll(".article-btn");
+      articleButtons.forEach(button => {
+        button.addEventListener("click", function (event) {
+          event.stopPropagation(); // 부모 요소의 클릭 이벤트가 발생하지 않도록 방지
+          const routeName = this.getAttribute("data-route-name");
+          const location = this.getAttribute("data-location");
+          const purchaseDate = this.getAttribute("data-purchase-date");
+          const purchaseTime = this.getAttribute("data-purchase-time");
+          const routedistance = this.getAttribute("data-route-distance");
+          const routePicture = JSON.parse(decodeURIComponent(this.getAttribute("data-route-picture")));
+
+          if (!confirm("정말로 추천하시겠습니까?")) {
+            return; // 사용자가 "아니오"를 선택한 경우 함수 종료
+          }
+          // WYSIWYG 방식으로 HTML 콘텐츠 생성
+          const contentContainer = document.createElement('div');
+
+          const mapElement = document.createElement('div');
+          mapElement.textContent = routePicture;
+
+          const routeNameElement = document.createElement('div');
+          routeNameElement.textContent = `산책명 : ` + routeName;
+
+          const routeLocationElement = document.createElement('div');
+          routeLocationElement.textContent = `지역 : ` + location;
+
+          const routedistanceElement = document.createElement('div');
+          routedistanceElement.textContent = `산책거리 : ` + routedistance;
+
+          // 요소들을 contentContainer에 추가
+          contentContainer.appendChild(routeNameElement);
+          contentContainer.appendChild(document.createElement('br'));
+          contentContainer.appendChild(mapElement);
+          contentContainer.appendChild(document.createElement('br'));
+          contentContainer.appendChild(routeLocationElement);
+          contentContainer.appendChild(document.createElement('br'));
+          contentContainer.appendChild(routedistanceElement);
+
+          // HTML 콘텐츠를 인코딩
+          const encodedContent = encodeURIComponent(contentContainer.innerHTML);
+
+          // 페이지를 initializeEditor가 있는 HTML 파일로 이동
+          window.location.href = `http://localhost:8081/usr/shopping/write?content=${encodedContent}`;
+        });
+      });
+    }
+    function deleteWalk(routeName, location, purchaseDate, purchaseTime,routedistance) {
+      let eventIdToDelete;
+
+      if (!routeName) {
+        alert("아이템 이름을 입력하세요.");
+        return;
+      }
+
+      // memberId를 쿼리 파라미터로 추가하여 기존 일정 가져오기
+      fetch(`/usr/walk/get?memberId=` + wmemberId)
+              .then(response => response.json())
+              .then(data => {
+                // 특정 이벤트를 찾기 위한 로직
+                data.forEach(event => {
+                  console.log(event.routedistance);
+                  console.log(parseFloat(routedistance));
+                  if (event.routeName === routeName &&
+                          event.location === location &&
+                          event.purchaseDate === purchaseDate &&
+                          event.purchaseTime === purchaseTime &&
+                          event.routedistance === parseFloat(routedistance)) {
+                    eventIdToDelete = event.id; // 해당 ID를 저장
+                  }
+                });
+                // 삭제할 이벤트 ID가 존재하면 삭제 요청
+                if (eventIdToDelete) {
+                  // DELETE 메소드로 요청 보내기
+                  fetch(`/usr/walk/delete?id=` + eventIdToDelete, {
+                    method: 'DELETE'
+                  })
+                          .then(response => {
+                            if (!response.ok) {
+                              throw new Error('삭제 요청이 실패했습니다.');
+                            }
+                            return response.json(); // 응답을 JSON으로 처리
+                          })
+                          .then(data => {
+                            console.log('삭제 성공:', data.message);
+                            window.location.reload();
+                          })
+                          .catch(error => {
+                            console.error('삭제 실패:', error);
+                          });
+                } else {
+                  alert("해당 일정을 찾을 수 없습니다.");
+                }
+              })
+              .catch(error => {
+                console.error('일정 불러오기 실패:', error);
+              });
+    }
+
+    function sortByColumn(walksData, column, isAscending) {
+      return walksData.sort((a, b) => {
+        let valueA = a[column] || '';  // undefined 처리
+        let valueB = b[column] || '';
+
+        // 'timing' 값을 이용하여 알람일 계산
+        if (column === 'alarmDays') {
+          const today = new Date();
+          const alarmDateA = new Date(today);
+          alarmDateA.setDate(today.getDate() - a.timing);  // a의 timing을 사용하여 알람일 계산
+
+          const alarmDateB = new Date(today);
+          alarmDateB.setDate(today.getDate() - b.timing);  // b의 timing을 사용하여 알람일 계산
+
+          valueA = alarmDateA;
+          valueB = alarmDateB;
+        }
+
+        // 날짜 형식일 경우 비교 방법 변경
+        if (column === 'purchaseDate') {
+          valueA = valueA ? new Date(valueA) : new Date();
+          valueB = valueB ? new Date(valueB) : new Date();
+        }
+
+        // 정렬 로직 (오름차순 또는 내림차순)
+        if (valueA < valueB) return isAscending ? -1 : 1;
+        if (valueA > valueB) return isAscending ? 1 : -1;
+        return 0;
+      });
+    }
+    currentSortColumn = 'purchaseDate'; // 초기 정렬 열
+
+    const arrows = {
+      routeName: document.getElementById("routeNameArrow"),
+      routeLocation: document.getElementById("routeLocationArrow"),
+      purchaseDate: document.getElementById("purchaseDateArrow"),
+      purchaseTime: document.getElementById("purchaseTimeArrow"),
+      routedistance: document.getElementById("routedistanceArrow"),
+    };
+
+// 화살표 초기화 함수
+    function resetArrows() {
+      for (const key in arrows) {
+        arrows[key].textContent = ''; // 모든 화살표 초기화
+        arrows[key].classList.remove('visible');
+      }
+    }
+
+// 초기화 함수
+    function init() {
+      resetArrows(); // 화살표 초기화
+      arrows.purchaseDate.textContent = '▼'; // 구매일 화살표 표시
+      arrows.purchaseDate.classList.add('visible'); // 화살표 보이기
+      const sortedWalks = sortByColumn(walks, currentSortColumn, isAscending); // 정렬
+      renderWalks(sortedWalks); // 정렬된 데이터 렌더링
+    }
+
+    init(); // 초기화 호출
+
+// 산책명 정렬
+    document.getElementById("routeNameHeader").addEventListener("click", () => {
+      resetArrows(); // 화살표 초기화
+      isAscending = currentSortColumn !== 'routeName' || !isAscending; // 정렬 방향 결정
+      currentSortColumn = 'routeName';
+      arrows.routeName.textContent = isAscending ? '▼' : '▲'; // 화살표 표시
+      arrows.routeName.classList.add('visible'); // 화살표 보이기
+      const sortedWalks = sortByColumn(walks, 'routeName', isAscending); // 정렬
+      renderWalks(sortedWalks); // 정렬된 데이터 렌더링
+    });
+
+// 산책 지역 정렬
+    document.getElementById("routeLocationHeader").addEventListener("click", () => {
+      resetArrows(); // 화살표 초기화
+      isAscending = currentSortColumn !== 'routeLocation' || !isAscending; // 정렬 방향 결정
+      currentSortColumn = 'routeLocation';
+      arrows.routeLocation.textContent = isAscending ? '▼' : '▲'; // 화살표 표시
+      arrows.routeLocation.classList.add('visible'); // 화살표 보이기
+      const sortedWalks = sortByColumn(walks, 'routeLocation', isAscending); // 정렬
+      renderWalks(sortedWalks); // 정렬된 데이터 렌더링
+    });
+
+// 산책날짜 정렬
+    document.getElementById("purchaseDateHeader").addEventListener("click", () => {
+      resetArrows(); // 화살표 초기화
+      isAscending = currentSortColumn !== 'purchaseDate' || !isAscending; // 정렬 방향 결정
+      currentSortColumn = 'purchaseDate';
+      arrows.purchaseDate.textContent = isAscending ? '▼' : '▲'; // 화살표 표시
+      arrows.purchaseDate.classList.add('visible'); // 화살표 보이기
+      const sortedWalks = sortByColumn(walks, 'purchaseDate', isAscending); // 정렬
+      renderWalks(sortedWalks); // 정렬된 데이터 렌더링
+    });
+
+// 산책시간 정렬
+    document.getElementById("purchaseTimeHeader").addEventListener("click", () => {
+      resetArrows(); // 화살표 초기화
+      isAscending = currentSortColumn !== 'purchaseTime' || !isAscending; // 정렬 방향 결정
+      currentSortColumn = 'purchaseTime';
+      arrows.purchaseTime.textContent = isAscending ? '▼' : '▲'; // 화살표 표시
+      arrows.purchaseTime.classList.add('visible'); // 화살표 보이기
+      const sortedWalks = sortByColumn(walks, 'purchaseTime', isAscending); // 정렬
+      renderWalks(sortedWalks); // 정렬된 데이터 렌더링
+    });
+
+// 산책거리 정렬
+    document.getElementById("routedistanceHeader").addEventListener("click", () => {
+      resetArrows(); // 화살표 초기화
+      isAscending = currentSortColumn !== 'routedistance' || !isAscending; // 정렬 방향 결정
+      currentSortColumn = 'routedistance';
+      arrows.routedistance.textContent = isAscending ? '▼' : '▲'; // 화살표 표시
+      arrows.routedistance.classList.add('visible'); // 화살표 보이기
+      const sortedWalks = sortByColumn(walks, 'routedistance', isAscending); // 정렬
+      renderWalks(sortedWalks); // 정렬된 데이터 렌더링
+    });
+
+// 품목 리스트를 가져오는 함수
+    function fetchWalks(wmemberId) {
+      fetch(`/usr/walk/get?memberId=`+wmemberId) // memberId 값을 URL에 추가
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error('데이터를 가져오는 데 실패했습니다.');
+                }
+                return response.json();
+              })
+              .then(data => {
+                walks = data; // 데이터를 essentials에 할당
+
+                // 기본적으로 구매일 순으로 정렬
+                walks = sortByColumn(walks, 'purchaseDate', true); // 오름차순 정렬
+                renderWalks(walks); // 데이터를 렌더링하는 함수 호출
+              })
+              .catch(error => {
+                console.error('Error fetching essentials:', error);
+              });
+    }
+    // 초기 위치에 대한 격자 좌표 요청
+    const gridCoordinates = convertLatLngToGrid(latitude, longitude);
+    getWeatherInfo(gridCoordinates.nx, gridCoordinates.ny); // 날씨 정보 요청
+
+    // 지도 클릭 이벤트 리스너 추가
+    map.addListener('click', (event) => {
+      addLatLng(event.latLng);
+    });
+
+    // 경로 지우기 버튼 클릭 이벤트 리스너
+    document.getElementById("clearPathButton").addEventListener("click", clearPath);
+    document.getElementById("savePathButton").addEventListener("click", function() {
+      openPopup(false);
+      document.getElementById("routedistance").innerText = document.getElementById("distanceDisplay").innerText.replace("총 거리: ", "");
+      const geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ location: marker.getPosition() }, function(results, status) {
+        if (status === "OK") {
+          if (results[0]) {
+            const addressWords = results[0].formatted_address.split(" ");
+            document.getElementById("routeLocation").innerText = addressWords[1] || "주소를 찾을 수 없습니다";
+          } else {
+            document.getElementById("routeLocation").innerText = "주소를 찾을 수 없습니다";
+          }
+        } else {
+          console.error("Geocoder failed due to: " + status);
+          document.getElementById("routeLocation").innerText = "주소를 찾을 수 없습니다";
+        }
+      });
+    });
+    document.getElementById("closeRoutePopup").addEventListener("click", function() {
+      document.getElementById("addRoutePopup").style.display = "none";
+    });
+    document.getElementById("loadPathButton").addEventListener("click", loadPathFromLocalStorage);
+  }
+
+  // 클릭된 위치를 polyline 경로에 추가하는 함수
+  function addLatLng(location) {
+    path.push(location);
+    polyline1.setPath(path);
+    polyline2.setPath(path);
+    updateDistance(); // 경로가 업데이트될 때마다 거리 계산
+  }
+
+  function updateDistance() {
+    let totalDistance = 0;
+
+    // 두 좌표 간의 거리 계산 및 합산
+    for (let i = 0; i < path.length - 1; i++) {
+      totalDistance += google.maps.geometry.spherical.computeDistanceBetween(path[i], path[i + 1]);
+    }
+
+    // 거리 표시 (미터를 킬로미터로 변환)
+    const distanceInKm = (totalDistance / 1000).toFixed(2);
+    document.getElementById("distanceDisplay").innerText = `총 거리: ${distanceInKm} km`;
+  }
+
+  // 경로를 지우는 함수
+  function clearPath() {
+    if (path.length > 0) {
+      path.pop(); // 마지막 좌표 제거
+      polyline1.setPath(path); // 폴리라인에 새로운 경로 설정
+      polyline2.setPath(path);
+      updateDistance();
+    }
+  }
+  function savePathToLocalStorage() {
+    const pathCoordinates = path.map(point => ({ lat: point.lat(), lng: point.lng() }));
+    localStorage.setItem("savedPath", JSON.stringify(pathCoordinates));
+    alert("Path saved successfully!");
+  }
+
+  function loadPathFromLocalStorage() {
+    const savedPath = JSON.parse(localStorage.getItem("savedPath"));
+    if (savedPath && savedPath.length > 0) {
+      path = savedPath.map(coord => new google.maps.LatLng(coord.lat, coord.lng));
+      polyline1.setPath(path);
+      polyline2.setPath(path);
+      updateDistance(); // 로드된 경로의 거리 업데이트
+    } else {
+      alert("No path found in local storage.");
+    }
+  }
+
+  // 위치 입력 필드의 이벤트 리스너
+  document.getElementById("locationInput").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      searchLocation();
+    }
+  });
+
+
+  function searchLocation() {
+    const location = document.getElementById("locationInput").value;
+    if (!location) {
+      alert("Please enter a location.");
+      return;
+    }
+
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ address: location }, (results, status) => {
+      if (status === "OK" && results[0]) {
+        const position = results[0].geometry.location;
+        map.setCenter(position);
+        map.setZoom(15);
+        marker.setPosition(position);
+        marker.setTitle(location);
+
+        // 예시 사용
+        const latitude = position.lat(); // 실제 위치값
+        const longitude = position.lng(); // 실제 위치값
+        var gridCoordinates = convertLatLngToGrid(latitude, longitude);
+        getWeatherInfo(gridCoordinates.nx, gridCoordinates.ny); // 날씨 정보 요청
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });
+  }
+  function getCurrentDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+    const day = String(today.getDate()).padStart(2, '0');
+
+    return `${year}${month}${day}`;
+  }
+  function getCurrentHour() {
+    const today = new Date();
+    const hours = today.getHours(); // 현재 시간 (0-23)
+    const minutes = today.getMinutes(); // 현재 분 (0-59)
+
+    // 현재 시간에 대한 결과를 저장할 변수
+    let adjustedHour;
+
+    // 분이 10분 미만이면 전시간으로 설정
+    if (minutes < 10) {
+      adjustedHour = hours > 0 ? hours - 1 : 23; // 0시인 경우 23시로 설정
+    } else {
+      adjustedHour = hours; // 10분 이상이면 현재 시간으로 설정
+    }
+
+    // 2자리 형식으로 반환
+    return String(adjustedHour).padStart(2, '0') + "00"; // 예: "0700", "0800"
+  }
+
+  function getWeatherInfo(nx, ny) {
+    // 현재 날짜와 시간 가져오기
+    const date = getCurrentDate();
+    const hour = getCurrentHour();
+
+    // AJAX 요청을 통해 날씨 정보 가져오기
+    fetch(`/usr/walk/getWeather?date=${date}&hour=${hour}&nx=${nx}&ny=${ny}`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+              }
+              return response.json(); // JSON 형태로 응답을 가져오기
+            })
+            .then(data => {
+              // obsrValue 값을 저장할 변수
+              let obsrValuePTY, obsrValueRN1, obsrValueT1H;
+
+              // items.item 배열이 있는지 확인하고 순회
+              const items = data.response.body.items.item; // item 배열 가져오기
+              if (Array.isArray(items)) {
+                items.forEach(item => {
+                  const category = item.category; // category 값을 가져옴
+                  const obsrValue = item.obsrValue; // obsrValue 값을 가져옴
+
+                  // category에 따라 obsrValue 값 할당
+                  if (category === "PTY") {
+                    obsrValuePTY = obsrValue;
+                  } else if (category === "RN1") {
+                    obsrValueRN1 = obsrValue;
+                  } else if (category === "T1H") {
+                    obsrValueT1H = obsrValue;
+                  }
+                });
+              }
+
+              // obsrValuePTY에 따라 아이콘 결정
+              const weatherIcon = {
+                "0": "🌞",  // 맑음
+                "1": "🌧",  // 비
+                "2": "🌧/🌨", // 비/눈
+                "3": "🌨",  // 눈
+                "4": "⛈",  // 천둥번개
+              };
+
+              // PTY에 따른 날씨 아이콘 출력
+              const weatherSymbol = weatherIcon[obsrValuePTY] || "❓"; // 기본 아이콘
+              const weatherSymbolElement = document.querySelector(".information"); // 날씨 아이콘을 표시할 요소
+
+              // "이 지역의 날씨" 멘트를 추가하고 아이콘을 다음 줄에 표시
+              weatherSymbolElement.innerHTML = `이 지역의 날씨<br><span style="font-size: 1.5em;">${weatherSymbol}</span`; // 크기 조정 및 줄 바꿈 추가
+
+              // 기온 처리 및 표시
+              if (obsrValueT1H) {
+                const temperature = `${obsrValueT1H}°C`; // 섭씨 기호 붙이기
+                const temperatureElement = document.createElement('div');
+                temperatureElement.textContent = `기온: ${temperature}`;
+                weatherSymbolElement.appendChild(temperatureElement); // 날씨 아이콘 아래에 추가
+              }
+
+              // 강수량 처리 및 표시
+              if (obsrValueRN1 > 0) { // 강수량이 0 이상일 때만 표시
+                const rainfall = `${obsrValueRN1}mm`; // 강수량에 .mm 붙이기
+                const rainfallElement = document.createElement('div');
+                rainfallElement.textContent = `강수량: ${rainfall}`;
+                weatherSymbolElement.appendChild(rainfallElement); // 날씨 아이콘 아래에 추가
+              }
+
+            })
+            .catch(error => {
+              console.error('Error fetching weather data:', error);
+            });
+  }
+</script>
+</body>
+</html>

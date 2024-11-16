@@ -2,6 +2,7 @@ package com.project.tailsroute.controller;
 
 import com.project.tailsroute.service.AlarmService;
 import com.project.tailsroute.vo.Alarms;
+import com.project.tailsroute.vo.Essentials;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

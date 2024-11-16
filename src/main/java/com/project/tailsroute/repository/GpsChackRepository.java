@@ -56,5 +56,5 @@ public interface GpsChackRepository {
                 OR location LIKE CONCAT('%', #{location2}, '%')
             ) 		
              """)
-    int[] getRegionCode(String location1, String location2);
+	int[] getRegionCode(String location1, String location2);
 }

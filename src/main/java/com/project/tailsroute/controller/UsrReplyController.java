@@ -4,14 +4,13 @@ package com.project.tailsroute.controller;
 import com.project.tailsroute.service.ReactionPointService;
 import com.project.tailsroute.service.ReplyService;
 import com.project.tailsroute.util.Ut;
-import com.project.tailsroute.vo.Article;
 import com.project.tailsroute.vo.Reply;
 import com.project.tailsroute.vo.ResultData;
 import com.project.tailsroute.vo.Rq;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class UsrReplyController {

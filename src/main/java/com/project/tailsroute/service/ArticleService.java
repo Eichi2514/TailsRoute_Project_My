@@ -184,9 +184,9 @@ public class ArticleService {
 		return articleRepository.getBadRP(relId);
 	}
 
-    public List<Article> getMainArticles(int boardId) {
+	public List<Article> getMainArticles(int boardId) {
 		return articleRepository.getMainArticles(boardId);
-    }
+	}
 
 	public boolean isNew(String regDateStr) {
 		try {

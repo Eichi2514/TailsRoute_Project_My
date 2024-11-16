@@ -36,6 +36,12 @@
             <div th:class="${boardId == 3 && memberId == 0 ? 'list_board tw-text-[#ff6f61]' : 'list_board'}">
                 <a class="a" href="../article/list?boardId=3&page=1">Q & A</a>
             </div>
+            <div th:class="${boardId == 4 && memberId == 0 ? 'list_board tw-text-[#ff6f61]' : 'list_board'}">
+                <a class="a" href="../article/list?boardId=4&page=1">추천합니다</a>
+            </div>
+            <div th:class="${boardId == 5 && memberId == 0 ? 'list_board tw-text-[#ff6f61]' : 'list_board'}">
+                <a class="a" href="../article/list?boardId=5&page=1">일상기록공유</a>
+            </div>
         </div>
     </div>
     <div class="list_main">
@@ -61,6 +67,14 @@
             <div th:if="${boardId == 3}" class="tw-flex tw-flex-col">
                 <div class="tw-font-bold tw-text-4xl tw-pb-[20px]">Q & A</div>
                 <div>궁금한 점을 질문하고 답변을 공유하는 공간입니다. 서로 도와가며 지식을 나눠보세요!</div>
+            </div>
+            <div th:if="${boardId == 4}" class="tw-flex tw-flex-col">
+                <div class="tw-font-bold tw-text-4xl tw-pb-[20px]">추천합니다</div>
+                <div>다양한 제품을 소개하고 추천하는 공간입니다. 유용한 제품을 찾고 함께 공유해보세요!</div>
+            </div>
+            <div th:if="${boardId == 5}" class="tw-flex tw-flex-col">
+                <div class="tw-font-bold tw-text-4xl tw-pb-[20px]">일상기록공유</div>
+                <div>나의 일상과 특별한 순간들을 기록하고 공유하는 공간입니다. 소소한 일상의 이야기를 나눠보세요!</div>
             </div>
             <a class="link tw-pr-[100px]" th:href="@{../article/write}">작성하기</a>
         </div>
@@ -151,7 +165,7 @@
             </div>
             <div class="underline tw-flex tw-gap-5 tw-p-5" th:each="article : ${articles}" th:if="${articles != null}">
                 <a class="tw-flex tw-items-center tw-w-full" th:href="@{'../article/detail?id=' + ${article.id}}">
-                    <div class="tw-w-[50px] tw-text-center border" th:text="${article.boardId == 1 ? '공지' : article.boardId == 2 ? '자유' : article.boardId == 3 ? 'Q&A' : ''}"></div>
+                    <div class="tw-w-[50px] tw-text-center border" th:text="${article.boardId == 1 ? '공지' : article.boardId == 2 ? '자유' : article.boardId == 3 ? 'Q&A' : article.boardId == 4 ? '추천' : article.boardId == 5 ? '일상' : ''}"></div>
                     <div class="tw-flex-grow">
                         <span class="link tw-pl-5"
                               th:text="${#strings.abbreviate(article.title,30)}"></span>

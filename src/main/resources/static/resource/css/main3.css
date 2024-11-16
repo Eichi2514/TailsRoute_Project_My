@@ -49,7 +49,7 @@ body{
 /* 슬라이더 버튼 스타일 */
 .slider_btn {
     position: absolute;
-    top: calc(50% - 10px);
+    top: 50%;
     transform: translateY(-50%);
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
@@ -67,7 +67,7 @@ body{
 }
 
 .right_btn {
-    right: 30px;
+    right: 10px;
     display: none;
 }
 

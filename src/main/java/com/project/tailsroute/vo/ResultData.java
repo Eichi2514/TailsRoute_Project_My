@@ -1,11 +1,11 @@
 package com.project.tailsroute.vo;
 
+import java.util.Map;
+
 import com.project.tailsroute.util.Ut;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Map;
 
 @AllArgsConstructor
 @NoArgsConstructor

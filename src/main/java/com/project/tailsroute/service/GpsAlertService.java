@@ -137,7 +137,7 @@ public class GpsAlertService {
 
     // SMS를 전송하는 메서드
     private void sendSms(String messageContent, GpsAlert gpsAlert) {
-        // String userCellphoneNum = gpsAlert.getExtra__cellphoneNum();
+        String userCellphoneNum = gpsAlert.getExtra__cellphoneNum();
 
         // String toNumber = userCellphoneNum; // 수신자 번호
         String toNumber = "01022296877"; // 수신자 번호

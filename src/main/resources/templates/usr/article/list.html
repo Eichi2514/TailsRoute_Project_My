@@ -142,6 +142,7 @@
         <div class="tw-p-10">
             <!-- 게시글 목록이 있는 경우 -->
             <div class="tw-flex tw-items-center tw-w-full tw-p-5 underline" th:if="${articles != null}">
+                <button class="tw-w-[50px] tw-text-center" th:text="게시판"></button>
                 <button class="tw-flex-grow tw-text-center" th:text="제목"></button>
                 <button class="tw-w-[130px]" th:text="작성자"></button>
                 <button class="tw-w-[90px] tw-text-center" th:text="작성일"></button>
@@ -150,8 +151,9 @@
             </div>
             <div class="underline tw-flex tw-gap-5 tw-p-5" th:each="article : ${articles}" th:if="${articles != null}">
                 <a class="tw-flex tw-items-center tw-w-full" th:href="@{'../article/detail?id=' + ${article.id}}">
+                    <div class="tw-w-[50px] tw-text-center border" th:text="${article.boardId == 1 ? '공지' : article.boardId == 2 ? '자유' : article.boardId == 3 ? 'Q&A' : ''}"></div>
                     <div class="tw-flex-grow">
-                        <span class="link"
+                        <span class="link tw-pl-5"
                               th:text="${#strings.abbreviate(article.title,30)}"></span>
                         <span th:text="' [ ' + ${article.extra__repliesCount} + ' ]'"
                               th:if="${article.extra__repliesCount} > 0"
@@ -177,3 +179,4 @@
     </div>
 </div>
 </body>
+<th:block th:replace="usr/common/mouseEffect"/>

@@ -27,6 +27,11 @@ input, select, option{
     display: block;
 }
 
+.border{
+    border: 1px solid #DADADA;
+    border-radius: 10px;
+}
+
 .link:hover {
     text-decoration: underline;
 }

@@ -77,14 +77,16 @@
                 <img class="list_main_dogPoto" th:if="${article.extra__dogPoto == null}"
                      th:src="@{/resource/photo/default.png}" alt="Default Profile Image"/>
                 <a class="list_main_body" th:href="@{'../article/detail?id=' + ${article.id}}">
-                    <div>
-                        <span class="tw-text-3xl tw-p-2 link"
-                              th:text="${#strings.abbreviate(article.title,30)}"></span>
+                    <div class="tw-flex tw-items-center">
+                        <span class="tw-text-3xl tw-pl-2 tw-pb-2 tw-pr-2 link"
+                              th:text="${#strings.abbreviate(article.title,20)}"></span>
                         <span th:text="' [ ' + ${article.extra__repliesCount} + ' ]'"
                               th:if="${article.extra__repliesCount} > 0"
                               style="color: red; font-weight: bold;"></span>
-                        <span th:text="'\' New \''" style="color: red; font-weight: bold;"
-                              th:if="${article.articleCanNew}"></span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 30 30" style="display: inline-block;" th:if="${article.articleCanNew}">
+                            <circle cx="15" cy="15" r="12" fill="#ff6f61"/>
+                            <text x="15" y="16" font-size="10" fill="white" font-family="Arial, sans-serif" text-anchor="middle" dominant-baseline="middle"> N </text>
+                        </svg>
                     </div>
                     <div>
                         <span class="tw-p-2" th:text="${#strings.abbreviate(article.body,30)}"></span>

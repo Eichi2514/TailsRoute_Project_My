@@ -248,7 +248,8 @@ public class UsrArticleController {
 						   @RequestParam(defaultValue = "1") int page,
 						   @RequestParam(defaultValue = "전체") String searchKeywordTypeCode,
 						   @RequestParam(defaultValue = "") String searchKeyword,
-						   @RequestParam(defaultValue = "0") int memberId){
+						   @RequestParam(defaultValue = "0") int memberId,
+						   @RequestParam(defaultValue = "regDate") String sortOrder){
 
 		boolean isLogined = rq.isLogined();
 		if (isLogined) {
@@ -269,7 +270,7 @@ public class UsrArticleController {
 		int pagesCount = (int) Math.ceil(articlesCount / (double) itemsInAPage);
 
 		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page, searchKeywordTypeCode,
-				searchKeyword, memberId);
+				searchKeyword, memberId, sortOrder);
 
 		for (Article article : articles) {
 			article.setPoto(articleService.extractFirstImageSrc(article.getBody()));
@@ -286,6 +287,7 @@ public class UsrArticleController {
 		model.addAttribute("searchKeyword", searchKeyword);
 		model.addAttribute("boardId", boardId);
 		model.addAttribute("memberId", memberId);
+		model.addAttribute("sortOrder", sortOrder);
 
 		return "usr/article/list";
 	}

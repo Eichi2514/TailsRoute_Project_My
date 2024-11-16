@@ -78,10 +78,10 @@ public interface ArticleRepository {
                 )
                 AND (#{memberId} = 0 OR A.memberId = #{memberId})
                 GROUP BY A.id
-                ORDER BY A.id DESC
+                ORDER BY A.${sortOrder} DESC
                 LIMIT #{limitFrom}, #{limitTake}
             """)
-    public List<Article> getForPrintArticles(int boardId, int limitFrom, int limitTake, String searchKeywordTypeCode, String searchKeyword, int memberId);
+    public List<Article> getForPrintArticles(int boardId, int limitFrom, int limitTake, String searchKeywordTypeCode, String searchKeyword, int memberId, String sortOrder);
 
 
     @Select("""
@@ -194,7 +194,7 @@ public interface ArticleRepository {
                 WHERE 1=1
                 AND (#{boardId} = 0 OR A.boardId = #{boardId})                
                 GROUP BY A.id        
-                ORDER BY A.id DESC
+                ORDER BY A.regDate DESC
                 LIMIT 10;
             """)
     List<Article> getMainArticles(int boardId);

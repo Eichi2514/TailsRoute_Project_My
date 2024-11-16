@@ -68,7 +68,7 @@ public class ArticleService {
 	}
 
 	public List<Article> getForPrintArticles(int boardId, int itemsInAPage, int page, String searchKeywordTypeCode,
-											 String searchKeyword, int memberId) {
+											 String searchKeyword, int memberId, String sortOrder) {
 
 		int limitFrom = (page - 1) * itemsInAPage;
 		int limitTake = itemsInAPage;
@@ -80,7 +80,7 @@ public class ArticleService {
 		// System.err.println("searchKeyword : " + searchKeyword);
 
 		return articleRepository.getForPrintArticles(boardId, limitFrom, limitTake, searchKeywordTypeCode,
-				searchKeyword, memberId);
+				searchKeyword, memberId, sortOrder);
 	}
 
 	public List<Article> getArticles() {

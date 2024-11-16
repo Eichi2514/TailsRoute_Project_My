@@ -125,13 +125,17 @@
                            th:text="${pagesCount}"></a>
                     </div>
                 </div>
-
-                <select class="str tw-border-box tw-p-2" id="str" name="str" required onchange="location.href='list?page=1&str=' + this.value;">
-                    <option th:value="${sortOrder}" th:text="${sortOrder}"></option>
-                    <option th:if="${sortOrder != '최신순'}" value="최신순">최신순</option>
-                    <option th:if="${sortOrder != '제목순'}" value="제목순">제목순</option>
-                    <option th:if="${sortOrder != '조회순'}" value="조회순">조회순</option>
-                    <option th:if="${sortOrder != '추천순'}" value="추천순">추천순</option>
+                <select class="str tw-border-box tw-p-2" id="sortOrder" name="sortOrder"
+                        th:onchange="|location.href='list?page=1&boardId='+${boardId}+'&sortOrder=' + this.value|">
+                    <option th:value="${sortOrder}" th:text="${sortOrder == 'regDate' ? '최신순' :
+                         sortOrder == 'title' ? '제목순' :
+                         sortOrder == 'hitCount' ? '조회순' :
+                         sortOrder == 'goodReactionPoint' ? '추천순' : '정렬'}">
+                    </option>
+                    <option th:if="${sortOrder != 'regDate'}" value="regDate">최신순</option>
+                    <option th:if="${sortOrder != 'title'}" value="title">제목순</option>
+                    <option th:if="${sortOrder != 'hitCount'}" value="hitCount">조회순</option>
+                    <option th:if="${sortOrder != 'goodReactionPoint'}" value="goodReactionPoint">추천순</option>
                 </select>
             </div>
         </form>
@@ -152,7 +156,10 @@
                         <span th:text="' [ ' + ${article.extra__repliesCount} + ' ]'"
                               th:if="${article.extra__repliesCount} > 0"
                               style="color: red; font-weight: bold;"></span>
-                        <span class="new-icon" th:text="N" th:if="${article.articleCanNew}"></span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 30 30" style="display: inline-block;" th:if="${article.articleCanNew}">
+                            <circle cx="15" cy="15" r="12" fill="#ff6f61"/>
+                            <text x="15" y="16" font-size="10" fill="white" font-family="Arial, sans-serif" text-anchor="middle" dominant-baseline="middle"> N </text>
+                        </svg>
                     </div>
                     <div class="tw-w-[130px]" th:text="${article.extra__writer}"></div>
                     <div class="tw-w-[90px] tw-text-center" th:text="${article.regDate.substring(0, 10)}"></div>

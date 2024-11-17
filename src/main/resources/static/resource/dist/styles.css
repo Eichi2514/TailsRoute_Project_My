@@ -632,10 +632,6 @@ video {
   z-index: 30;
 }
 
-.tw-m-auto {
-  margin: auto;
-}
-
 .tw-mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -689,6 +685,10 @@ video {
   margin-right: 30px;
 }
 
+.tw-mr-\[80px\] {
+  margin-right: 80px;
+}
+
 .tw-mt-10 {
   margin-top: 2.5rem;
 }
@@ -711,10 +711,6 @@ video {
 
 .tw-mt-\[30px\] {
   margin-top: 30px;
-}
-
-.tw-mr-\[80px\] {
-  margin-right: 80px;
 }
 
 .tw-block {

@@ -7,12 +7,11 @@ CREATE TABLE `member`(
                          id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
                          regDate DATETIME NOT NULL COMMENT '가입 날짜',
                          updateDate DATETIME NOT NULL COMMENT '수정 날짜',
-                         loginId CHAR(30) NOT NULL COMMENT '아이디',
+                         loginId VARCHAR(250) NOT NULL COMMENT '아이디',
                          loginPw CHAR(100) NOT NULL COMMENT '비밀번호',
                          authLevel SMALLINT(2) UNSIGNED DEFAULT 3 COMMENT '권한 레벨 (3=일반, 7=관리자)',
                          `name` CHAR(20) NOT NULL COMMENT '오프라인 이름',
                          nickname CHAR(20) NOT NULL COMMENT '온라인 이름',
-                         gender TINYINT(1) UNSIGNED NOT NULL COMMENT '성별 (0=여자, 1=남자)',
                          cellphoneNum CHAR(20) NOT NULL COMMENT '전화번호',
                          delStatus TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '탈퇴 여부 (0=탈퇴 전, 1=탈퇴 후)',
                          delDate DATETIME COMMENT '탈퇴 날짜'
@@ -28,7 +27,6 @@ INSERT INTO `member` SET
                          authLevel = 7,
                          `name` = '관리자',
                          nickname = '강아지왕',
-                         gender = 1,
                          cellphoneNum = '010-8765-4321',
                          delStatus = 0;
 
@@ -40,7 +38,6 @@ INSERT INTO `member` SET
                          authLevel = 3,
                          `name` = '김서준',
                          nickname = '콩이의대장',
-                         gender = 1,
                          cellphoneNum = '010-1234-5678',
                          delStatus = 0;
 
@@ -53,7 +50,6 @@ INSERT INTO `member` SET
                          authLevel = 3,
                          `name` = '이지아',
                          nickname = '바둑이의수호자',
-                         gender = 0,
                          cellphoneNum = '010-1111-2222',
                          delStatus = 1,
                          delDate = '2024-05-01 10:30:00';
@@ -61,24 +57,22 @@ INSERT INTO `member` SET
 INSERT INTO `member` SET
     regDate = '2024-04-18 16:00:00',
                          updateDate = '2024-05-20 09:00:00',
-                         loginId = 'user03',
-                         loginPw = 'pw_hash4',
+                         loginId = 'qwe',
+                         loginPw = 'qwe',
                          authLevel = 3,
                          `name` = '박도윤',
                          nickname = '두부의행복전도사',
-                         gender = 1,
                          cellphoneNum = '010-3333-4444',
                          delStatus = 0;
 
 INSERT INTO `member` SET
     regDate = '2024-05-22 11:30:00',
                          updateDate = '2024-06-10 15:45:00',
-                         loginId = 'user04',
-                         loginPw = 'pw_hash5',
+                         loginId = 'zxc',
+                         loginPw = 'zxc',
                          authLevel = 3,
                          `name` = '최하은',
                          nickname = '뭉치의천사',
-                         gender = 0,
                          cellphoneNum = '010-5555-6666',
                          delStatus = 0;
 
@@ -90,7 +84,6 @@ INSERT INTO `member` SET
                          authLevel = 3,
                          `name` = '유은희',
                          nickname = '꾸미엄마',
-                         gender = 0,
                          cellphoneNum = '010-7698-1532',
                          delStatus = 0;
 

@@ -4,6 +4,7 @@ import com.project.tailsroute.vo.Member;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 
 @Mapper
@@ -34,4 +35,13 @@ public interface MemberRepository {
     @Select("SELECT LAST_INSERT_ID();")
     public int getLastInsertId();
 
+    @Update("""
+            UPDATE member
+            SET updateDate = NOW(),
+            name = #{name},
+            nickname = #{nickname},
+            cellphoneNum = #{cellphoneNum} 
+            WHERE id = #{loginedMemberId}
+            """)
+    void memberModify(int loginedMemberId, String name, String nickname, String cellphoneNum);
 }

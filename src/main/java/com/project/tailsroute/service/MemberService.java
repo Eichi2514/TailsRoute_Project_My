@@ -39,4 +39,7 @@ public class MemberService {
     }
 
 
+    public void memberModify(int loginedMemberId, String name, String nickname, String cellphoneNum) {
+        memberRepository.memberModify(loginedMemberId, name, nickname, cellphoneNum);
+    }
 }

@@ -17,8 +17,8 @@
                 <div><label>회원번호</label><span class="myPage_text" th:text="${member.id} + '번'"></span></div>
                 <div><label>등록일시</label><span class="myPage_text" th:text="${member.regDate}"></span></div>
                 <div><label>수정일시</label><span class="myPage_text" th:text="${member.updateDate}"></span></div>
-                <div><label>등급</label><span class="myPage_text"
-                                            th:text="(${member.authLevel == 3 ? '일반회원' : '관리자'})"></span></div>
+                <div><label>등급</label><span class="myPage_text" th:text="(${member.authLevel == 3 ? '일반회원' : '관리자'})"></span></div>
+                <div><label>이메일</label><span class="myPage_text" th:text="${member.email}"></span></div>
                 <div class="name1">
                     <label>이름</label>
                     <span class="myPage_text" th:text="${member.name}"></span></div>

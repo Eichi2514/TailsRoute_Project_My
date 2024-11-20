@@ -3,6 +3,7 @@ package com.project.tailsroute.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.tailsroute.service.MemberService;
+import com.project.tailsroute.util.Ut;
 import com.project.tailsroute.vo.Member;
 import com.project.tailsroute.vo.Rq;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -51,6 +53,7 @@ public class NaverLoginController {
     }
 
     @GetMapping("/auth/naver/callback")
+    @ResponseBody
     public String naverLoginCallback(@RequestParam String code, @RequestParam String state, Model model) {
         String redirectUri = "http://localhost:8081/auth/naver/callback";
 
@@ -61,16 +64,16 @@ public class NaverLoginController {
             // 네이버 사용자 정보 요청
             Member member = getNaverUserInfo(accessToken);
 
-            if(!member.isDelStatus()){
-                return "<script>alert(\"회원이 삭제된 상태입니다.\");</script>";
+            if(member.isDelStatus()){
+                return Ut.rejoin("F-1", Ut.f("탈퇴한 회원입니다"), "/usr/member/doRejoin?id="+member.getId(), "/usr/home/main");
             }
 
             model.addAttribute("member", member);
             model.addAttribute("isLogined", true);
-            return "redirect:/usr/home/main"; // 메인 화면으로 리다이렉트
+            return Ut.jsReplace("S-1", Ut.f("%s님 환영합니다", member.getNickname()), "/usr/home/main");
         } else {
             model.addAttribute("isLogined", false);
-            return "redirect:/usr/home/main"; // 실패 시 다시 메인 화면
+            return Ut.jsReplace("F-2", Ut.f("로그인에 실패하였습니다"), "/usr/home/main");
         }
     }
 
@@ -148,6 +151,7 @@ public class NaverLoginController {
             String nickname = responseNode.get("nickname").asText();
             String name = responseNode.get("name").asText();
             String cellphoneNum = responseNode.get("mobile").asText();
+            String email = responseNode.get("email").asText();
 
             // 회원 정보 확인
             Member existingMember = memberService.getMemberByLoginId(loginId);
@@ -160,7 +164,7 @@ public class NaverLoginController {
                 // 새로운 회원인 경우 -> 회원가입 처리
                 String loginPw = generateRandomPassword();  // 랜덤 비밀번호 생성
 
-                memberService.signUp(loginId, loginPw, name, nickname, cellphoneNum, 1);   // 세션에 로그인 정보 저장
+                memberService.signUp(loginId, loginPw, name, nickname, cellphoneNum, email, 1);   // 세션에 로그인 정보 저장
 
                 Member newMember = memberService.getMemberByLoginId(loginId);
                 rq.login(newMember);

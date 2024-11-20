@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>인증 코드 요청</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div>아이디 찾기 예시</div>
+<!-- 이메일 입력 폼 -->
+<form id="sendCodeForm">
+    <input type="email" id="email" name="email" placeholder="이메일을 입력해주세요" required>
+    <button type="submit">인증 코드 요청</button>
+</form>
+
+<!-- 인증 코드 입력 폼 -->
+<form id="verifyCodeForm" style="display: none;">
+    <input type="text" id="code" name="code" placeholder="인증코드를 입력해주세요" required>
+    <button type="submit">확인</button>
+</form>
+
+<div id="message"></div>
+
+<div style="height: 100px"></div>
+
+<div>비밀번호 찾기 예시</div>
+<!-- 이메일 입력 폼 -->
+<form id="sendLoginIdForm">
+    <input type="text" id="loginId" name="loginId" placeholder="아이디를 입력해주세요" required>
+    <button type="submit">인증 코드 요청</button>
+</form>
+
+<!-- 인증 코드 입력 폼 -->
+<form id="verifyLoginIdForm" style="display: none;">
+    <input type="text" id="passwordCode" name="passwordCode" placeholder="인증코드를 입력해주세요" required>
+    <button type="submit">확인</button>
+</form>
+
+<div id="message2"></div>
+<script>
+    // 아이디 찾기 인증 코드 요청
+    $('#sendCodeForm').on('submit', function (e) {
+        e.preventDefault();  // 폼이 제출되는 기본 동작을 막음
+
+        var email = $('#email').val();  // 입력된 이메일 값
+
+        $.ajax({
+            url: '/usr/member/send-code',  // 인증 코드 요청 URL
+            type: 'POST',
+            data: {email: email},  // 이메일을 데이터로 전송
+            success: function (response) {
+                $('#message').text(response);  // 서버로부터 받은 메시지를 그대로 출력
+                if (response == "인증코드가 전송되었습니다") {
+                    $('#verifyCodeForm').show();  // 인증 코드 입력 폼 표시
+                }
+            },
+            error: function (xhr, status, error) {
+                $('#message').text("인증 코드 요청에 실패했습니다.");  // 에러 메시지 표시
+            }
+        });
+    });
+
+    // 아이디 찾기 인증 코드 검증
+    $('#verifyCodeForm').on('submit', function (e) {
+        e.preventDefault();  // 폼이 제출되는 기본 동작을 막음
+
+        var email = $('#email').val();
+        var code = $('#code').val();  // 입력된 인증 코드 값
+
+        $.ajax({
+            url: '/usr/member/verify-code',  // 인증 코드 검증 URL
+            type: 'POST',
+            data: {email: email, code: code},  // 이메일과 인증 코드 전송
+            success: function (response) {
+                $('#message').text(response);  // 서버로부터 받은 메시지를 그대로 출력
+            },
+            error: function (xhr, status, error) {
+                $('#message').text("인증 코드 검증에 실패했습니다.");  // 에러 메시지 표시
+            }
+        });
+    });
+
+    // 비밀번호 찾기 인증 코드 요청
+    $('#sendLoginIdForm').on('submit', function (e) {
+        e.preventDefault();
+
+        var loginId = $('#loginId').val();
+
+        $.ajax({
+            url: '/usr/member/send-loginId',
+            type: 'POST',
+            data: {loginId: loginId},
+            success: function (response) {
+                $('#message2').text(response);
+                if (response == "인증코드가 전송되었습니다") {
+                    $('#verifyLoginIdForm').show();
+                }
+            },
+            error: function (xhr, status, error) {
+                $('#message2').text("인증 코드 요청에 실패했습니다.");
+            }
+        });
+    });
+
+    // 비밀번호 찾기 인증 코드 검증
+    $('#verifyLoginIdForm').on('submit', function (e) {
+        e.preventDefault();
+
+        var loginId = $('#loginId').val();
+        var passwordCode = $('#passwordCode').val();
+
+        $.ajax({
+            url: '/usr/member/verify-loginId',
+            type: 'POST',
+            data: {loginId: loginId, passwordCode: passwordCode},
+            success: function (response) {
+                $('#message2').text(response);
+            },
+            error: function (xhr, status, error) {
+                $('#message2').text("인증 코드 검증에 실패했습니다.");
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -61,4 +61,21 @@ public interface MemberRepository {
             WHERE id = #{loginedMemberId}
             """)
     void memberReStatus(int loginedMemberId);
+
+    @Select("""
+			SELECT M.*, D.photo extra__dogPoto
+            FROM `member` M
+            LEFT JOIN dog D
+            ON D.memberId = M.id
+            WHERE email = #{email}
+			""")
+    Member getMemberByEmail(String email);
+
+    @Update("""
+            UPDATE member
+            SET updateDate = NOW(),
+            loginPw = #{loginPW}
+            WHERE id = #{id}
+            """)
+    void setTemporaryPassword(int id, String loginPW);
 }

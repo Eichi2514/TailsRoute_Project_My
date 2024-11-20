@@ -65,6 +65,7 @@ public class NaverLoginController {
             Member member = getNaverUserInfo(accessToken);
 
             if(member.isDelStatus()){
+                rq.logout();
                 return Ut.rejoin("F-1", Ut.f("탈퇴한 회원입니다, 복구하시겠습니까?"), "/usr/member/doRejoin?id="+member.getId(), "/usr/home/main");
             }
 
@@ -162,7 +163,7 @@ public class NaverLoginController {
                 return existingMember;
             } else {
                 // 새로운 회원인 경우 -> 회원가입 처리
-                String loginPw = generateRandomPassword();  // 랜덤 비밀번호 생성
+                String loginPw = memberService.generateRandomPassword();  // 랜덤 비밀번호 생성
 
                 memberService.signUp(loginId, loginPw, name, nickname, cellphoneNum, email, 1);   // 세션에 로그인 정보 저장
 
@@ -174,11 +175,5 @@ public class NaverLoginController {
             e.printStackTrace();
             return null;
         }
-    }
-
-    // 랜덤 비밀번호 생성 메서드
-    private String generateRandomPassword() {
-        // UUID를 사용해 랜덤 문자열 생성 (하이픈 제거)
-        return UUID.randomUUID().toString().replace("-", "").substring(0, 12); // 12자리 문자열 반환
     }
 }

@@ -22,6 +22,8 @@ public class UsrMemberController {
 
     private final Rq rq;
 
+    private final Map<String, String> authCodes = new HashMap<>();
+
     public UsrMemberController(Rq rq) {
         this.rq = rq;
     }
@@ -173,5 +175,85 @@ public class UsrMemberController {
         rq.login(member);
 
         return "redirect:/usr/home/main";
+    }
+
+    @GetMapping("/usr/member/test")
+    public String test() {
+        return "/usr/member/test";
+    }
+
+    // 아이디 인증코드 요청
+    @PostMapping("usr/member/send-code")
+    @ResponseBody
+    public String sendCode(@RequestParam String email) {
+
+        Member member = memberService.getMemberByEmail(email);
+
+        if(member == null){
+            return "해당 회원은 존재하지 않습니다";
+        }else if(member.getSocialLoginStatus() == 1){
+            return "소셜 로그인 회원은 아이디 찾기 기능을 사용할 수 없습니다. 로그인 시 사용한 소셜 계정으로 로그인해 주세요.";
+        }
+
+        String authCode = memberService.generateAuthCode();
+        authCodes.put(email, authCode);
+        memberService.sendAuthCode(email, authCode);
+        return "인증코드가 전송되었습니다";
+    }
+
+    // 아이디 인증코드 검증
+    @PostMapping("usr/member/verify-code")
+    @ResponseBody
+    public String verifyCode(@RequestParam String email, @RequestParam String code) {
+        String savedCode = authCodes.get(email);
+        Member member = memberService.getMemberByEmail(email);
+
+        if (savedCode != null && savedCode.equals(code)) {
+            authCodes.remove(email);
+            memberService.sendLoginId(email, member.getLoginId());
+            return "인증성공! 아이디가 메일로 전송되었습니다.";
+        } else {
+            return "인증실패";
+        }
+    }
+
+    // 비밀번호 인증코드 요청
+    @PostMapping("usr/member/send-loginId")
+    @ResponseBody
+    public String sendLoginId(@RequestParam String loginId) {
+        String authCode = memberService.generateAuthCode();
+
+        Member member = memberService.getMemberByLoginId(loginId);
+
+        if(member == null){
+            return "해당 회원은 존재하지 않습니다";
+        }else if(member.getSocialLoginStatus() == 1){
+            return "소셜 로그인 회원은 비밀번호 찾기 기능을 사용할 수 없습니다. 로그인 시 사용한 소셜 계정으로 로그인해 주세요.";
+        }
+
+        authCodes.put(member.getEmail(), authCode);
+        memberService.sendAuthCode(member.getEmail(), authCode);
+        return "인증코드가 전송되었습니다";
+    }
+
+    // 비밀번호 인증코드 검증
+    @PostMapping("usr/member/verify-loginId")
+    @ResponseBody
+    public String verifyLoginId(@RequestParam String loginId, @RequestParam String passwordCode) {
+        Member member = memberService.getMemberByLoginId(loginId);
+
+        String savedCode = authCodes.get(member.getEmail());
+
+        String loginPW = memberService.generateRandomPassword();
+
+        memberService.setTemporaryPassword(member.getId(), loginPW);
+
+        if (savedCode != null && savedCode.equals(passwordCode)) {
+            authCodes.remove(member.getEmail());
+            memberService.sendLoginPW(member.getEmail(), loginPW);
+            return "인증성공! 임시비밀번호가 메일로 전송되었습니다.";
+        } else {
+            return "인증실패";
+        }
     }
 }

@@ -65,7 +65,7 @@ public class NaverLoginController {
             Member member = getNaverUserInfo(accessToken);
 
             if(member.isDelStatus()){
-                return Ut.rejoin("F-1", Ut.f("탈퇴한 회원입니다"), "/usr/member/doRejoin?id="+member.getId(), "/usr/home/main");
+                return Ut.rejoin("F-1", Ut.f("탈퇴한 회원입니다, 복구하시겠습니까?"), "/usr/member/doRejoin?id="+member.getId(), "/usr/home/main");
             }
 
             model.addAttribute("member", member);

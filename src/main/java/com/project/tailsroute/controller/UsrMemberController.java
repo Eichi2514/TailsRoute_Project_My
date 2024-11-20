@@ -152,4 +152,14 @@ public class UsrMemberController {
 
         return "redirect:/usr/member/myPage";
     }
+
+    @PostMapping("/usr/member/delStatus")
+    public String doDelStatus() {
+
+        memberService.memberDelStatus(rq.getLoginedMemberId());
+
+        rq.logout();
+
+        return "redirect:/usr/home/main";
+    }
 }

@@ -35,20 +35,6 @@ public class NaverLoginController {
     @Autowired
     private MemberService memberService;
 
-    @GetMapping("/usr/test/test")
-    public String test(Model model) {
-
-        boolean isLogined = rq.isLogined();
-        if (isLogined) {
-            Member member = rq.getLoginedMember();
-            model.addAttribute("member", member);
-        }
-
-        model.addAttribute("isLogined", isLogined);
-
-        return "usr/test/test";
-    }
-
     @GetMapping("/usr/member/naver-login")
     public String naverLoginRedirect() {
         String redirectUri = "http://localhost:8081/auth/naver/callback";  // 콜백 URL
@@ -74,6 +60,11 @@ public class NaverLoginController {
         if (accessToken != null) {
             // 네이버 사용자 정보 요청
             Member member = getNaverUserInfo(accessToken);
+
+            if(!member.isDelStatus()){
+                return "<script>alert(\"회원이 삭제된 상태입니다.\");</script>";
+            }
+
             model.addAttribute("member", member);
             model.addAttribute("isLogined", true);
             return "redirect:/usr/home/main"; // 메인 화면으로 리다이렉트

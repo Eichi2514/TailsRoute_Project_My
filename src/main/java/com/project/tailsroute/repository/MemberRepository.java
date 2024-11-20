@@ -44,4 +44,13 @@ public interface MemberRepository {
             WHERE id = #{loginedMemberId}
             """)
     void memberModify(int loginedMemberId, String name, String nickname, String cellphoneNum);
+
+    @Update("""
+            UPDATE member
+            SET updateDate = NOW(),
+            delDate = NOW(),
+            delStatus = 1 
+            WHERE id = #{loginedMemberId}
+            """)
+    void memberDelStatus(int loginedMemberId);
 }

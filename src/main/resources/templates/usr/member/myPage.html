@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div class="upload_button_wrapper">
-                <button type="button" class="upload_button myPage_modify_button">수정</button>
+                <button type="button" class="upload_button myPage_modify_button" th:if="${member.socialLoginStatus == 0}">수정</button>
                 <button type="button" style="display: none" class="upload_button myPage_exit_button">취소</button>
             </div>
         </form>

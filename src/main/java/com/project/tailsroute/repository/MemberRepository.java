@@ -29,8 +29,8 @@ public interface MemberRepository {
 			""")
     public Member getMemberByLoginId(String loginId);
 
-    @Insert("INSERT INTO `member` SET regDate = NOW(), updateDate = NOW(), loginId = #{loginId}, loginPw = #{loginPw}, `name` = #{name}, nickname = #{nickname}, cellphoneNum = #{cellphoneNum}")
-    public void doSignUp(String loginId, String loginPw, String name, String nickname, String cellphoneNum);
+    @Insert("INSERT INTO `member` SET regDate = NOW(), updateDate = NOW(), loginId = #{loginId}, loginPw = #{loginPw}, `name` = #{name}, nickname = #{nickname}, cellphoneNum = #{cellphoneNum}, socialLoginStatus = #{socialLoginStatus}")
+    public void doSignUp(String loginId, String loginPw, String name, String nickname, String cellphoneNum, int socialLoginStatus);
 
     @Select("SELECT LAST_INSERT_ID();")
     public int getLastInsertId();

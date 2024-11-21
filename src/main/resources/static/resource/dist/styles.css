@@ -825,6 +825,10 @@ video {
   width: 10px;
 }
 
+.tw-w-\[120px\] {
+  width: 120px;
+}
+
 .tw-w-\[130px\] {
   width: 130px;
 }
@@ -849,8 +853,8 @@ video {
   width: 1px;
 }
 
-.tw-w-\[300px\] {
-  width: 300px;
+.tw-w-\[20px\] {
+  width: 20px;
 }
 
 .tw-w-\[400px\] {
@@ -883,6 +887,10 @@ video {
 
 .tw-w-full {
   width: 100%;
+}
+
+.tw-w-\[60px\] {
+  width: 60px;
 }
 
 .tw-max-w-6xl {
@@ -969,10 +977,6 @@ video {
 
 .tw-gap-\[10px\] {
   gap: 10px;
-}
-
-.tw-gap-3 {
-  gap: 0.75rem;
 }
 
 .tw-space-y-4 > :not([hidden]) ~ :not([hidden]) {

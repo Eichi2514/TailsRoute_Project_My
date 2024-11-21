@@ -19,4 +19,8 @@ public class Walk {
     private double routedistance;
     private String location;
     private int isLiked;
+
+    private String extra__walker;
+    private int extra__count;
+    private double extra__distance;
 }

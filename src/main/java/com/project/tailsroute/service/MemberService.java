@@ -49,8 +49,8 @@ public class MemberService {
     }
 
 
-    public void memberModify(int loginedMemberId, String name, String nickname, String cellphoneNum) {
-        memberRepository.memberModify(loginedMemberId, name, nickname, cellphoneNum);
+    public void memberModify(int loginedMemberId, String name, String nickname, String cellphoneNum, String loginPw) {
+        memberRepository.memberModify(loginedMemberId, name, nickname, cellphoneNum, loginPw);
     }
 
     public void memberDelStatus(int loginedMemberId) {

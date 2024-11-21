@@ -37,13 +37,14 @@ public interface MemberRepository {
 
     @Update("""
             UPDATE member
-            SET updateDate = NOW(),
+            SET updateDate = NOW(),            
+            loginPw = #{loginPw},
             name = #{name},
             nickname = #{nickname},
-            cellphoneNum = #{cellphoneNum} 
+            cellphoneNum = #{cellphoneNum}
             WHERE id = #{loginedMemberId}
             """)
-    void memberModify(int loginedMemberId, String name, String nickname, String cellphoneNum);
+    void memberModify(int loginedMemberId, String name, String nickname, String cellphoneNum, String loginPw);
 
     @Update("""
             UPDATE member

@@ -148,9 +148,15 @@ public class UsrMemberController {
     }
 
     @PostMapping("/usr/member/modify")
-    public String doModify(@RequestParam String name, @RequestParam String nickname, @RequestParam String cellphoneNum) {
+    public String doModify(@RequestParam String name, @RequestParam String nickname, @RequestParam String cellphoneNum, @RequestParam String loginPw) {
 
-        memberService.memberModify(rq.getLoginedMemberId(), name, nickname, cellphoneNum);
+        if(loginPw.isBlank()){
+            // System.err.println("전 : " + loginPw);
+            loginPw = rq.getLoginedMember().getLoginPw();
+            // System.err.println("후 : " + loginPw);
+        }
+
+        memberService.memberModify(rq.getLoginedMemberId(), name, nickname, cellphoneNum, loginPw);
 
         return "redirect:/usr/member/myPage";
     }
@@ -177,9 +183,19 @@ public class UsrMemberController {
         return "redirect:/usr/home/main";
     }
 
-    @GetMapping("/usr/member/test")
-    public String test() {
-        return "/usr/member/test";
+    @GetMapping("/usr/member/find")
+    public String showFind(Model model) {
+
+        boolean isLogined = rq.isLogined();
+
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        }
+
+        model.addAttribute("isLogined", isLogined);
+
+        return "/usr/member/find";
     }
 
     // 아이디 인증코드 요청
@@ -251,7 +267,7 @@ public class UsrMemberController {
         if (savedCode != null && savedCode.equals(passwordCode)) {
             authCodes.remove(member.getEmail());
             memberService.sendLoginPW(member.getEmail(), loginPW);
-            return "인증성공! 임시비밀번호가 메일로 전송되었습니다.";
+            return "인증성공! 임시비밀번호가 " + member.getEmail() + "로 전송되었습니다.";
         } else {
             return "인증실패";
         }

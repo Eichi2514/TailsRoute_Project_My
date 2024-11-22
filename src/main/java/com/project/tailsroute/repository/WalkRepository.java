@@ -7,15 +7,18 @@ import java.util.List;
 
 @Mapper
 public interface WalkRepository {
-    @Insert("INSERT INTO walk (regDate, updateDate, memberId, routeName, purchaseDate, routePicture, routedistance,isLiked) " +
-            "VALUES (NOW(), NOW(), #{memberId}, #{routeName}, #{purchaseDate}, #{routePicture},#{routedistance},#{isLiked})")
-    public void addWalks(int memberId, String routeName, String purchaseDate, String routePicture,double routedistance,int isLiked);
+    @Insert("INSERT INTO walk (updateDate, memberId, routeName, purchaseDate, routePicture, routedistance,isLiked) " +
+            "VALUES (NOW(), #{memberId}, #{routeName}, NOW(), #{routePicture},#{routedistance},#{isLiked})")
+    public void addWalks(int memberId, String routeName, String routePicture,double routedistance,int isLiked);
 
     @Select("SELECT * FROM walk WHERE memberId = #{memberId}")
     public List<Walk> findByMemberId(int memberId);
 
     @Select("SELECT routePicture FROM walk WHERE routeName= #{routeName} AND purchaseDate=#{purchaseDate} AND routedistance=#{routedistance}")
     public String findRoutePicture(String routeName, String purchaseDate, double routedistance);
+
+    @Select("SELECT DATE(purchaseDate) AS date, COUNT(*) AS extra__count FROM walk WHERE YEAR(purchaseDate) = #{year} AND memberId= #{memberId} GROUP BY DATE(purchaseDate) ORDER BY DATE(purchaseDate)")
+    public List<Walk> countdate(int year,int memberId);
 
     @Update("UPDATE walk SET isLiked= #{isLiked} WHERE routeName= #{routeName} AND purchaseDate=#{purchaseDate} AND routedistance=#{routedistance}")
     public void updateIsLiked(int isLiked,String routeName, String purchaseDate, double routedistance);

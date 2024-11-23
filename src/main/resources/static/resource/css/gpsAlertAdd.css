@@ -41,9 +41,9 @@ body {
 }
 
 .upload_button {
-    background: RGB(105, 105, 105);
-    color: white;
-    border-radius: 10px;
-    height: 40px;
     width: 100px;
+    background: #ff6f61;
+    color : #ffffff;
+    border-radius: 10px;
+    padding: 10px;
 }

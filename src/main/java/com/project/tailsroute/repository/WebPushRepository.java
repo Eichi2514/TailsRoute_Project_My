@@ -1,7 +1,10 @@
 package com.project.tailsroute.repository;
 
-import org.apache.ibatis.annotations.*;
+
+import com.project.tailsroute.vo.WebPush;
 import nl.martijndwars.webpush.Subscription;
+import org.apache.ibatis.annotations.*;
+
 
 @Mapper
 public interface WebPushRepository {
@@ -15,4 +18,17 @@ public interface WebPushRepository {
             auth = #{subscription.keys.auth}
             """)
 	void save(int memberId, Subscription subscription);
+
+	@Select("""
+			SELECT *
+			FROM webpush
+			WHERE memberId = #{memberId}
+			""")
+    WebPush getMemberId(int memberId);
+
+	@Delete("""
+			DELETE FROM webpush
+			WHERE memberId = #{memberId}
+			""")
+	void delete(int memberId);
 }

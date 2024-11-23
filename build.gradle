@@ -36,6 +36,8 @@ dependencies {
     implementation 'net.coobird:thumbnailator:0.4.14'
     implementation 'net.nurigo:sdk:4.3.0' // SMS 문자 서비스
     implementation 'nl.martijndwars:web-push:5.1.1' // 웹 푸시 라이브러리
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'    // 암호화 기본 제공
+    implementation 'org.bouncycastle:bcpkix-jdk15on:1.70'    // 암호화 관련 PKI 확장
     implementation 'org.jsoup:jsoup:1.15.4'  // 최신 버전으로 수정
     implementation 'org.springframework.boot:spring-boot-starter-mail' // 이메일 서비스
     implementation files('src/main/resources/poto/thumbnailator-0.4.14.jar')

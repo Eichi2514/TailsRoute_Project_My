@@ -1,5 +1,5 @@
-body {
-    background: #EDE0D4;
+html, body {
+    background: #EDE0D4 !important;
     color: #4D3E3E;
     white-space: normal;
     word-break: keep-all;

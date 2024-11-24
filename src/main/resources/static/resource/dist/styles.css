@@ -1814,8 +1814,16 @@ html {
   height: 100vh;
 }
 
+.tw-h-\[30px\] {
+  height: 30px;
+}
+
 .tw-max-h-64 {
   max-height: 16rem;
+}
+
+.tw-min-h-screen {
+  min-height: 100vh;
 }
 
 .tw-w-48 {
@@ -1914,6 +1922,10 @@ html {
   max-width: 28rem;
 }
 
+.tw-max-w-lg {
+  max-width: 32rem;
+}
+
 .tw-flex-1 {
   flex: 1 1 0%;
 }
@@ -2002,6 +2014,12 @@ html {
   --tw-space-y-reverse: 0;
   margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
+}
+
+.tw-space-y-8 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(2rem * var(--tw-space-y-reverse));
 }
 
 .tw-overflow-auto {
@@ -2170,6 +2188,16 @@ html {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.tw-bg-\[\#f9f5eb\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(249 245 235 / var(--tw-bg-opacity));
+}
+
+.tw-bg-\[\#ff6f61\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 111 97 / var(--tw-bg-opacity));
+}
+
 .tw-object-cover {
   -o-object-fit: cover;
      object-fit: cover;
@@ -2325,6 +2353,10 @@ html {
   text-align: right;
 }
 
+.tw-font-sans {
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
 .tw-text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
@@ -2386,6 +2418,10 @@ html {
 
 .tw-font-medium {
   font-weight: 500;
+}
+
+.tw-font-semibold {
+  font-weight: 600;
 }
 
 .tw-tracking-wide {

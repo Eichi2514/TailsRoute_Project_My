@@ -12,7 +12,6 @@ body {
     background-color: #F9F5EB;
     width: 50vw;
     height: 805px;
-    z-index: -1;
 }
 
 .right_box{
@@ -22,7 +21,6 @@ body {
     background-color: #F9F5EB;
     width: 50vw;
     height: 718px;
-    z-index: -1;
 }
 
 .main_image, .main_box {

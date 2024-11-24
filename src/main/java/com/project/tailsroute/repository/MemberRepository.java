@@ -31,7 +31,7 @@ public interface MemberRepository {
     public Member getMemberByLoginId(String loginId);
 
     @Insert("INSERT INTO `member` SET regDate = NOW(), updateDate = NOW(), loginId = #{loginId}, loginPw = #{loginPw}, `name` = #{name}, nickname = #{nickname}, cellphoneNum = #{cellphoneNum}, email = #{email}, socialLoginStatus = #{socialLoginStatus}")
-    public void doSignUp(String loginId, String loginPw, String name, String nickname, String cellphoneNum,String email, int socialLoginStatus);
+    public void doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum,String email, int socialLoginStatus);
 
     @Select("SELECT LAST_INSERT_ID();")
     public int getLastInsertId();
@@ -81,4 +81,20 @@ public interface MemberRepository {
             WHERE id = #{id}
             """)
     void setTemporaryPassword(int id, String loginPW);
+
+    @Select("""
+			SELECT *
+			FROM `member`
+			WHERE name = #{name}
+			AND email = #{email}
+			""")
+    Member getMemberByNameAndEmail(String name, String email);
+
+    @Select("""
+			SELECT *
+			FROM `member`
+			WHERE name = #{name}
+            AND cellphoneNum = #{cellphoneNum}
+			""")
+    Member getMemberByNameAndcellphoneNum(String name, String cellphoneNum);
 }

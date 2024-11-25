@@ -4,6 +4,7 @@ import com.project.tailsroute.repository.WalkRepository;
 import com.project.tailsroute.vo.Walk;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -37,8 +38,9 @@ public class WalkService {
     public void updateIsLiked (int isLiked,String routeName, String purchaseDate, double routedistance) {
         walkRepository.updateIsLiked(isLiked,routeName, purchaseDate,routedistance);
     }
-    public void updateWalks(String routeName, String purchaseDate, int id) {
-        walkRepository.updateWalks(routeName, purchaseDate,id);
+    @Transactional
+    public void updateWalks(String routeName, String purchaseDate,String routePicture,double routedistance,int id) {
+        walkRepository.updateWalks(routeName, purchaseDate,routePicture,routedistance,id);
     }
     public void deleteWalks(int id) {
         walkRepository.deleteWalks(id);
@@ -46,5 +48,11 @@ public class WalkService {
 
     public List<Walk> getWalksRanking() {
         return walkRepository.getWalksRanking();
+    }
+    public Walk findWalk(int id) {
+        return walkRepository.findById(id);
+    }
+    public List<Walk> findFavoritesByMemberId(int memberId) {
+        return walkRepository.findFavoritesByMemberId(memberId);
     }
 }

@@ -37,9 +37,17 @@
 }
 
 @keyframes scroll {
-    0% { opacity: 0; }
-    10% { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(15px); opacity: 0; }
+    0% {
+        opacity: 0;
+    }
+    10% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(15px);
+        opacity: 0;
+    }
 }
 
 /* 기본 스타일 */
@@ -51,7 +59,7 @@
     background-color: transparent;
 }
 
-#login-button i, #hospital-button i{
+#login-button i, #hospital-button i {
     color: #FF7F50;
 }
 
@@ -89,11 +97,11 @@
 /* section2, section3 */
 
 
-.bo{
+.bo {
     border: 1px solid;
 }
 
-.main-missing-body{
+.main-missing-body {
     width: 1440px;
     height: 924px;
     position: relative;
@@ -159,7 +167,7 @@
 
 .gps_popup, .gps_popup2 {
     border: 1px solid;
-    border-radius: 10px;
+    border-radius: 50px;
     padding: 30px;
     position: fixed;
     top: 50%;
@@ -169,13 +177,14 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #FFFEF0;
+    background-color: #FFFFFF;
 }
 
 
-.gps_popup_button{
+.gps_popup_button {
+    background-color: #7DAF82;
+    color: #FFFFFF;
     padding: 10px;
-    border: 1px solid #4D3E3E;
     border-radius: 10px;
     height: 40px;
     width: 100px;
@@ -183,6 +192,29 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.gps_popup_button:hover {
+    background-color: #5C8D6D;
+    transform: translateY(-2px);
+}
+
+.gps_popup_cancelButton {
+    background-color: #FF6F61;
+    color: #FFFFFF;
+    padding: 10px;
+    border-radius: 10px;
+    height: 40px;
+    width: 100px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gps_popup_cancelButton:hover {
+    background-color: #D95A50;
+    transform: translateY(-2px);
 }
 
 .overlay {
@@ -224,7 +256,7 @@
     border-radius: 20px;
 }
 
-.svg-box:hover{
+.svg-box:hover {
     animation: none;
 }
 
@@ -258,6 +290,7 @@
     fill: #ff6f61;
     transition: fill 0.3s ease;
 }
+
 .flat-filled .circle {
     fill: #ffffff;
     transition: fill 0.3s ease;
@@ -268,12 +301,15 @@
 #filled-message .dots {
     fill: #ede0d4;
 }
+
 #filled-message:hover .circle {
     fill: #ffffff;
 }
+
 #filled-message:hover .back {
     fill: #ff6f61;
 }
+
 #filled-message:hover .front {
     fill: #ff6f61;
 }
@@ -281,6 +317,7 @@
 #filled-film .bottom {
     fill: #ede0d4;
 }
+
 #filled-film .top {
     fill: #ede0d4;
 }
@@ -288,6 +325,7 @@
 #filled-film:hover .circle {
     fill: #ffffff;
 }
+
 #filled-film:hover .base {
     fill: #ff6f61;
 }
@@ -299,6 +337,7 @@
 #filled-magnify:hover .circle {
     fill: #ffffff;
 }
+
 #filled-magnify:hover .base {
     fill: #ff6f61;
 }

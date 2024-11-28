@@ -5,6 +5,15 @@ html, body {
     word-break: keep-all;
 }
 
+input{
+    background: #ffffff;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #7DAF82;
+}
+
 .container {
     display: flex;
     align-items: flex-start; /* 모든 자식 요소를 위로 정렬 */
@@ -75,6 +84,19 @@ html, body {
 
 .upload_button:hover {
     background-color: #5C8D6D;
+    transform: translateY(-2px);
+}
+
+.upload_cancelButton {
+    width: 100px;
+    background-color: #FF6F61;
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.upload_cancelButton:hover {
+    background-color: #D95A50;
     transform: translateY(-2px);
 }
 

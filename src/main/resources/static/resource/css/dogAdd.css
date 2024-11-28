@@ -17,6 +17,10 @@ input:focus, select:focus, textarea:focus {
     box-shadow: 0 0 0 2px #7DAF82;
 }
 
+.link{
+    font-weight: bold;
+}
+
 .link:hover {
     text-decoration: underline;
 }
@@ -30,8 +34,7 @@ input:focus, select:focus, textarea:focus {
     padding: 20px; /* 내부 여백 */
     text-align: center; /* 텍스트 중앙 정렬 */
     align-content: center;
-    margin: auto;
-    margin-top: 20px; /* 상단 여백 */
+    margin: 20px auto auto;
     background: white;
 }
 
@@ -68,13 +71,14 @@ input:focus, select:focus, textarea:focus {
     margin: auto;
     width: 1340px;
     font-weight: bold;
+    font-size: 1.5rem;
+    line-height: 2rem;
 }
 
 .profile {
     border-bottom: 2px solid #dadada;
     margin: auto;
     width: 1340px;
-    font-weight: bold;
 }
 
 .dogAdd_body {
@@ -145,6 +149,11 @@ input:focus, select:focus, textarea:focus {
     border-radius: 10px;
     padding: 10px;
     width: 100px;
-    right: -120px;
-    top: 0;
+    right: 10px;
+    top: 10px;
+    display: none;
+}
+
+.drop_area:hover .image_clear, .image_clear:hover{
+    display: block;
 }

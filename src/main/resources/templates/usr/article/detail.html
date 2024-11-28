@@ -11,15 +11,6 @@
         let isAlreadyAddGoodRp = [[${isAlreadyAddGoodRp}]];
         let isAlreadyAddBadRp = [[${isAlreadyAddBadRp}]];
 
-        <!-- 좋아요 싫어요 처리 -->
-        function checkRP() {
-            if (isAlreadyAddGoodRp) {
-                $('#likeButton').toggleClass('btn-outline');
-            } else if (isAlreadyAddBadRp) {
-                $('#DislikeButton').toggleClass('btn-outline');
-            }
-        }
-
         $(document).ready(function () {
             checkRP();
             setTimeout(ArticleDetail__doIncreaseHitCount, 2000);
@@ -83,21 +74,20 @@
                 <span class="article-detail__hit-count" th:text="${article.hitCount}"></span>
             </div>
         </div>
-        <div class="tw-flex tw-gap-2" th:if="${member != null}">
-            <a class="link tw-pr-[5px]" th:href="|@{../article/modify?id=}${article.id}|"
-               th:if="${member.id == article.memberId}">수정</a>
+        <div class="tw-flex tw-gap-2" th:if="${member != null && member.id == article.memberId}">
+            <a class="link tw-pr-[5px]" th:href="|@{../article/modify?id=}${article.id}|">수정</a>
             <div>|</div>
             <a class="link tw-pl-[5px] tw-text-[#D95A50]" th:href="|@{../article/doDelete?id=}${article.id}|"
-               th:if="${member.id == article.memberId}" onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</a>
+               onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</a>
         </div>
     </div>
     <div class="article_body">
         <div class="tw-p-5" th:utext="${article.body}"></div>
         <div class="tw-flex tw-justify-between">
             <div class="reply_title tw-p-5" th:text="|댓글 : ${replies.size()}|"></div>
-            <button th:class="${isAlreadyAddGoodRp ? 'tw-text-red-500 tw-font-bold tw-p-5' : 'tw-p-5'}" id="likeButton"
+            <button th:class="${isAlreadyAddGoodRp ? 'tw-bg-[#FF6F61] tw-text-white tw-font-bold tw-rounded-[10px] tw-p-2 tw-m-3' : 'tw-p-2 tw-m-3'}" id="likeButton"
                     th:onclick="'doGoodReaction(\'article\', ' + ${article.id} + ')'">
-                👍 추천
+                <i class="fa-regular fa-heart"></i>
                 <span id="likeCount" th:text="${article.goodReactionPoint}"></span>
             </button>
         </div>
@@ -118,7 +108,7 @@
             <div class="tw-pl-2">이 필요합니다</div>
         </div>
         <div class="tw-mx-auto">
-            <div class="tw-p-5 tw-flex tw-items-center tw-justify-between tw-border-b tw-border-gray-500"
+            <div class="tw-p-5 tw-flex tw-items-center tw-justify-between tw-border-b-2 tw-border-gray-[#dadada]"
                  th:each="reply : ${replies}">
                 <div class="tw-flex tw-gap-2 tw-flex-1">
                     <img th:if="${reply.extra__dogPhoto != null}" th:src="@{${reply.extra__dogPhoto}}"
@@ -135,7 +125,7 @@
                             <div th:id="'replylikeCount' + ${reply.id}" th:text="${reply.goodReactionPoint}"></div>
                             <div th:id="'reply-body-' + ${reply.id}" class="tw-flex tw-justify-center tw-items-center">
                                 <button th:onclick="'doGoodReaction(\'reply\', ' + ${reply.id} + ')'">
-                                    <i th:class="${reply.extra__reactionPoint == null ? 'fa-solid fa-heart' : 'fa-solid fa-heart tw-text-red-500'}"></i>
+                                    <i th:class="${reply.extra__reactionPoint == null ? 'fa-solid fa-heart' : 'fa-solid fa-heart tw-text-[#FF6F61]'}"></i>
                                 </button>
                             </div>
                         </div>
@@ -251,17 +241,17 @@
             success: function (data) {// 성공 시 콜백
                 if (relTypeCode == 'article') {
                     $('#likeCount').text(data.data1); // 응답에서 body 문자열을 사용
-                    if ($('#likeButton').hasClass('tw-text-red-500')) {
-                        $('#likeButton').removeClass('tw-text-red-500 tw-font-bold');
+                    if ($('#likeButton').hasClass('tw-bg-[#FF6F61]')) {
+                        $('#likeButton').removeClass('tw-bg-[#FF6F61] tw-text-white tw-font-bold tw-rounded-[10px]');
                     } else {
-                        $('#likeButton').addClass('tw-text-red-500 tw-font-bold');
+                        $('#likeButton').addClass('tw-bg-[#FF6F61] tw-text-white tw-font-bold tw-rounded-[10px]');
                     }
                 } else if (relTypeCode == 'reply') {
                     $('#replylikeCount' + relId).text(data.data1);
-                    if ($('#reply-body-' + relId).find('i').hasClass('tw-text-red-500')) {
-                        $('#reply-body-' + relId).find('i').removeClass('tw-text-red-500');
+                    if ($('#reply-body-' + relId).find('i').hasClass('tw-text-[#FF6F61]')) {
+                        $('#reply-body-' + relId).find('i').removeClass('tw-text-[#FF6F61]');
                     } else {
-                        $('#reply-body-' + relId).find('i').addClass('tw-text-red-500');
+                        $('#reply-body-' + relId).find('i').addClass('tw-text-[#FF6F61]');
                     }
 
                 }

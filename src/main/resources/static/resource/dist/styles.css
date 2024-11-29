@@ -1665,13 +1665,27 @@ html {
   z-index: 50;
 }
 
+.tw-m-2 {
+  margin: 0.5rem;
+}
+
 .tw-m-3 {
   margin: 0.75rem;
+}
+
+.tw-mx-4 {
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 .tw-mx-auto {
   margin-left: auto;
   margin-right: auto;
+}
+
+.tw-my-4 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .tw-mb-10 {
@@ -1710,12 +1724,24 @@ html {
   margin-left: 0.5rem;
 }
 
+.tw-ml-\[1130px\] {
+  margin-left: 1130px;
+}
+
 .tw-ml-\[12px\] {
   margin-left: 12px;
 }
 
+.tw-ml-\[170px\] {
+  margin-left: 170px;
+}
+
 .tw-ml-\[200px\] {
   margin-left: 200px;
+}
+
+.tw-ml-\[20px\] {
+  margin-left: 20px;
 }
 
 .tw-ml-\[30px\] {
@@ -1724,6 +1750,10 @@ html {
 
 .tw-ml-auto {
   margin-left: auto;
+}
+
+.tw-mr-\[10px\] {
+  margin-right: 10px;
 }
 
 .tw-mr-\[30px\] {
@@ -1838,6 +1868,10 @@ html {
   height: 100%;
 }
 
+.tw-h-px {
+  height: 1px;
+}
+
 .tw-h-screen {
   height: 100vh;
 }
@@ -1848,6 +1882,10 @@ html {
 
 .tw-min-h-\[80vh\] {
   min-height: 80vh;
+}
+
+.tw-w-10 {
+  width: 2.5rem;
 }
 
 .tw-w-48 {
@@ -2122,11 +2160,6 @@ html {
   background-color: rgb(125 175 130 / var(--tw-bg-opacity, 1));
 }
 
-.tw-bg-\[\#E3DAC9\] {
-  --tw-bg-opacity: 1;
-  background-color: rgb(227 218 201 / var(--tw-bg-opacity, 1));
-}
-
 .tw-bg-\[\#EDE0D4\] {
   --tw-bg-opacity: 1;
   background-color: rgb(237 224 212 / var(--tw-bg-opacity, 1));
@@ -2180,6 +2213,11 @@ html {
 .tw-bg-gray-200 {
   --tw-bg-opacity: 1;
   background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1));
+}
+
+.tw-bg-gray-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity, 1));
 }
 
 .tw-bg-gray-900\/70 {
@@ -2312,6 +2350,10 @@ html {
   padding-left: 10px;
 }
 
+.tw-pl-\[15px\] {
+  padding-left: 15px;
+}
+
 .tw-pl-\[20px\] {
   padding-left: 20px;
 }
@@ -2344,6 +2386,10 @@ html {
   padding-right: 10px;
 }
 
+.tw-pr-\[15px\] {
+  padding-right: 15px;
+}
+
 .tw-pr-\[20px\] {
   padding-right: 20px;
 }
@@ -2366,14 +2412,6 @@ html {
 
 .tw-pt-\[10px\] {
   padding-top: 10px;
-}
-
-.tw-pr-\[15px\] {
-  padding-right: 15px;
-}
-
-.tw-pl-\[15px\] {
-  padding-left: 15px;
 }
 
 .tw-text-center {
@@ -2516,11 +2554,6 @@ html {
 .tw-text-gray-800 {
   --tw-text-opacity: 1;
   color: rgb(31 41 55 / var(--tw-text-opacity, 1));
-}
-
-.tw-text-red-500 {
-  --tw-text-opacity: 1;
-  color: rgb(239 68 68 / var(--tw-text-opacity, 1));
 }
 
 .tw-text-white {

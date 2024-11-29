@@ -51,20 +51,35 @@
 }
 
 /* 기본 스타일 */
-#login-button, #hospital-button {
+#login-button, #hospital-button, #welcome-button {
     transition: all 0.5s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: transparent;
+
 }
 
-#login-button i, #hospital-button i {
+/* hover 시 스타일 */
+#login-button:hover, #welcome-button:hover, #hospital-button:hover {
+    background-color: #FF7F50; /* 붉은 배경색 */
+    color: #FFFFFF; /* 흰 글자색 */
+}
+
+#login-button:hover i, #welcome-button:hover i, #hospital-button:hover i{
+    color: #FFFFFF; /* 아이콘 색도 흰색으로 변경 */
+}
+
+#login-button:hover span, #welcome-button:hover span, #hospital-button:hover span{
+    color: #FFFFFF;
+}
+
+#login-button i, #hospital-button i, #welcome-button i {
     color: #FF7F50;
 }
 
 /* 둥근 아이콘 상태 */
-#login-button.rounded, #hospital-button.rounded {
+#login-button.rounded, #hospital-button.rounded, #welcome-button.rounded {
     width: 70px;
     height: 70px;
     background-color: #FF7F50;
@@ -73,11 +88,11 @@
     align-items: center;
 }
 
-#login-button.rounded span, #hospital-button.rounded span {
+#login-button.rounded span, #hospital-button.rounded span, #welcome-button.rounded span {
     display: none; /* 둥근 상태에서 텍스트 숨김 */
 }
 
-#login-button.rounded i, #hospital-button.rounded i {
+#login-button.rounded i, #hospital-button.rounded i, #welcome-button.rounded i {
     font-size: 1.5em;
     color: white; /* 둥근 상태에서 아이콘 색상 */
 }
@@ -444,3 +459,70 @@
         transform: scale(1);
     }
 }
+
+/* 커뮤니티 버튼 */
+@import url(https://fonts.googleapis.com/css?family=BenchNine:700);
+
+.community {
+    background-color: #FF6F61;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: 'BenchNine', Arial, sans-serif;
+    font-size: 22px;
+    line-height: 1em;
+    margin: 15px 20px;
+    outline: none;
+    padding: 12px 20px 10px;
+    position: relative;
+    text-transform: uppercase;
+    font-weight: 700;
+    width: 200px; /* 버튼 너비 고정 */
+    height: 50px; /* 버튼 높이 고정 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+    box-sizing: border-box; /* 패딩 포함 */
+}
+
+.community:before,
+.community:after {
+    border-color: transparent;
+    -webkit-transition: all 0.25s;
+    transition: all 0.25s;
+    border-style: solid;
+    border-width: 0;
+    content: "";
+    height: 24px;
+    position: absolute;
+    width: 24px;
+}
+
+.community:before {
+    border-color: #FF6F61;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    right: -5px;
+    top: -5px;
+}
+
+.community:after {
+    border-bottom-width: 2px;
+    border-color: #FF6F61;
+    border-left-width: 2px;
+    bottom: -5px;
+    left: -5px;
+}
+
+.community:hover,
+.community.hover {
+    background-color: #FF6F61;
+}
+
+.community:hover:before,
+.community.hover:before,
+.community:hover:after,
+.community.hover:after {
+    height: 100%;
+    width: 100%;
+}
+

@@ -14,6 +14,9 @@ RUN chmod +x gradlew
 # build.gradle과 settings.gradle 파일을 먼저 복사하여 종속성 캐시 활용
 COPY build.gradle settings.gradle ./
 
+# .env 파일 복사 (빌드 시에 환경 변수 필요할 경우)
+COPY .env ./
+
 # 종속성 설치
 RUN ./gradlew dependencies --no-daemon
 
@@ -31,6 +34,9 @@ WORKDIR /app
 
 # 첫 번째 스테이지에서 빌드된 JAR 파일 복사
 COPY --from=builder /app/build/libs/*.jar app.jar
+
+# .env 파일 복사 (애플리케이션 실행 시 환경 변수 필요)
+COPY --from=builder /app/.env ./
 
 # 실행할 JAR 파일 지정
 ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "app.jar"]

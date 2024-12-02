@@ -4,9 +4,11 @@ FROM gradle:jdk21-graal-jammy AS builder
 # 작업 디렉토리 설정
 WORKDIR /app
 
-# Gradle 래퍼 파일 복사 및 권한 부여
+# Gradle 래퍼 파일 복사
 COPY gradlew .
 COPY gradle/wrapper/gradle-wrapper.jar gradle/wrapper/
+COPY gradle/wrapper/gradle-wrapper.properties gradle/wrapper/
+
 RUN chmod +x gradlew
 
 # build.gradle과 settings.gradle 파일을 먼저 복사하여 종속성 캐시 활용

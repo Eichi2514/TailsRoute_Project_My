@@ -16,7 +16,19 @@ services:
       - tailsroute_network
     restart: unless-stopped
 
-  # 다른 서비스들 (예: Spring Boot 애플리케이션)을 여기에 추가할 수 있습니다.
+  tailsroute:
+    image: Eichi2514/tailsroute:latest  # 이곳에 실제 Spring Boot 애플리케이션 이미지 이름을 넣어주세요
+    container_name: tailsroute
+    ports:
+      - "8081:8081"  # 이 포트를 수정하여 실제 애플리케이션의 포트를 사용
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_1:3306/tails_route
+      SPRING_DATASOURCE_USERNAME: root  # 데이터베이스 사용자명
+      SPRING_DATASOURCE_PASSWORD: koreait123414  # MySQL 비밀번호
+      SPRING_PROFILES_ACTIVE: prod  # 필요에 따라 환경 프로파일 설정
+    networks:
+      - tailsroute_network
+    restart: unless-stopped
 
 networks:
   tailsroute_network:

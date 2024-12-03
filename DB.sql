@@ -229,13 +229,11 @@ CREATE TABLE alarm (
                        regDate DATETIME NOT NULL COMMENT '생성 날짜',
                        updateDate DATETIME NOT NULL COMMENT '수정 날짜',
                        memberId INT(10) UNSIGNED NOT NULL COMMENT '생성자 식별번호',
-                       alarm_date DATE COMMENT '알람이 울릴 날짜',
-                       alarm_day ENUM('월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일') COMMENT '알람이 울릴 요일',
+                       alarm_date DATE NOT NULL COMMENT '알람이 울릴 날짜',
                        message TEXT NOT NULL COMMENT '알람 메시지',
                        site TEXT NOT NULL COMMENT '어느 사이트에서 왔는지 여부',
                        is_sent BOOLEAN DEFAULT FALSE COMMENT '알람이 이미 전송되었는지 여부',
-                       FOREIGN KEY (memberId) REFERENCES MEMBER(id),
-                       CHECK ((alarm_date IS NOT NULL) OR (alarm_day IS NOT NULL))
+                       FOREIGN KEY (memberId) REFERENCES MEMBER(id)
 );
 
 ## 생필품 테이블

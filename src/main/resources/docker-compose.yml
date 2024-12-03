@@ -12,6 +12,7 @@ services:
       - "3306:3306"
     volumes:
       - ./volumes/var/lib/mysql:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/my.cnf  # my.cnf 파일을 컨테이너에 마운트
     networks:
       - tailsroute_network
     restart: unless-stopped

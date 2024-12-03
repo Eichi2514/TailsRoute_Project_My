@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   mysql:
-    image: mysql:8.0
-    container_name: mysql_1
+    image: mysql
+    container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: koreait123414
       MYSQL_DATABASE: tails_route
@@ -22,7 +22,7 @@ services:
     ports:
       - "8081:8081"  # 이 포트를 수정하여 실제 애플리케이션의 포트를 사용
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_1:3306/tails_route
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tails_route  # mysql_1 대신 mysql로 수정
       SPRING_DATASOURCE_USERNAME: root  # 데이터베이스 사용자명
       SPRING_DATASOURCE_PASSWORD: koreait123414  # MySQL 비밀번호
       SPRING_PROFILES_ACTIVE: prod  # 필요에 따라 환경 프로파일 설정

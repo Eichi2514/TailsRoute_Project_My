@@ -11,7 +11,7 @@ CREATE TABLE `member`(
                          loginPw CHAR(100) NOT NULL COMMENT '비밀번호',
                          authLevel SMALLINT(2) UNSIGNED DEFAULT 3 COMMENT '권한 레벨 (3=일반, 7=관리자)',
                          `name` CHAR(20) NOT NULL COMMENT '오프라인 이름',
-                         nickname CHAR(20) NOT NULL COMMENT '온라인 이름',
+                         nickname CHAR(50) NOT NULL COMMENT '온라인 이름',
                          cellphoneNum CHAR(50) NOT NULL COMMENT '전화번호',
                          email CHAR(50) NOT NULL COMMENT '이메일',
                          socialLoginStatus TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '소셜 로그인 여부 (0=일반 회원, 1=소셜 로그인 회원)',

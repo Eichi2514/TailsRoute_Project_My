@@ -18,6 +18,12 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations("file:uploads/");
     }
 
+    //@Override
+    //public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    //   registry.addResourceHandler("/uploads/**") // 모든 하위 폴더와 파일 포함
+    //           .addResourceLocations("file:/dockerProjects/tailsroute/source/TailsRoute_Project_My/uploads/");
+    //}
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 캐시 제어를 위한 인터셉터 추가

@@ -91,4 +91,11 @@ public interface MemberRepository {
             AND cellphoneNum = #{cellphoneNum}
 			""")
     Member getMemberByNameAndcellphoneNum(String name, String cellphoneNum);
+
+    @Select("""
+			SELECT *
+			FROM `member`
+            LIMIT 1
+			""")
+    boolean isMemberExist();
 }

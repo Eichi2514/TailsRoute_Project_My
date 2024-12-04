@@ -19,9 +19,9 @@ public class AdminController {
     @GetMapping("/admin/init/data")
     public String initData() {
 
-        Member member = memberService.getMemberById(1);
+        boolean member = memberService.isMemberExist();
 
-        if(member == null) {
+        if(!member) {
             adminService.initData();
         }
 

@@ -1,25 +1,3 @@
-DROP DATABASE IF EXISTS `tails_route`;
-CREATE DATABASE `tails_route`;
-USE `tails_route`;
-
-## 회원정보 테이블
-CREATE TABLE `member`(
-                         id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
-                         regDate DATETIME NOT NULL COMMENT '가입 날짜',
-                         updateDate DATETIME NOT NULL COMMENT '수정 날짜',
-                         loginId VARCHAR(250) NOT NULL COMMENT '아이디',
-                         loginPw CHAR(100) NOT NULL COMMENT '비밀번호',
-                         authLevel SMALLINT(2) UNSIGNED DEFAULT 3 COMMENT '권한 레벨 (3=일반, 7=관리자)',
-                         `name` CHAR(20) NOT NULL COMMENT '오프라인 이름',
-                         nickname CHAR(20) NOT NULL COMMENT '온라인 이름',
-                         cellphoneNum CHAR(20) NOT NULL COMMENT '전화번호',
-                         email CHAR(50) NOT NULL COMMENT '이메일',
-                         socialLoginStatus TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '소셜 로그인 여부 (0=일반 회원, 1=소셜 로그인 회원)',
-                         delStatus TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '탈퇴 여부 (0=탈퇴 전, 1=탈퇴 후)',
-                         delDate DATETIME COMMENT '탈퇴 날짜'
-);
-
-## 회원정보 테이블 테스트 데이터
 INSERT INTO `member` SET
                          regDate = '2024-02-05 14:15:00',
                          updateDate = '2024-03-10 16:30:00',
@@ -90,7 +68,6 @@ INSERT INTO `member` SET
                          email = "asd@naver.com";
 
 
-## 반려견 테이블
 CREATE TABLE `dog`(
                       id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
                       regDate DATETIME NOT NULL COMMENT '생성 날짜',
@@ -138,7 +115,6 @@ INSERT INTO dog SET
                     `type` = '소형',
                     comPortName = "COM7";
 
-## 게시글 테이블
 CREATE TABLE article(
                         id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
                         regDate DATETIME NOT NULL COMMENT '작성 날짜',
@@ -163,7 +139,6 @@ INSERT INTO article SET regDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 86400
 INSERT INTO article SET regDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 864000) - 864000) SECOND), updateDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 864000) - 864000) SECOND), memberId = FLOOR(1 + RAND() * 6), boardId = 3, title = '강아지가 처음 만나는 사람을 너무 무서워해요 😢', `body` = '<p>우리 강아지가 처음 만나는 사람을 너무 무서워해서, 사회화가 걱정돼요. 어떻게 잘 적응시킬 수 있을까요?</p>', hitCount = FLOOR(1 + RAND() * 100), goodReactionPoint = FLOOR(1 + RAND() * 100);
 INSERT INTO article SET regDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 864000) - 864000) SECOND), updateDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 864000) - 864000) SECOND), memberId = FLOOR(1 + RAND() * 6), boardId = 2, title = '우리 강아지, 너무 잘 배워요!', `body` = '<p>우리 강아지가 "앉아", "기다려", "손" 같은 기본 명령어를 너무 빨리 배웠어요. 정말 똑똑하고 순종적이라 자랑스럽습니다!</p>', hitCount = FLOOR(1 + RAND() * 100), goodReactionPoint = FLOOR(1 + RAND() * 100);
 
-## 게시판 테이블
 CREATE TABLE board(
                       id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
                       regDate DATETIME NOT NULL COMMENT '생성 날짜',
@@ -174,7 +149,6 @@ CREATE TABLE board(
                       delDate DATETIME COMMENT '삭제 날짜'
 );
 
-## 게시판 테스트 데이터
 INSERT INTO board
 SET regDate = NOW(),
 updateDate = NOW(),
@@ -199,7 +173,6 @@ updateDate = NOW(),
 `code` = 'recommend',
 `name` = '추천합니다';
 
-## 리액션(좋아요, 싫어요) 테이블
 CREATE TABLE reactionPoint(
                               id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
                               regDate DATETIME NOT NULL COMMENT '추천 날짜',
@@ -210,7 +183,6 @@ CREATE TABLE reactionPoint(
                               `point` INT(10) COMMENT '좋아요, 싫어요 여부'
 );
 
-## 댓글 테이블
 CREATE TABLE reply (
                        id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
                        regDate DATETIME NOT NULL COMMENT '작성 날짜',
@@ -223,7 +195,6 @@ CREATE TABLE reply (
                        badReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '싫어요'
 );
 
-## 알람 테이블
 CREATE TABLE alarm (
                        id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
                        regDate DATETIME NOT NULL COMMENT '생성 날짜',
@@ -238,7 +209,6 @@ CREATE TABLE alarm (
                        CHECK ((alarm_date IS NOT NULL) OR (alarm_day IS NOT NULL))
 );
 
-## 생필품 테이블
 CREATE TABLE essentials (
                             id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
                             regDate DATETIME NOT NULL COMMENT '생성 날짜',
@@ -253,7 +223,6 @@ CREATE TABLE essentials (
                             timing INT(10) NOT NULL COMMENT '알림 시기'
 );
 
-## 약 체크 테이블
 CREATE TABLE medicationLog (
                                id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
                                regDate DATETIME NOT NULL COMMENT '생성 날짜',
@@ -261,7 +230,6 @@ CREATE TABLE medicationLog (
                                medicationDate DATE NOT NULL COMMENT '복용 날짜'
 );
 
-## 실종 테이블
 CREATE TABLE missing(
                         id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
                         memberId INT(10) UNSIGNED NOT NULL COMMENT '신고자 식별번호',
@@ -277,7 +245,6 @@ CREATE TABLE missing(
                         trait TEXT NOT NULL COMMENT '특징'
 );
 
-## 실종 테스트 데이터
 INSERT INTO `missing` SET
                           memberId = 1,
                           `name` = '바둑이',
@@ -411,7 +378,6 @@ INSERT INTO `missing` SET
                           photo = '/resource/photo/missing11.png',
                           trait = '심장이 안좋아 자꾸 켁켁 거려요';
 
-##건강기록 테이블
 CREATE TABLE doghealth(
                           memberId INT(10) UNSIGNED NOT NULL COMMENT 'member번호',
                           dogWeight FLOAT NOT NULL COMMENT '강아지 체중',
@@ -420,7 +386,6 @@ CREATE TABLE doghealth(
                           activityLevel FLOAT NOT NULL COMMENT '활동량(평균걸음수)'
 );
 
-## 일지작성  테이블
 CREATE TABLE diary(
                       Id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '일지 고유번호',
                       regDate DATETIME NOT NULL COMMENT '생성일',
@@ -436,14 +401,12 @@ CREATE TABLE diary(
 );
 
 
-## 일지작성 테스트데이터
 INSERT INTO Diary (regDate, updateDate, memberId, title, BODY, imagePath, startDate, endDate, takingTime, information) VALUES
 ('2024-11-01 10:00:00', '2024-11-01 10:00:00', 1, '첫 산책: 새로운 코스를 탐험하다', '오늘 반려견과 함께 새로 발견한 공원 코스를 걸었다. 반응이 좋았고, 공원에는 다양한 강아지 친구들이 있었다.', '/uploads/diary/default.png', '2024-11-01', '2024-11-10', '08:00:00', '약 복용(타이레놀) 후 충분히 물을 제공.'),
 ('2024-11-02 11:00:00', '2024-11-02 11:00:00', 1, '두 번째 산책: 조용한 아침', '아침 일찍 동네 산책로를 따라 걸었다. 반려견이 조금 더 활발해 보였고, 아침 공기가 맑아 기분이 좋았다.', '/uploads/diary/default2.jpg', '2024-11-11', '2024-11-12', '08:00:00', '약 복용(비타민C) 후 산책 전 간단한 스트레칭 권장.'),
 ('2024-11-05 14:00:00', '2024-11-05 14:00:00', 1, '비 온 뒤 산책: 상쾌한 공기', '비가 그친 후 맑은 하늘 아래 산책. 반려견이 흙냄새를 맡으며 활발히 움직였다. 오늘은 평소보다 더 많은 거리를 걸었다.', '/uploads/diary/default3.png', '2024-11-13', '2024-11-14', '08:00:00', '약 복용(유산균) 중 간식 제공은 소량으로 제한.'),
 ('2024-11-08 17:00:00', '2024-11-08 17:00:00', 1, '저녁 산책: 황혼 속 반려견', '노을 사진 촬영 후 20분 간 걷기. 반려견이 주변을 유심히 살피며 천천히 걸었다. 오늘은 리드줄 훈련을 추가로 진행했다.', '/uploads/diary/default4.jpeg', '2024-11-15', '2024-11-16', '08:00:00', '약 복용(오메가3) 후 충분히 물을 제공.');
 
-##반려견 행동범위 지정 테이블
 CREATE TABLE gpsAlert(
                          id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
                          regDate DATETIME NOT NULL COMMENT '등록 날짜',
@@ -455,7 +418,6 @@ CREATE TABLE gpsAlert(
                          onOff INT(1) UNSIGNED DEFAULT 0 COMMENT 'gps 알림 온오프 여부'
 );
 
-## 병원 테이블
 CREATE TABLE hospital(
                          id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '고유 병원 ID',
                          `name` TEXT NOT NULL COMMENT '병원 이름',
@@ -467,6 +429,7 @@ CREATE TABLE hospital(
                          businessStatus ENUM('영업', '폐업') DEFAULT '영업' COMMENT '영업 상태',
                          `type` ENUM('일반', '야간', '24시간') NOT NULL DEFAULT '일반' COMMENT '병원 타입'
 );
+
 CREATE TABLE cart(
                      id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
                      regDate DATETIME NOT NULL COMMENT '가입 날짜',
@@ -477,7 +440,6 @@ CREATE TABLE cart(
                      itemlink TEXT NOT NULL COMMENT '제품사이트'
 );
 
-## GPS 수신 정보 동의 테이블
 CREATE TABLE gpsChack(
                          id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
                          memberId INT(10) UNSIGNED NOT NULL COMMENT '접속자 식별번호',
@@ -488,7 +450,6 @@ CREATE TABLE gpsChack(
                          location VARCHAR(100) COMMENT '장소'
 );
 
-## 산책 테이블
 CREATE TABLE walk(
                      id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
                      memberId INT(10) UNSIGNED NOT NULL COMMENT '접속자 식별번호',
@@ -508,29 +469,3 @@ CREATE TABLE webpush (
                          auth VARCHAR(255) NOT NULL,
                          createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-INSERT INTO article SET
-    regDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 864000) - 864000) SECOND),
-updateDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 864000) - 864000) SECOND),
-memberId = FLOOR(1 + RAND() * 6),
-boardId = FLOOR(1 + RAND() * 3),
-title = CONCAT('제목', FLOOR(RAND() * 10000)),
-`body` = CONCAT('내용', FLOOR(RAND() * 10000)),
-hitCount = FLOOR(1 + RAND() * 100),
-goodReactionPoint = FLOOR(1 + RAND() * 100);
-
-INSERT INTO reply SET
-    regDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 864000) - 864000) SECOND),
-updateDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 864000) - 864000) SECOND),
-memberId = FLOOR(1 + RAND() * 6),
-relTypeCode = 'article',
-relId = FLOOR(1 + RAND() * 10),
-`body` = CONCAT('내용', FLOOR(RAND() * 10000));
-
-INSERT INTO walk SET
-    memberId = FLOOR(1 + RAND() * 6),
-updateDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 864000) - 864000) SECOND),
-routeName = CONCAT('제목', FLOOR(RAND() * 10000)),
-purchaseDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 864000) - 864000) SECOND),
-routePicture = CONCAT('경로', FLOOR(RAND() * 10000)),
-routedistance = ROUND(RAND() * 9.9 + 0.1, 1);

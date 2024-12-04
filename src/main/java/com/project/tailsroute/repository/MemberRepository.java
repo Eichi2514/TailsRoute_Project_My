@@ -37,7 +37,7 @@ public interface MemberRepository {
     public int getLastInsertId();
 
     @Update("""
-            UPDATE member
+            UPDATE `member`
             SET updateDate = NOW(),            
             loginPw = #{loginPw},
             name = #{name},
@@ -48,7 +48,7 @@ public interface MemberRepository {
     void memberModify(int loginedMemberId, String name, String nickname, String cellphoneNum, String loginPw);
 
     @Update("""
-            UPDATE member
+            UPDATE `member`
             SET updateDate = NOW(),
             delDate = NOW(),
             delStatus = 1 
@@ -57,7 +57,7 @@ public interface MemberRepository {
     void memberDelStatus(int loginedMemberId);
 
     @Update("""
-            UPDATE member
+            UPDATE `member`
             SET updateDate = NOW(),
             delStatus = 0 
             WHERE id = #{loginedMemberId}
@@ -75,7 +75,7 @@ public interface MemberRepository {
     Member getMemberByEmail(String email);
 
     @Update("""
-            UPDATE member
+            UPDATE `member`
             SET updateDate = NOW(),
             loginPw = #{loginPW}
             WHERE id = #{id}

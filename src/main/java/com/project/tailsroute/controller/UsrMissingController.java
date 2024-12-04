@@ -51,7 +51,7 @@ public class UsrMissingController {
 
         model.addAttribute("isLogined", isLogined);
 
-        return "/usr/missing/write";
+        return "usr/missing/write";
     }
 
 
@@ -70,7 +70,7 @@ public class UsrMissingController {
 
         model.addAttribute("missing", missing);
 
-        return "/usr/missing/detail";
+        return "usr/missing/detail";
     }
 
     @PostMapping("/usr/missing/doDelete")
@@ -107,7 +107,7 @@ public class UsrMissingController {
 
         model.addAttribute("missing", missing);
 
-        return "/usr/missing/modify";
+        return "usr/missing/modify";
     }
 
     @PostMapping("/usr/missing/doModify")
@@ -262,7 +262,7 @@ public class UsrMissingController {
         // 현재 지역 넘기기
         model.addAttribute("str", str);
 
-        return "/usr/missing/list";
+        return "usr/missing/list";
     }
 
 }

@@ -53,7 +53,7 @@ public class WebPushController {
     @GetMapping("/subscribe")
     public String test1(Model model) {
         model.addAttribute("PUBLIC_KEY", PUBLIC_KEY);
-        return "/usr/missing/webPush";
+        return "usr/missing/webPush";
     }
 
     @PostMapping("/sendPush")

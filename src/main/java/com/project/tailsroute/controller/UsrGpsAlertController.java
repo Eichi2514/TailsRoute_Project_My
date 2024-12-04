@@ -50,7 +50,7 @@ public class UsrGpsAlertController {
         model.addAttribute("isLogined", isLogined);
         model.addAttribute("dogId", dogId);
 
-        return "/usr/gpsAlert/add";
+        return "usr/gpsAlert/add";
     }
 
     @GetMapping("/usr/gpsAlert/modify")
@@ -78,7 +78,7 @@ public class UsrGpsAlertController {
         model.addAttribute("isLogined", isLogined);
         model.addAttribute("dogId", dogId);
 
-        return "/usr/gpsAlert/modify";
+        return "usr/gpsAlert/modify";
     }
 
     @PostMapping("/usr/gpsAlert/saveLocation")
@@ -140,7 +140,7 @@ public class UsrGpsAlertController {
 
         model.addAttribute("isLogined", isLogined);
 
-        return "/usr/gpsAlert/test";
+        return "usr/gpsAlert/test";
     }
 
     @GetMapping("/usr/gpsAlert/toggleOnOff")

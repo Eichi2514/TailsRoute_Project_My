@@ -45,7 +45,7 @@ public class UsrDogController {
 
         model.addAttribute("isLogined", isLogined);
 
-        return "/usr/dog/add";
+        return "usr/dog/add";
     }
 
     @GetMapping("/usr/dog/modify")
@@ -66,7 +66,7 @@ public class UsrDogController {
         model.addAttribute("isLogined", isLogined);
         model.addAttribute("dog", dog);
 
-        return "/usr/dog/modify";
+        return "usr/dog/modify";
     }
 
     @PostMapping("/usr/dog/doModify")

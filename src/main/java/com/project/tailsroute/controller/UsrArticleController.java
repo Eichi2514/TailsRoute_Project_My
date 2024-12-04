@@ -150,7 +150,7 @@ public class UsrArticleController {
 
         model.addAttribute("article", article);
 
-        return "/usr/article/modify";
+        return "usr/article/modify";
     }
 
     // 로그인 체크 -> 유무 체크 -> 권한 체크 -> 수정

@@ -184,7 +184,7 @@ public class UsrMemberController {
 
         model.addAttribute("isLogined", isLogined);
 
-        return "/usr/member/find";
+        return "usr/member/find";
     }
 
     // 아이디 인증코드 요청

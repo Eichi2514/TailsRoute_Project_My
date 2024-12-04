@@ -13,7 +13,7 @@ public interface ReplyRepository {
    			FROM reply AS R
    			LEFT JOIN dog AS D
    			ON R.memberId = D.memberId
-   			LEFT JOIN MEMBER AS M
+   			LEFT JOIN member AS M
     		ON R.memberId = M.id
    			LEFT JOIN reactionPoint AS RP
    			ON R.id = RP.relId AND RP.relTypeCode = "reply" AND RP.memberId = #{loginedMemberId}

@@ -5,22 +5,26 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 public class DirectionsController {
-
-    @Value("${OPENROUTESERVICE_API_KEY}")
-    private String openRouteServiceApiKey;
 
     @Value("${NAVER_API}")
     private String apiKeyId;  // 네이버 API Key ID
 
     @Value("${NAVER_SECRET}")
     private String apiKey;    // 네이버 API Key
+
+    @Value("${TMAP_KEY}")
+    private String mapKey;
 
     // 주소를 받아 위도, 경도 정보를 반환하는 메소드
     @GetMapping("/reverse-geocode")
@@ -85,25 +89,38 @@ public class DirectionsController {
         // 결과 반환
         return ResponseEntity.ok(response.getBody());
     }
-    @GetMapping("/get-directions")
-    public ResponseEntity<String> getDirections(
+    @GetMapping("/get-route")
+    public ResponseEntity<String> getRoute(
             @RequestParam double startLat,
             @RequestParam double startLng,
             @RequestParam double endLat,
             @RequestParam double endLng) {
-        // OpenRouteService의 foot-walking 경로를 위한 URL 구성
-        String url = UriComponentsBuilder.fromHttpUrl("https://api.openrouteservice.org/v2/directions/foot-walking")
-                .queryParam("start", startLng + "," + startLat)  // 경도, 위도 순서
-                .queryParam("end", endLng + "," + endLat)      // 경도, 위도 순서
-                .toUriString();
-        // 요청 헤더에 API 키 추가
+
+        String url = "https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1";
+
+        // 요청 바디 생성
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("startX", startLng);
+        requestBody.put("startY", startLat);
+        requestBody.put("endX", endLng);
+        requestBody.put("endY", endLat);
+        requestBody.put("startName", "시작");
+        requestBody.put("endName", "끝");
+
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", openRouteServiceApiKey);
-        // RestTemplate을 사용하여 OpenRouteService API 호출
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Accept", "application/json");
+        headers.set("appKey", mapKey);
+
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+
         RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-        // 결과 반환
-        return ResponseEntity.ok(response.getBody());
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+            return ResponseEntity.ok(response.getBody());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to fetch route: " + e.getMessage());
+        }
     }
 }

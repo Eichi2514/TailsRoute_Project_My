@@ -117,7 +117,4 @@ public class MemberService {
         return memberRepository.getMemberByNameAndcellphoneNum(name, cellphoneNum);
     }
 
-    public boolean isMemberExist() {
-        return memberRepository.isMemberExist();
-    }
 }

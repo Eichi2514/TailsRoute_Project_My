@@ -112,11 +112,10 @@
                 </div>
                 <select class="str tw-border-box tw-p-2 tw-mr-[80px]" id="sortOrder" name="sortOrder"
                         th:onchange="|location.href='list?page=1&boardId='+${boardId}+'&sortOrder=' + this.value|">
-                    <option th:value="${sortOrder}" th:text="${sortOrder == 'regDate' ? '최신순' :
-                         sortOrder == 'title' ? '제목순' :
-                         sortOrder == 'hitCount' ? '조회순' :
-                         sortOrder == 'goodReactionPoint' ? '추천순' : '정렬'}">
-                    </option>
+                    <option th:if="${sortOrder == 'regDate'}" value="regDate">최신순</option>
+                    <option th:if="${sortOrder == 'title'}" value="title">제목순</option>
+                    <option th:if="${sortOrder == 'hitCount'}" value="hitCount">조회순</option>
+                    <option th:if="${sortOrder == 'goodReactionPoint'}" value="goodReactionPoint">추천순</option>
                     <option th:if="${sortOrder != 'regDate'}" value="regDate">최신순</option>
                     <option th:if="${sortOrder != 'title'}" value="title">제목순</option>
                     <option th:if="${sortOrder != 'hitCount'}" value="hitCount">조회순</option>
@@ -136,7 +135,14 @@
             </div>
             <div class="underline tw-flex tw-gap-5 tw-p-5" th:each="article : ${articles}" th:if="${articles != null}">
                 <a class="tw-flex tw-items-center tw-w-full" th:href="@{'../article/detail?id=' + ${article.id}}">
-                    <div class="tw-w-[50px] tw-text-center border" th:text="${article.boardId == 1 ? '공지' : article.boardId == 2 ? '자유' : article.boardId == 3 ? 'Q&A' : article.boardId == 4 ? '추천' : article.boardId == 5 ? '일상' : ''}"></div>
+                    <div class="tw-w-[50px] tw-text-center border">
+                        <span th:if="${article.boardId == 1}" th:text="'공지'"></span>
+                        <span th:if="${article.boardId == 2}" th:text="'자유'"></span>
+                        <span th:if="${article.boardId == 3}" th:text="'Q&A'"></span>
+                        <span th:if="${article.boardId == 4}" th:text="'추천'"></span>
+                        <span th:if="${article.boardId == 5}" th:text="'일상'"></span>
+                        <span th:unless="${article.boardId >= 1 && article.boardId <= 5}" th:text="''"></span>
+                    </div>
                     <div class="tw-flex-grow">
                         <span class="link tw-pl-5"
                               th:text="${#strings.abbreviate(article.title,30)}"></span>

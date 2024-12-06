@@ -10,16 +10,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    // @Override
-    // public void addResourceHandlers(ResourceHandlerRegistry registry) {
+     @Override
+     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // "/uploads/**" 경로를 "file:uploads/" 디렉토리로 매핑
-    //    registry.addResourceHandler("/uploads/**")
-    //            .addResourceLocations("file:uploads/");
+        registry.addResourceHandler("/uploads/**")
+                .addResourceLocations("file:uploads/");
 
-    //    registry.addResourceHandler("/uploaded_videos/**")
-    //            .addResourceLocations("file:uploaded_videos/");
-    //}
+        registry.addResourceHandler("/uploaded_videos/**")
+                .addResourceLocations("file:uploaded_videos/");
+    }
 
+    /*
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
        registry.addResourceHandler("/uploads/**") // 모든 하위 폴더와 파일 포함
@@ -27,6 +28,7 @@ public class WebConfig implements WebMvcConfigurer {
          registry.addResourceHandler("/uploaded_videos/**")
                  .addResourceLocations("file:/dockerProjects/tailsroute/source/TailsRoute_Project_My/uploaded_videos/");
     }
+     */
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

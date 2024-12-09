@@ -1,6 +1,7 @@
 html,body {
     background-color: #f9f5eb !important;
     color: #4D3E3E;
+    word-break: keep-all;
 }
 #title{
     box-shadow: none !important;
@@ -162,4 +163,7 @@ input:focus, select:focus, textarea:focus {
 .historyBack:hover {
     background-color: #2E2E2E;; /* 호버 시 배경색 */
     transform: translateY(-2px);
+}
+.title{
+    font-family: 'Cafe24Ssurround', sans-serif;
 }

@@ -1,6 +1,7 @@
 html,body {
     background-color: #F9F5EB !important;
     color: #4D3E3E;
+    word-break: keep-all;
 }
 .grass {
     padding-left: 10px;
@@ -181,4 +182,19 @@ td.ellipsis{
     top:170px;
     margin-top: 20px;
     transform: translate(-50%);
+}
+
+.article_button {
+    background-color: #7DAF82;
+    color: #ffffff;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    width: 100px;
+    display: inline-grid;
+}
+
+.article_button:hover {
+    background-color: #5C8D6D;
+    transform: translateY(-2px);
 }

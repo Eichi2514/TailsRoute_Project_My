@@ -1,5 +1,6 @@
 # TailsRoute(반려견 종합 플랫폼)
 <br> - **공동 작업 리포지토리** : [TailsRoute GitHub](https://github.com/TailsRoute/TailsRoute_PJ/tree/main)
+<br> - **프로젝트 소개 및 실행 화면** : [TailsRoute Velog](https://velog.io/@ichi2514/tp1-73%EC%9D%BC%EC%B0%A8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%86%8C%EA%B0%9C)
 
 ## 네이버 클라우드 APIKey 사용방법
 ### NAVER CLOUD FLATFORM API 발급 방법
